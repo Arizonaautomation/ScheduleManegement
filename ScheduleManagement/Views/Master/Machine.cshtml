@@ -1,0 +1,445 @@
+﻿@model TrainningManagement.Models.tblMachineCreation
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="alert alert-success" id="Save-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Save Data Successfully.
+</div>
+<div class="alert alert-success" id="Update-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Update Data Successfully.
+</div>
+<div class="alert alert-success" id="Delete-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Delete Data Successfully.
+</div>
+
+<div id="NewMachine">
+    <div class="row">
+        <div class="col-sm-12">
+            @foreach (var grp in ViewBag.Groupchild)
+            {
+                if (grp.menu_Id == 11)
+                {
+                    if (grp.access_Create == "true")
+                    {
+                        <button class="btn btn-info pull-right" style="border-radius: 20px">
+                            <i class="ace-icon fa fa-plus icon-animated-hand-pointer white"></i>
+                            <a href="#modal-Machine" data-toggle="modal" class="white" onclick="ClearTextBox();">Add</a>
+                        </button>
+                    }
+                }
+            }
+        </div>
+    </div>
+    <label for="form-field-8" id="ButtonId"> </label>
+    <label for="form-field-8" id="Id"> </label>
+
+    <div style="margin-top: 15px !important">
+        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+            <thead>
+                <tr>
+                    @foreach (var grp in ViewBag.Groupchild)
+                    {
+                        if (grp.menu_Id == 11)
+                        {
+                            if (grp.access_Modify == "true" || grp.access_Delete == "true")
+                            {
+                                <th style="width: 130px !important;">Action</th>
+                            }
+                        }
+                    }
+                    <th>Instrument Name</th>
+                    <th>Instrument Department</th>
+                    <th>Instrument Location</th>
+                    <th>Instrument Instalattion Time</th>
+                    <th>Instrument Schedule Type</th>
+                    <th>Status</th>
+                    @*<th>Created By</th>*@
+                    <th>Created Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in ViewBag.lstMachine)
+                {
+                    <tr>
+                        @foreach (var grp in ViewBag.Groupchild)
+                        {
+                            if (grp.menu_Id == 11)
+                            {
+                                if (grp.access_View == "true")
+                                {
+
+                                }
+                                if (grp.access_Modify == "true" && grp.access_Delete == "true")
+                                {
+
+                                    <td>
+                                        @if (grp.access_Modify == "true" && grp.access_Delete == "false")
+                                        {
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                        }
+                                        @if (grp.access_Delete == "true" && grp.access_Modify == "false")
+                                        {
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                        }
+                                        @if (grp.access_Delete == "true" && grp.access_Modify == "true")
+                                        {
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                        }
+                                    </td>
+                                }
+                            }
+                        }
+                        <td>@item.Machine_Name</td>
+                        <td>@item.Machine_Department</td>
+                        <td>@item.Machine_Location</td>
+
+                        <td>@item.Machine_InstallationTime</td>
+                        <td>@item.Machine_ScheduleType</td>
+                        <td>@item.Status</td>
+                        @*<td>@item.CreatedBy</td>*@
+                        <td>@item.CreatedDate</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="modal" id="modal-Machine" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Instrument
+            </div>
+            <div id="DivwaitingDesignation" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+                <form id="frmmachine">
+                    <input class="form-control" type="hidden" id="Machine_Id" name="Machine_Id" placeholder="Department Name" />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div>
+                                <label for="form-field-11">Instrument Department <span style="color:red;">*</span></label>
+                                @Html.DropDownList("Machine_Department", new SelectList(ViewBag.MachineDepartment, "Department_Id", "Department_Name"), "Please Select Department", new { @id = "Machine_Department", @class = "form-control" })
+                                <label class="error" for="Machine_Department" id="MachineDepartment_error" style="color:red;" hidden>Select Machine Department.</label>
+                            </div>
+                            <div>
+                                <label for="form-field-11">Instrument Name <span style="color:red;">*</span></label>
+                                @Html.EditorFor(model => model.Machine_Name, new { htmlAttributes = new { @class = "form-control", id = "Machine_Name", name = "Machine_Name", placeholder = "Machine Name" } })
+                                <label class="error" for="Machine_Name" id="MachineName_error" style="color:red;" hidden>Enter Machine Name.</label>
+                            </div>
+                            <div>
+                                <label for="form-field-11">Instrument Location <span style="color:red;">*</span></label>
+                                @Html.EditorFor(model => model.Machine_Location, new { htmlAttributes = new { @class = "form-control", @id = "Machine_Location", @name = "Machine_Location", @placeholder = "Location Name" } })
+                                <label class="error" for="Machine_Location" id="MachineLocation_error" style="color:red;" hidden>Enter Machine Location.</label>
+                            </div>
+                            <div>
+                                <label for="form-field-11">Installation Time <span style="color:red;">*</span></label>
+                                @Html.EditorFor(model => model.Machine_InstallationTime, new { htmlAttributes = new { @class = "form-control", @id = "Machine_InstallationTime", @name = "Machine_InstallationTime", @placeholder = "Installtion Time" } })
+                                <label class="error" for="Machine_InstallationTime" id="MachineInstallationTime_error" style="color:red;" hidden>Enter Installation Time.</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div>
+                                <label for="form-field-8">Instrument ScheduleType <span style="color:red;">*</span></label>
+                                @Html.EditorFor(model => model.Machine_ScheduleType, new { htmlAttributes = new { @class = "form-control", @id = "Machine_ScheduleType", @name = "Machine_ScheduleType", @placeholder = "Machine ScheduleType" } })
+                                <label class="error" for="Machine_ScheduleType" id="MachineScheduleType_error" style="color:red;" hidden>Enter Machine ScheduleType.</label>
+                            </div>
+                            <div>
+                                <label for="form-field-8">Schedule Date For Calibration</label>
+                                @Html.EditorFor(model => model.Calibration_Date, new { htmlAttributes = new { @class = "form-control", @id = "Calibration_Date", @name = "Calibration_Date", @placeholder = "Schedule Date For Calibration" } })
+                                <label class="error" for="Calibration_Date" id="CalibrationDate_error" style="color:red;" hidden>Select Calibration Date.</label>
+                            </div>
+                            <div>
+                                <label for="form-field-8">First Due Calibration Date</label>
+                                @Html.EditorFor(model => model.FirstDueCalibration_Date, new { htmlAttributes = new { @class = "form-control", @id = "FirstDueCalibration_Date", @name = "FirstDueCalibration_Date", @placeholder = "First Due Calibration Date" } })
+                                <label class="error" for="FirstDueCalibration_Date" id="FirstDueCalibrationDate_error" style="color:red;" hidden>Select First Due Calibration Date.</label>
+                            </div>
+                            <div>
+                                <label for="form-field-11">Status</label>
+                                <select id="Status" name="Status" class="form-control">
+                                    <option value="0">Select Status</option>
+                                    <option>Pass</option>
+                                    <option>Fail</option>
+                                    <option>Under Reviewer</option>
+                                    <option>Under Approver</option>
+                                </select>
+                                <label class="error" for="Status" id="Status_error" style="color:red;" hidden>Select Status.</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" style="margin-top: 10px;" data-toggle="modal" data-target="#AddRemark" onclick=" ValidationMachine()">
+                <i class="ace-icon fa fa-plus"></i>
+                Save
+            </button>
+        </div>
+    </div>
+</div>
+<!-- /.modal-content -->
+
+<div class="modal" id="AddRemark" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Add Remark
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+                <form id="frmRemark">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-8">Remark <span style="color:red;">*</span></label>
+                            <textarea class="form-control" type="text" id="Remark" name="Remark" placeholder="Enter Remark"></textarea>
+                            <label class="error" for="messageBody" id="messageBody_error" style="color:red;" hidden>Please Enter Remark.</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" style="margin-top: 10px;" onclick="CallFunctionUsingId()">
+                <i class="ace-icon fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    $('.table').DataTable({
+    });
+
+    (function ($) {
+        $('#Machine_InstallationTime').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+        $('#Calibration_Date').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+        $('#FirstDueCalibration_Date').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+    }(jQuery));
+    function loadTable() {
+        location.reload(true);
+    }
+    function ClearTextBox() {
+        $('#Machine_Id').val("");
+        $('#Machine_Department').val("");
+        $('#Machine_Name').val("");
+        $('#Machine_Location').val("");
+        $('#Machine_InstallationTime').val("");
+        $('#Machine_ScheduleType').val("");
+        $('#Status').val("0");
+        $('#Calibration_Date').val("");
+        $('#FirstDueCalibration_Date').val("");
+    }
+
+
+    function GetID(button, id) {
+        $('#ButtonId').val(button);
+        $('#Id').val(id);
+        console.log($('#ButtonId').val());
+        console.log($('#Id').val());
+    }
+    function CallFunctionUsingId() {
+        if ($('#ButtonId').val() == "MachineSubmit") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                submitMachine();
+            }
+
+        }
+        else if ($('#ButtonId').val() == "MachineDelete") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                deltMachine($('#Id').val());
+            }
+        }
+    }
+
+
+    //Validation Function
+    function ValidationMachine() {
+        var isValid = true;
+        if ($('#Machine_Department').val().trim() == "") {
+            $('#MachineDepartment_error').show();
+            $("#MachineDepartment_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineDepartment_error').hide();
+        }
+        if ($('#Machine_Name').val().trim() == "") {
+            $('#MachineName_error').show();
+            $("#MachineName_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineName_error').hide();
+        }
+        if ($('#Machine_Location').val().trim() == "") {
+            $('#MachineLocation_error').show();
+            $("#MachineLocation_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineLocation_error').hide();
+        }
+        if ($('#Machine_InstallationTime').val().trim() == "") {
+            $('#MachineInstallationTime_error').show();
+            $("#MachineInstallationTime_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineInstallationTime_error').hide();
+        }
+        if ($('#Machine_ScheduleType').val().trim() == "") {
+            $('#MachineScheduleType_error').show();
+            $("#MachineScheduleType_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineScheduleType_error').hide();
+        }
+        if ($('#Calibration_Date').val().trim() == "") {
+            $('#CalibrationDate_error').show();
+            $("#CalibrationDate_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#CalibrationDate_error').hide();
+        }
+        if ($('#FirstDueCalibration_Date').val().trim() == "") {
+            $('#FirstDueCalibrationDate_error').show();
+            $("#FirstDueCalibrationDate_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#FirstDueCalibrationDate_error').hide();
+        }
+
+        if (isValid == true) {
+            $('#modal-Machine').modal('hide');
+            GetID('MachineSubmit', '');
+        }
+        return isValid;
+    }
+
+
+    function submitMachine() {
+        var res = ValidationMachine();
+        if (res == false) {
+            return false;
+        }
+        var machine = $('#frmmachine').serialize();
+        machine = machine + "&Remark=" + $('#Remark').val();
+        $('#DivwaitingDesignation').removeClass('hide')
+        $.post("/Master/MachineCreation", machine, function (result) {
+            $('#AddRemark').modal('hide');
+            loadTable();
+            $('#DivwaitingDesignation').addClass('hide')
+            if (result == "Save Success") {
+                $("#Save-alert").fadeTo(2000, 1000).slideUp(1000, function () {
+                    $("#Save-alert").slideUp(1000);
+                });
+            } else {
+                $("#Update-alert").fadeTo(2000, 1000).slideUp(1000, function () {
+                    $("#Update-alert").slideUp(1000);
+                });
+            }
+        })
+    }
+
+    function editMachine(id) {
+        var id = { id: id };
+        $.get("/Master/MachineEdit", id, function (result) {
+            $('#modal-Machine').modal('toggle');
+            $('#Machine_Name').val(result.Machine_Name);
+            $('#Machine_Location').val(result.Machine_Location);
+            $('#Machine_InstallationTime').val(moment(result.Machine_InstallationTime).format('DD/MM/YYYY hh:mm a'));
+            $('#Machine_ScheduleType').val(result.Machine_ScheduleType);
+            $('#Machine_Department').val(result.Machine_Department);
+            $('#Status').val(result.Status);
+            $('#Calibration_Date').val(moment(result.Calibration_Date).format('DD/MM/YYYY hh:mm a'));
+            $('#FirstDueCalibration_Date').val(moment(result.FirstDueCalibration_Date).format('DD/MM/YYYY hh:mm a'));
+        });
+    }
+    function deltMachine(id) {
+        $('#AddRemark').modal('toggle');
+        //var id = { id: id };
+        bootbox.confirm({
+            titel: 'Confirm message',
+            message: 'Are you sure you want to delete!!..',
+            button: {
+                'confirm': {
+                    label: 'Confirm',
+                    className: 'btn-sm btn-info'
+                },
+                'cancle': {
+                    label: 'Cancel',
+                    className: 'btn-sm btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    var data = {
+                        id: id,
+                        remark: $('#Remark').val(),
+                    }
+
+                    $('#DivwaitingTreatment').removeClass('hide')
+                    $.get("/Master/MachineDelete", data, function (result) {
+                        loadTable();
+                        $('#DivwaitingTreatment').addClass('hide')
+                        $("#Delete-alert").fadeTo(2000, 500).slideUp(500, function () {
+                            $("#Delete-alert").slideUp(500);
+                        });
+                    });
+                }
+            }
+
+        })
+
+    }
+</script>

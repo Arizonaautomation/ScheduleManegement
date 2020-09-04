@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SchedulManagementSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ScheduleMachine">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MachineId" Type="bigint" Nullable="false" />
+    <Property Name="MachineLocation" Type="nvarchar" MaxLength="50" />
+    <Property Name="ScheduleType" Type="nchar" MaxLength="10" />
+    <Property Name="StartScheduleDate" Type="datetime" />
+    <Property Name="EndScheduleDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="bigint" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="AsignTo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="nvarchar" MaxLength="30" />
+    <Property Name="AsignType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ApprovedDate" Type="datetime" />
+    <Property Name="CreatedDepartment" Type="bigint" />
+    <Property Name="EmployeeHead" Type="bigint" />
+  </EntityType>
+  <EntityType Name="tblAccessGroupChild">
+    <Key>
+      <PropertyRef Name="groupChild_Id" />
+    </Key>
+    <Property Name="groupChild_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="group_Id" Type="bigint" />
+    <Property Name="menu_Id" Type="bigint" />
+    <Property Name="access_Create" Type="nvarchar" MaxLength="10" />
+    <Property Name="access_Modify" Type="nvarchar" MaxLength="10" />
+    <Property Name="access_Delete" Type="nvarchar" MaxLength="10" />
+    <Property Name="access_View" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="tblAccessGroupMaster">
+    <Key>
+      <PropertyRef Name="group_Id" />
+    </Key>
+    <Property Name="group_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="group_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="remark" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="tblAccessMenuMaster">
+    <Key>
+      <PropertyRef Name="menu_Id" />
+    </Key>
+    <Property Name="menu_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="menu_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="menu_Link" Type="nvarchar" MaxLength="50" />
+    <Property Name="menu_Icon" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tblAssignEmployeeGroup">
+    <Key>
+      <PropertyRef Name="assignGroupId" />
+    </Key>
+    <Property Name="assignGroupId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="employee_Id" Type="bigint" />
+    <Property Name="group_Id" Type="bigint" />
+  </EntityType>
+  <EntityType Name="tblDepartment">
+    <Key>
+      <PropertyRef Name="Department_Id" />
+    </Key>
+    <Property Name="Department_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Department_Description" Type="nvarchar" MaxLength="150" />
+    <Property Name="CreatedBy" Type="bigint" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblDesignation">
+    <Key>
+      <PropertyRef Name="Designation_Id" />
+    </Key>
+    <Property Name="Designation_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Designation_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Designation_Description" Type="nvarchar" MaxLength="150" />
+    <Property Name="CreatedBy" Type="bigint" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblEmployee">
+    <Key>
+      <PropertyRef Name="Employee_Id" />
+    </Key>
+    <Property Name="Employee_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Employee_Department" Type="bigint" Nullable="false" />
+    <Property Name="Employee_Designation" Type="bigint" Nullable="false" />
+    <Property Name="Employee_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Employee_Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="Employee_Contact" Type="nvarchar" MaxLength="50" />
+    <Property Name="Employee_Password" Type="nvarchar" MaxLength="50" />
+    <Property Name="Employee_Type" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedBy" Type="nchar" MaxLength="10" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="FirstTimeLoginStatus" Type="nvarchar" MaxLength="10" />
+    <Property Name="group_Id" Type="bigint" />
+    <Property Name="Employee_Address" Type="nvarchar" MaxLength="100" />
+    <Property Name="Department_UserType" Type="nvarchar" MaxLength="50" />
+    <Property Name="HeadType" Type="nvarchar" MaxLength="50" />
+    <Property Name="UserHead_Id" Type="bigint" />
+    <Property Name="TotalNoOfLeaves" Type="bigint" />
+    <Property Name="EmpProfilePhoto" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="tblHistory">
+    <Key>
+      <PropertyRef Name="H_Id" />
+    </Key>
+    <Property Name="H_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Emp_Id" Type="bigint" />
+    <Property Name="Old_Action" Type="nvarchar" MaxLength="50" />
+    <Property Name="New_Action" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remark" Type="nvarchar" MaxLength="100" />
+    <Property Name="EntryDatetime" Type="datetime" />
+    <Property Name="ActionRowId" Type="bigint" />
+    <Property Name="FromName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Department_Id" Type="bigint" />
+    <Property Name="EmployeeName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tblMachineCreation">
+    <Key>
+      <PropertyRef Name="Machine_Id" />
+    </Key>
+    <Property Name="Machine_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Machine_Department" Type="bigint" Nullable="false" />
+    <Property Name="Machine_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Machine_Location" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Machine_InstallationTime" Type="datetime" Nullable="false" />
+    <Property Name="Machine_ScheduleType" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CreatedBy" Type="bigint" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="Calibration_Date" Type="datetime" />
+    <Property Name="FirstDueCalibration_Date" Type="datetime" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tblPayroll">
+    <Key>
+      <PropertyRef Name="Payroll_Id" />
+    </Key>
+    <Property Name="Payroll_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Head_Id" Type="bigint" />
+    <Property Name="FromDate" Type="datetime" />
+    <Property Name="ToDate" Type="datetime" />
+    <Property Name="Reason" Type="nvarchar" MaxLength="100" />
+    <Property Name="NoOfDays" Type="bigint" />
+    <Property Name="EmergencyContactNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedBy" Type="bigint" />
+    <Property Name="CreatedDatetime" Type="datetime" />
+    <Property Name="ApprovedDateTime" Type="datetime" />
+    <Property Name="HeadName" Type="nvarchar" MaxLength="50" />
+    <Property Name="UserId" Type="bigint" />
+    <Property Name="Status" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="tblScheduleMaster">
+    <Key>
+      <PropertyRef Name="Schecule_Id" />
+    </Key>
+    <Property Name="Schecule_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Schedule_Name" Type="nchar" MaxLength="10" />
+    <Property Name="Schedule_Type" Type="nchar" MaxLength="10" />
+    <Property Name="Schedule_description" Type="nvarchar" MaxLength="150" />
+  </EntityType>
+  <EntityType Name="tblSetting">
+    <Key>
+      <PropertyRef Name="setting_Id" />
+    </Key>
+    <Property Name="setting_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Password_Limit" Type="bigint" />
+    <Property Name="Password_Security" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password_age" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password_Age_Notify" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password_attempt_Limit" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password_Reopen" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password_History_Store_Limit" Type="nvarchar" MaxLength="50" />
+    <Property Name="Auto_Logout_Limit" Type="nvarchar" MaxLength="50" />
+    <Property Name="Login_For_All_Action" Type="nvarchar" MaxLength="10" />
+    <Property Name="Password_in_Logout" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityContainer Name="SchedulManagementSystemModelStoreContainer">
+    <EntitySet Name="ScheduleMachine" EntityType="Self.ScheduleMachine" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblAccessGroupChild" EntityType="Self.tblAccessGroupChild" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblAccessGroupMaster" EntityType="Self.tblAccessGroupMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblAccessMenuMaster" EntityType="Self.tblAccessMenuMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblAssignEmployeeGroup" EntityType="Self.tblAssignEmployeeGroup" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblDepartment" EntityType="Self.tblDepartment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblDesignation" EntityType="Self.tblDesignation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblEmployee" EntityType="Self.tblEmployee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblHistory" EntityType="Self.tblHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblMachineCreation" EntityType="Self.tblMachineCreation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblPayroll" EntityType="Self.tblPayroll" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblScheduleMaster" EntityType="Self.tblScheduleMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblSetting" EntityType="Self.tblSetting" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
