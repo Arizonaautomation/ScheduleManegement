@@ -1,0 +1,694 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="alert alert-success" id="Save-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Save Data Successfully.
+</div>
+<div class="alert alert-success" id="Update-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Update Data Successfully.
+</div>
+<div class="alert alert-success" id="Delete-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Delete Data Successfully.
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        @foreach (var grp in ViewBag.Groupchild)
+        {
+            if (grp.menu_Id == 3)
+            {
+                if (grp.access_Create == "True")
+                {
+
+                    <button class="btn btn-info pull-right" style="border-radius: 20px">
+                        <i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>
+                        <a href="#modal-User" data-toggle="modal" class="white" onclick="ClearTextBox();">New Create</a>
+                    </button>
+                }
+            }
+        }
+    </div>
+</div>
+<label for="form-field-8" id="ButtonId"> </label>
+<label for="form-field-8" id="Id"> </label>
+
+<fieldset>
+    <legend>Employee</legend>
+
+    <div style="margin-top: 15px !important">
+        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+            <thead>
+                <tr>
+                    @foreach (var grp in ViewBag.Groupchild)
+                    {
+                        if (grp.menu_Id == 3)
+                        {
+                            if (grp.access_Modify == "True" || grp.access_Delete == "True")
+                            {
+                                <th style="width: 130px !important;">Action</th>
+                            }
+                        }
+                    }
+                    <th hidden>ID</th>
+                    <th>Employee ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in ViewBag.Employee)
+                {
+                    <tr>
+                        @foreach (var grp in ViewBag.Groupchild)
+                        {
+                            if (grp.menu_Id == 3)
+                            {
+                                if (grp.access_View == "True")
+                                {
+
+                                }
+                                if (grp.access_Delete == "True" || grp.access_Modify == "True")
+                                {
+                                    <td>
+                                        @if (grp.access_Modify == "True" && grp.access_Delete == "False")
+                                        {
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editEmployee(@item.Employee_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                        }
+                                        @if (grp.access_Delete == "True" && grp.access_Modify == "False")
+                                        {
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("EmployeeDelete",@item.Employee_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                        }
+                                        @if (grp.access_Delete == "True" && grp.access_Modify == "True")
+                                        {
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editEmployee(@item.Employee_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("EmployeeDelete",@item.Employee_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                        }
+                                    </td>
+
+                                }
+
+                            }
+
+                        }
+                        <td hidden>@item.Employee_Id</td>
+                        <td>@item.EmpID</td>
+                        <td>@item.Employee_Name</td>
+                        <td>@item.Employee_Email</td>
+                        <td>@item.Employee_Contact</td>
+                        <td>@item.Status</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+
+</fieldset>
+
+
+<div class="modal" id="modal-User" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span style="color:black;">×</span>
+                </button>
+                Employee Creation
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding">
+                <form id="frmemployee">
+                    <div class="row">
+                        <input class="form-control" type="hidden" id="Employee_Id" name="Employee_Id" placeholder="Department Name" />
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-3">
+                            <div>
+                                <div class="form-group"></div>
+                                <label for="form-field-11">Profile Photo</label>
+                            </div>
+                            <div>
+                                <img id="imagePreview" src="~/Image/defaultAvtar.png" width="120" height="150" />
+                                <input type="file" name="EmpProfilePhoto" id="EmpProfilePhoto" onchange="ShowImagePreview(this)">
+                            </div>
+
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group"></div>
+                            <label for="form-field-11">Employee ID <span style="color:red;">*</span></label>
+                            <input class="form-control" type="text" id="EmpID" name="EmpID" placeholder="Employee ID" onkeypress="return checkAlphaNumeric()"  onchange="ValidateEmpId();"/>
+                            <label class="error" for="EmpID" id="EmpID_error" style="color:red;" hidden>Enter Employee ID.</label>
+                            <label class="error" for="EmpID" id="EmpID_error_Dublicate" style="color:red;" hidden>Found Duplicate EmployeeID.</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group"></div>
+                            <label for="form-field-11">Employee Name <span style="color:red;">*</span></label>
+                            <input class="form-control" type="text" id="Employee_Name" name="Employee_Name" placeholder="Employee Name" onkeypress="return checkAlphaNumeric()" />
+                            <label class="error" for="Employee_Name" id="EmployeeName_error" style="color:red;" hidden>Enter Employee Name.</label>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="form-field-11">Contact</label>
+                            <input class="form-control" type="text" id="Employee_Contact" name="Employee_Contact" placeholder="Employee Contact" maxlength="10" onkeypress="return validateNumericValue(event)" />
+                            <label class="error" for="Employee_Contact" id="EmployeeContact_error" style="color:red;" hidden>Enter 10 digit.</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="form-field-8">Email</label>
+                            <input class="form-control" type="text" id="Employee_Email" name="Employee_Email" placeholder="Enter Email" onchange="ValidateEmailId()" />
+                            <label class="error" for="Employee_Email" id="EmployeeEmail_error_Reg" style="color:red;" hidden>Enter Correct EmailID.</label>
+                            <label class="error" for="Employee_Email" id="EmployeeEmail_error_Dublicate" style="color:red;" hidden>Found Duplicate EmailID.</label>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="form-field-11">Department <span style="color:red;">*</span></label>
+                            @Html.DropDownList("Employee_Department", new SelectList(ViewBag.Department, "Department_Id", "Department_Name"), "Please Select Department", new { @id = "Employee_Department", @class = "form-control" })
+                            <label class="error" for="Employee_Department" id="EmployeeDepartment_error" style="color:red;" hidden>Select Employee Department.</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="form-field-8">Designation <span style="color:red;">*</span></label>
+                            @Html.DropDownList("Employee_Designation", new SelectList(ViewBag.Designation, "Designation_Id", "Designation_Name"), "Please Select Designation", new { @id = "Employee_Designation", @class = "form-control" })
+                            <label class="error" for="Employee_Designation" id="EmployeeDesignation_error" style="color:red;" hidden>Select Employee Designation.</label>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-3">
+                            <div class="form-group"></div>
+                            <label for="form-field-11">User Name <span style="color:red;">*</span></label>
+                            <input class="form-control" type="text" id="Employee_UserName" name="Employee_UserName" placeholder="Enter UserName" onkeypress="return checkAlphaNumeric()" />
+                            <label class="error" for="Employee_UserName" id="EmployeeUserName_error" style="color:red;" hidden>Enter User Name.</label>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group"></div>
+                            <label for="form-field-8">Password <span style="color:red;">*</span></label>
+                            <input class="form-control" type="Password" id="Employee_Password" name="Employee_Password" placeholder="Password" />
+                            <label class="error" for="Employee_Password" id="EmployeePassword_error" style="color:red;" hidden>Enter Employee Password.</label>
+                            <label class="error" for="Employee_Password" id="EmployeePassword_error_Check" style="color:red;" hidden>Enter at least 1 Upparcase,1 Lowercase, 1 Digit,1 Special character.</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group"></div>
+                            <label for="form-field-11">Assign Group <span style="color:red;">*</span></label>
+                            <select id="group_Id" name="group_Id" class="form-control selectpicker" multiple data-live-search="true">
+                                @foreach (var item in ViewBag.RoleList)
+                                {
+                                    <option value="@item.group_Id">@item.group_Name</option>
+                                }
+                            </select>
+                            <div class="form-group"></div>
+                            <label class="error" for="group_Id" id="groupId_error" style="color:red;" hidden>Select Group.</label>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-10">
+                            <label for="form-field-11">Address <span style="color:red;">*</span></label>
+                            <textarea class="form-control" type="text" id="Employee_Address" name="Employee_Address" placeholder="Employee Address"></textarea>
+                            <label class="error" for="Employee_Address" id="EmployeeAddress_error" style="color:red;" hidden>Enter Employee Address.</label>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group"></div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" id="Submit" style="margin-top: 10px;" onclick="ValidationEmployee()">
+                <i class="ace-icon fa fa-plus"></i>
+                Save
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="AddRemark" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Add Remark
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+                <form id="frmRemark">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-8">Remark <span style="color:red;">*</span></label>
+                            <textarea class="form-control" type="text" id="Remark" name="Remark" placeholder="Enter Remark"></textarea>
+                            <label class="error" for="messageBody" id="messageBody_error" style="color:red;" hidden>Please Enter Remark.</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" style="margin-top: 10px;" onclick="CallFunctionUsingId()">
+                <i class="ace-icon fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.table').DataTable({
+        "order": [[1, "desc"]]
+    });
+    (function ($) {
+        // BindGroup();
+        BindEmployeeType();
+        $('#Employee_Type').val("0");
+    }(jQuery));
+
+
+    //Image Upload Preview
+    function ShowImagePreview(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imagePreview').prop('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function HeadShow() {
+        var selectedtext = $("#Department_UserType option:selected").text();
+        if (selectedtext == "User")
+            $('#Headsdiv').show();
+        else
+            $('#Headsdiv').hide();
+    }
+    function HeadList(id) {
+        var selectedtext = $("#HeadType option:selected").text();
+        var selectedDepartment = $("#Employee_Department option:selected").val();
+        console.log(selectedDepartment);
+        var ddlHeadType = $("#UserHead_Id");
+
+        $.ajax({
+            url: "/Master/HeadList",
+            type: "GET",
+            data: { departmentid: selectedDepartment, Hd: selectedtext },
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response.data);
+                console.log(id);
+                if (id != 0) {
+                    ddlHeadType.empty().append('<option value="0">Select Head Type</option>');
+                    $.each(response.data, function (index, value) {
+                        if (id == value.Employee_Id)
+                            ddlHeadType.append($("<option selected='selected'></option>").val(value.Employee_Id).html(value.Employee_Name));
+                        else
+                            ddlHeadType.append($("<option></option>").val(value.Employee_Id).html(value.Employee_Name));
+                    });
+                }
+                else {
+                    ddlHeadType.empty().append('<option selected="selected" value="0">Select Head Type</option>');
+                    $.each(response.data, function (index, value) {
+                        console.log(response.data);
+                        ddlHeadType.append($("<option></option>").val(value.Employee_Id).html(value.Employee_Name));
+                    });
+                }
+            }, error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+    function loadTable() {
+        location.reload(true);
+    }
+
+    function GetID(button, id) {
+        $('#ButtonId').val(button);
+        $('#Id').val(id);
+        console.log($('#ButtonId').val());
+        console.log($('#Id').val());
+    }
+    function CallFunctionUsingId() {
+        if ($('#ButtonId').val() == "EmployeeSubmit") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                submitEmployee();
+            }
+
+        }
+        else if ($('#ButtonId').val() == "EmployeeDelete") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                deltEmployee($('#Id').val());
+            }
+        }
+    }
+
+
+    //Bind Project Function
+    function BindEmployeeType() {
+        var ddlEmployeeType = $("#Employee_Type");
+        ddlEmployeeType.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
+        $.ajax({
+            url: "/Master/ListEmployeeType",
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response.data);
+                ddlEmployeeType.empty().append('<option selected="selected" value="0">Select Employee Type</option>');
+                $.each(response.data, function (index, value) {
+                    ddlEmployeeType.append($("<option></option>").val(value).html(value));
+                });
+            }, error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    //Bind Project Function
+    function BindGroup() {
+        var ddlGroup = $("#group_Id");
+        ddlGroup.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
+        $.ajax({
+            url: "/Master/lstGroup",
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response.data);
+                ddlGroup.empty().append('<option selected="selected" value="0">Select Group</option>');
+                $.each(response.data, function (index, value) {
+                    ddlGroup.append($("<option></option>").val(value.group_Id).html(value.group_Name));
+                });
+            }, error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+    function ClearTextBox() {
+        $('#Employee_Id').val("");
+        $('#EmpID').val("");
+        $('#EmpProfilePhoto').val("");
+        $("#imagePreview").attr("src", "/Image/defaultAvtar.png");
+        $('#Employee_Department').val("");
+        $('#Employee_Designation').val("");
+        $('#Employee_Name').val("");
+        $('#Employee_Email').val("");
+        $('#Employee_Contact').val("");
+        $('#Employee_UserName').val("");
+        $('#Employee_Password').val("");
+        $('#group_Id').val(null);
+        $('#Employee_Address').val("");
+    }
+    //Validation Function
+    function ValidationEmployee() {
+        var emailReg = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        var email = $('#Employee_Email').val();
+        var Contact = $('#Employee_Contact').val();
+        var password = $('#Employee_Password').val();
+        var CheckPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{4,10}$/;
+
+        var isValid = true;
+        if ($('#Employee_Department').val().trim() == "") {
+            $('#EmployeeDepartment_error').show();
+            $("#EmployeeDepartment_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#EmployeeDepartment_error').hide();
+        }
+        if ($('#Employee_Designation').val().trim() == "") {
+            $('#EmployeeDesignation_error').show();
+            $("#EmployeeDesignation_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#EmployeeDesignation_error').hide();
+        }
+        if ($('#EmpID').val().trim() == "") {
+            $('#EmpID_error').show();
+            $("#EmpID_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#EmpID_error').hide();
+        }
+        if ($('#Employee_Name').val().trim() == "") {
+            $('#EmployeeName_error').show();
+            $("#EmployeeName_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#EmployeeName_error').hide();
+        }
+        if ($('#Employee_Email').val().trim() == "") {
+            $('#EmployeeEmail_error_Reg').hide();
+        }
+        else if (!emailReg.test(email)) {
+            $('#EmployeeEmail_error').hide();
+            $('#EmployeeEmail_error_Reg').show();
+            $("#EmployeeEmail_error_Reg").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#EmployeeEmail_error_Reg').hide();
+        }
+        if ($('#Employee_Contact').val().trim() == "") {
+            $('#EmployeeContact_error').hide();
+        }
+        else if (Contact.length != 10) {
+            $('#EmployeeContact_error').show();
+            $("#EmployeeContact_error").fadeOut(2000);
+            isValid = false;
+        } else {
+            $('#EmployeeContact_error').hide();
+        }
+        if ($('#Employee_Address').val().trim() == "") {
+            $('#EmployeeAddress_error').show();
+            $("#EmployeeAddress_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#EmployeeAddress_error').hide();
+        }
+        if ($('#Employee_UserName').val().trim() == "") {
+            $('#EmployeeUserName_error').show();
+            $("#EmployeeUserName_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#EmployeeUserName_error').hide();
+        }
+        if ($('#Employee_Password').val().trim() == "") {
+            $('#EmployeePassword_error_Check').hide();
+            $('#EmployeePassword_error').show();
+            $("#EmployeePassword_error").fadeOut(2000);
+            isValid = false;
+        }
+        else if (!CheckPassword.test(password)) {
+            $('#EmployeePassword_error').hide();
+            $('#EmployeePassword_error_Check').show();
+            $("#EmployeePassword_error_Check").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#EmployeePassword_error').hide();
+            $('#EmployeePassword_error_Check').hide();
+        }
+        if ($('#group_Id').val() == null) {
+            console.log($('#group_Id').val());
+            $('#groupId_error').show();
+            $("#groupId_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            console.log($('#group_Id').val());
+            $('#groupId_error').hide();
+        }
+        if (isValid == true) {
+            $('#modal-User').modal('hide');
+            $('#AddRemark').modal('show');
+            GetID('EmployeeSubmit', '');
+        }
+        return isValid;
+    }
+    function ValidateEmpId() {
+        var empId = $("#EmpID").val();
+        $.ajax({
+            method: "POST",
+            url: "/Master/ValidateEmpId/",
+            data: { id: empId }
+        })
+            .done(function (msg) {
+                if (msg == 1) {
+                    $('#EmpID_error_Dublicate').show();
+                    $("#EmpID_error_Dublicate").fadeOut(2000);
+                    $("#Employee_Name_Blank").fadeOut(2000);
+                    $("#EmpID").val("");
+                    $("#EmpID").focus();
+                } else {
+                    $('#EmpID_error_Dublicate').hide();
+                    $('#Employee_Name_Blank').hide();
+
+                }
+            });
+    }
+
+    function ValidateEmailId() {
+        var email = $("#Employee_Email").val();
+        $.ajax({
+            method: "POST",
+            url: "/Master/ValidateEmailId/",
+            data: { emailId: email }
+        })
+            .done(function (msg) {
+                if (msg == 1) {
+                    $('#EmployeeEmail_error_Dublicate').show();
+                    $("#EmployeeEmail_error_Dublicate").fadeOut(2000);
+                    $("#Employee_Email").val("");
+                    $("#Employee_Email").focus();
+                } else {
+                    $('#EmployeeEmail_error_Dublicate').hide();
+                }
+            });
+    }
+
+    function viewPassword() {
+        var passwordInput = document.getElementById('Employee_Password');
+        var passStatus = document.getElementById('togglePassword');
+        console.log(passwordInput.type);
+        if (passwordInput.type == 'password') {
+            passwordInput.type = 'text';
+            passStatus.className = 'fa fa-eye-slash pull-right';
+        }
+        else {
+            passwordInput.type = 'password';
+            passStatus.className = 'fa fa-eye pull-right';
+        }
+    }
+    var filename = "";
+    $('input[type="file"]').change(function (e) {
+        filename = e.target.files[0].name;
+        // alert('The file "' + filename + '" has been selected.');
+    });
+
+    function submitEmployee() {
+        var res = ValidationEmployee();
+        if (res == false) {
+            return false;
+        }
+        $('#DivwaitingTreatment').removeClass('hide')
+        var gId = [];
+        $.each($("#group_Id option:selected"), function () {
+            gId.push($(this).val());
+        });
+        var empCreation = $('#frmemployee').serialize();
+        empCreation = empCreation + "&otherdata.Remark=" + $('#Remark').val() + "&otherdata.grpid=" + gId + "&EmpProfilePhoto=" + filename;
+        console.log(empCreation);
+        $('#DivwaitingTreatment').removeClass('hide')
+        $.post("/Master/EmpCreation", empCreation, function (result) {
+            $('#AddRemark').modal('hide');
+            loadTable();
+            $('#DivwaitingTreatment').addClass('hide')
+            if (result == "Save Success") {
+                $("#Save-alert").fadeTo(2000, 5000).slideUp(5000, function () {
+                    $("#Save-alert").slideUp(5000);
+                });
+            } else {
+                $("#Update-alert").fadeTo(2000, 5000).slideUp(5000, function () {
+                    $("#Update-alert").slideUp(5000);
+                });
+            }
+        })
+    }
+
+    function editEmployee(id) {
+        $('#DivwaitingTreatment').removeClass('hide')
+        var id = { id: id };
+        $("Employee_Id").val("12");
+        $.get("/Master/EmployeeEdit", id, function (result) {
+            $('#modal-User').modal('toggle');
+            console.log(result);
+            $("#Submit").text('Update');
+            $("#Employee_Id").val(result.Employee_Id);
+            $("#EmpProfilePhoto").text(result.EmpProfilePhoto);
+            $("#imagePreview").attr("src", result.EmpProfilePhoto);
+            $('#Employee_Department').val(result.Employee_Department);
+            $('#Employee_Designation').val(result.Employee_Designation);
+            $('#EmpID').val(result.EmpID);
+            $('#Employee_Name').val(result.Employee_Name);
+            $('#Employee_Email').val(result.Employee_Email);
+            $('#Employee_Contact').val(result.Employee_Contact);
+            $('#Employee_UserName').val(result.Employee_UserName);
+            $('#Employee_Password').val(result.Employee_Password);
+            $('#group_Id').val(result.group_Id);
+            $('#Employee_Address').val(result.Employee_Address);
+            $('#DivwaitingTreatment').addClass('hide')
+        });
+    }
+    function deltEmployee(id) {
+        $('#AddRemark').modal('toggle');
+        // var id = { id: id };
+        bootbox.confirm({
+            //Zuber Khan
+            titel: 'Confirm message',
+            message: 'Are you sure you want to Deactive!!..',
+            button: {
+                'confirm': {
+                    label: 'Confirm',
+                    className: 'btn-sm btn-info'
+                },
+                'cancle': {
+                    label: 'Cancel',
+                    className: 'btn-sm btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    var data = {
+                        id: id,
+                        remark: $('#Remark').val(),
+                    }
+                    $('#DivwaitingTreatment').removeClass('hide')
+                    $.get("/Master/EmployeeDeactive", data, function (result) {
+                        loadTable();
+                        $('#DivwaitingTreatment').addClass('hide')
+                        $("#Delete-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                            $("#Delete-alert").slideUp(10000);
+                        });
+                    });
+
+                }
+            }
+        })
+
+    }
+</script>

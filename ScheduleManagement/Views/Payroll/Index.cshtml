@@ -1,0 +1,496 @@
+﻿
+@{
+    TrainningManagement.Models.tblEmployee sessEmpData = (TrainningManagement.Models.tblEmployee)Session["EmployeeData"];
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="alert alert-success" id="Save-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Save Data Successfully.
+</div>
+<div class="alert alert-success" id="Update-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Update Data Successfully.
+</div>
+<div class="alert alert-success" id="Delete-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Delete Data Successfully.
+</div>
+
+@if (sessEmpData != null)
+{
+    <label for="form-field-8" hidden id="EmployeeId">@sessEmpData.Employee_Id</label>
+}
+else
+{
+    Response.Redirect("~", true);
+}
+<div class="row">
+    <div class="col-sm-12">
+        @foreach (var grp in ViewBag.Groupchild)
+        {
+            if (grp.menu_Id == 18)
+            {
+                if (grp.access_Create == "true")
+                {
+
+                    <button class="btn btn-info pull-right" style="border-radius: 20px">
+                        <i class="ace-icon fa fa-plus icon-animated-hand-pointer white"></i>
+                        <a href="#modal-LeaveApp" data-toggle="modal" class="white" onclick="ClearTextBox();">Add</a>
+                    </button>
+                }
+            }
+        }
+    </div>
+</div>
+<label for="form-field-8" id="ButtonId"> </label>
+<label for="form-field-8" id="Id"> </label>
+
+<div>
+    Total Panding Leaves:<label id="PandingLeave"></label>
+</div>
+<div style="margin-top: 15px !important">
+    <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+        <thead>
+            <tr>
+                @foreach (var grp in ViewBag.Groupchild)
+                {
+                    if (grp.menu_Id == 18)
+                    {
+                        if (grp.access_Modify == "true" || grp.access_Delete == "true")
+                        {
+                            <th style="width: 130px !important;">Action</th>
+                        }
+                    }
+                }
+                <th>Head Name</th>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>NoOfDays</th>
+                <th>E.Conttact</th>
+                <th>Created DateTime</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in ViewBag.LeaveList)
+            {
+                <tr>
+                    @foreach (var grp in ViewBag.Groupchild)
+                    {
+                        if (grp.menu_Id == 18)
+                        {
+                            if (grp.access_View == "true")
+                            {
+
+                            }
+                            if (grp.access_Delete == "true" || grp.access_Modify == "true")
+                            {
+                                <td>
+                                    @if (grp.access_Modify == "true" && grp.access_Delete == "false")
+                                    {
+                                        <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editLeave(@item.Payroll_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                    }
+                                    @if (grp.access_Delete == "true" && grp.access_Modify == "false")
+                                    {
+                                        <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("LeaveDelete",@item.Payroll_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                    }
+                                    @if (grp.access_Delete == "true" && grp.access_Modify == "true")
+                                    {
+                                        <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editLeave(@item.Payroll_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                        <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("LeaveDelete",@item.Payroll_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                    }
+                                </td>
+
+                            }
+
+                        }
+
+                    }
+
+                    <td>@item.HeadName</td>
+                    <td>@item.FromDate</td>
+                    <td>@item.ToDate</td>
+
+                    <td>@item.NoOfDays</td>
+                    <td>@item.EmergencyContactNo</td>
+                    <td>@item.CreatedDatetime</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+</div>
+
+
+
+
+<div class="modal" id="modal-LeaveApp" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span style="color:black;">×</span>
+                </button>
+                Leave Application
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding">
+                <form id="LeaveApp">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input class="form-control" type="hidden" id="Payroll_Id" name="Payroll_Id" placeholder="" />
+                            <input class="form-control" type="hidden" id="UserId" name="UserId" placeholder="" />
+                            <div>
+                                <label for="form-field-11">Department Head<span style="color:red;">*</span></label>
+                                <select class="form-control" id="Head_Id" name="Head_Id">
+                                    <option>Select</option>
+                                </select>
+                                <label class="error" for="Head_Id" id="HeadId_error" style="color:red;" hidden>Select Department Head.</label>
+                            </div>
+                            <div>
+                                <label for="form-field-8">From Date <span style="color:red;">*</span></label>
+                                <input type="text" id="FromDate" name="FromDate" class="form-control" placeholder="From date" onkeyup="NoofDaysCal();"/> @*onclick="NoofDaysCal();"*@
+                                <label class="error" for="FromDate" id="FromDate_error" style="color:red;" hidden>Select From Date.</label>
+                            </div>
+                            <div>
+                                <label for="form-field-11"> Emergency Contact</label>
+                                <input class="form-control" type="text" id="EmergencyContactNo" name="EmergencyContactNo" placeholder="Emergency ContactNo" maxlength="10" onkeypress="return validateNumericValue(event)" />
+                                <label class="error" for="EmergencyContactNo" id="EmergencyContactNo_error" style="color:red;" hidden>Enter 10 digit.</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div>
+                                <label for="form-field-11">No Of Days <span style="color:red;">*</span></label>
+                                <input class="form-control" type="text" id="NoOfDays" name="NoOfDays" placeholder="No of days" onkeypress="return checkAlphaNumeric()" />
+                                <label class="error" for="NoOfDays" id="NoOfDays_error" style="color:red;" hidden>Enter No Of Days.</label>
+                            </div>
+                            <div>
+                                <label for="form-field-8">To Date <span style="color:red;">*</span></label>
+                                <input class="form-control" type="text" id="ToDate" name="ToDate" placeholder="To Date" onclick="NoofDaysCal();"/>@*onclick="NoofDaysCal();"*@
+                                <label class="error" for="ToDate" id="ToDate_error" style="color:red;" hidden>Select To Date.</label>
+                            </div>
+                            <div id="Leavestatus" hidden>
+                                <label for="form-field-8">Status <span style="color:red;">*</span></label>
+                                <select class="form-control" id="Status" name="Status">
+                                    <option>Select</option>
+                                    <option>Approve</option>
+                                    <option>Reject</option>
+                                </select>
+                                <label class="error" for="Status" id="Status_error" style="color:red;" hidden>Select Status.</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div>
+                                <label for="form-field-11">Reason <span style="color:red;">*</span></label>
+                                <textarea class="form-control" type="text" id="Reason" name="Reason" placeholder="Reason"></textarea>
+                                <label class="error" for="Reason" id="Reason_error" style="color:red;" hidden>Enter Reason.</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" style="margin-top: 10px;" data-toggle="modal" data-target="#AddRemark" onclick="Validation()">
+                <i class="ace-icon fa fa-plus"></i>
+                Save
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="AddRemark" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Add Remark
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+                <form id="frmRemark">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-8">Remark <span style="color:red;">*</span></label>
+                            <textarea class="form-control" type="text" id="Remark" name="Remark" placeholder="Enter Remark"></textarea>
+                            <label class="error" for="messageBody" id="messageBody_error" style="color:red;" hidden>Please Enter Remark.</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" style="margin-top: 10px;" onclick="CallFunctionUsingId()">
+                <i class="ace-icon fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function ($) {
+        HeadList();
+        pandingLeave();
+        $('#FromDate').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+        $('#ToDate').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+    }(jQuery));
+    function loadTable() {
+        location.reload(true);
+    }
+
+    function pandingLeave() {
+        $.get("/Payroll/PandingLeave", function (response) {
+            var approveLeave = 0;
+            var totalLeave = 0;
+            $.each(response.data, function (index, value) {
+                totalLeave = value.TotalLeaves;
+                approveLeave += value.ApproveLeaves;
+            });
+            var PandingLeave = totalLeave - approveLeave;
+            $('#PandingLeave').text(PandingLeave);
+        });
+    }
+    function ClearTextBox() {
+        $('#Leavestatus').hide();
+        $('#UserId').val("");
+        $('#Reason').val("");
+        $('#Head_Id').prop("disabled", false);
+        $('#EmergencyContactNo').prop("disabled", false);
+        $('#Payroll_Id').val("");
+        $('#Head_Id').val(0);
+        $('#FromDate').val("");
+        $('#EmergencyContactNo').val("");
+        $('#NoOfDays').val("");
+        $('#ToDate').val("");
+    }
+
+    //Validation Function
+    function Validation() {
+        var isValid = true;
+        if ($('#Head_Id').val().trim() == "0") {
+            $('#HeadId_error').show();
+            $("#HeadId_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#HeadId_error').hide();
+        }
+        if ($('#FromDate').val().trim() == "") {
+            $('#FromDate_error').show();
+            $("#FromDate_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#FromDate_error').hide();
+        }
+        if ($('#EmergencyContactNo').val() == "") {
+            $('#EmergencyContactNo_error').show();
+            $("#EmergencyContactNo_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#EmergencyContactNo_error').hide();
+        }
+        if ($('#NoOfDays').val() == "") {
+            $('#NoOfDays_error').show();
+            $("#NoOfDays_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#NoOfDays_error').hide();
+        }
+        if ($('#ToDate').val().trim() == "") {
+            $('#ToDate_error').show();
+            $("#ToDate_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#ToDate_error').hide();
+        }
+        if ($('#Status').val().trim() == "") {
+            $('#Status_error').show();
+            $("#Status_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#Status_error').hide();
+        }
+        if ($('#Reason').val().trim() == "") {
+            $('#Reason_error').show();
+            $("#Reason_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#Reason_error').hide();
+        }
+
+        if (isValid == true) {
+            $('#modal-LeaveApp').modal('hide');
+            GetID('LeaveSubmit', '');
+        }
+        return isValid;
+    }
+
+    function GetID(button, id) {
+        $('#ButtonId').val(button);
+        $('#Id').val(id);
+        console.log($('#ButtonId').val());
+        console.log($('#Id').val());
+    }
+    function CallFunctionUsingId() {
+        if ($('#ButtonId').val() == "LeaveSubmit") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                submitLeaveApp();
+            }
+        }
+        else if ($('#ButtonId').val() == "LeaveDelete") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                deltEmployee($('#Id').val());
+            }
+        }
+    }
+
+    function NoofDaysCal() {
+        if ($('#FromDate').val() != "" && $('#ToDate').val() != "") {
+            var start = $('#FromDate').val();
+            var end = $('#ToDate').val();
+            console.log(start);
+            console.log(end);
+
+            // end - start returns difference in milliseconds
+            var diff = new Date(end - start);
+
+            // get days
+            var days = diff / 1000 / 60 / 60 / 24;
+            console.log(days);
+
+            //// To calculate the time difference of two dates
+            //var Difference_In_Time = $('#FromDate').val() - $('#ToDate').val();
+            //console.log(Difference_In_Time);
+            //// To calculate the no. of days between two dates
+            //$('#NoOfDays').val(Difference_In_Time / (1000 * 3600 * 24));
+        }
+        console.log($('#NoOfDays').val());
+    }
+
+    function HeadList() {
+        var ddlHeadId = $("#Head_Id");
+
+        $.ajax({
+            url: "/Payroll/HeadList",
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response.data);
+                ddlHeadId.empty().append('<option selected="selected" value="0">Select Head</option>');
+                $.each(response.data, function (index, value) {
+                    console.log(response.data);
+                    ddlHeadId.append($("<option></option>").val(value.Employee_Id).html(value.Employee_Name));
+                });
+            }, error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    function submitLeaveApp() {
+        var res = Validation();
+        if (res == false) {
+            return false;
+        }
+        $('#DivwaitingTreatment').removeClass('hide')
+        $('#Head_Id').prop("disabled", false);
+        $('#EmergencyContactNo').prop("disabled", false);
+        var LeaveCreation = $('#LeaveApp').serialize();
+        LeaveCreation = LeaveCreation + "&Remark=" + $('#Remark').val() + "&HeadName=" + $("#Head_Id option:selected").text();
+        console.log(LeaveCreation);
+
+        $('#DivwaitingTreatment').removeClass('hide')
+        $.post("/Payroll/LeaveCreation", LeaveCreation, function (result) {
+            $('#AddRemark').modal('hide');
+            $('#DivwaitingTreatment').addClass('hide')
+            loadTable();
+            $('#DivwaitingTreatment').addClass('hide')
+            if (result == "Save Success") {
+                $("#Save-alert").fadeTo(2000, 5000).slideUp(5000, function () {
+                    $("#Save-alert").slideUp(5000);
+                });
+            } else {
+                $("#Update-alert").fadeTo(2000, 5000).slideUp(5000, function () {
+                    $("#Update-alert").slideUp(5000);
+                });
+            }
+        })
+    }
+
+    function editLeave(id) {
+
+        console.log($('#EmployeeId').text());
+        $('#DivwaitingTreatment').removeClass('hide')
+        var id = { id: id };
+        $.get("/Payroll/LeaveAppEdit", id, function (result) {
+            $('#modal-LeaveApp').modal('toggle');
+            if ($('#EmployeeId').text() == result.Head_Id) {
+                $('#Leavestatus').show();
+                $('#UserId').val(result.CreatedBy);
+                $('#Reason').val();
+                $('#Head_Id').prop("disabled", true);
+                $('#EmergencyContactNo').prop("disabled", true);
+            } else {
+                $('#Leavestatus').hide();
+                $('#Reason').val(result.Reason);
+                $('#Head_Id').prop("disabled", false);
+                $('#EmergencyContactNo').prop("disabled", false);
+            }
+            $('#Payroll_Id').val(result.Payroll_Id);
+            $('#Head_Id').val(result.Head_Id);
+            $('#FromDate').val(moment(result.FromDate).format('DD/MM/YYYY hh:mm a'));
+            $('#EmergencyContactNo').val(result.EmergencyContactNo);
+            $('#NoOfDays').val(result.NoOfDays);
+            $('#ToDate').val(moment(result.ToDate).format('DD/MM/YYYY hh:mm a'));
+            $('#DivwaitingTreatment').addClass('hide')
+        });
+    }
+
+
+</script>

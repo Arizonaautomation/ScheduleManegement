@@ -1,0 +1,649 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="alert alert-success" id="Save-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Save Data Successfully.
+</div>
+<div class="alert alert-success" id="Update-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Update Data Successfully.
+</div>
+<div class="alert alert-success" id="Delete-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Delete Data Successfully.
+</div>
+<div id="DivwaitingSchedule" class="hide widget-box-overlay">
+    <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+        <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+    </div>
+</div>
+
+<div class="">
+    <div class="">
+        @*<form id="frmAccessGroup">
+                <div class="widget-main">
+                    <div class="row">
+                        <div class="col-sm-3">
+
+                            <input type="hidden" id="group_Id" name="group_Id" class="form-control" placeholder="" />
+                            <input type="hidden" id="groupChilld_Id" name="groupChilld_Id" class="form-control" placeholder="" />
+                            <div>
+                                <div class="form-group"></div>
+                                <label for="form-field-8">Group Code <span style="color:red;">*</span></label>
+                                <input type="text" class="form-control" name="group_Name" id="group_Name" placeholder="Enter Group Name" onchange="ValidateGroup()" />
+                                <label class="error" for="group_Name" id="group_Name_error" style="color:red;" hidden>Enter Group Name.</label>
+                                <label class="error" for="group_Name" id="group_Name_error_Dublicate" style="color:red;" hidden>Found Duplicate Group.</label>
+                            </div>
+                            <div>
+                                <div class="form-group"></div>
+                                <label for="form-field-9">Description <span style="color:red;">*</span></label>
+                                <textarea type="text" class="form-control" name="remark" id="Description" placeholder="Enter Description"></textarea>
+                                <label class="error" for="Description" id="Description_error" style="color:red;" hidden>Enter Description.</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2" style="margin-top: 20px">
+                            <div>
+                                <button type="button" class="btn btn-info" onclick="CreateGroup()">Submit</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-10" style="margin-top: 20px">
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>*@
+        <div class="row">
+            <div class="col-sm-12">
+
+                @foreach (var grp in ViewBag.Groupchild)
+                {
+                    if (grp.menu_Id == 7)
+                    {
+                        if (grp.access_Create == "True")
+                        {
+                            <button class="btn btn-info pull-right" style="border-radius: 20px">
+                                <i class="ace-icon fa fa-plus icon-animated-hand-pointer white"></i>
+                                <a href="#MenuModal" data-toggle="modal" class="white" onclick="ClearTextBox();">New Create</a>
+                            </button>
+                        }
+                    }
+                }
+
+            </div>
+        </div>
+        <div class="form-group"></div>
+        <div class="form-group"></div>
+
+        @*<div class="widget-body" style="display: none;">
+                <table id="tblgrpMasterWithChild" class="table table-striped table-bordered table-hover table-condensed width-100"></table>
+            </div>*@
+        <fieldset>
+            <legend>Access Right Role</legend>
+
+            <table id="tblGroupMaster" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        @foreach (var grp in ViewBag.Groupchild)
+                        {
+                            if (grp.menu_Id == 7)
+                            {
+                                if (grp.access_Modify == "True" || grp.access_Delete == "True")
+                                {
+                                    <th style="width: 130px !important;">Action</th>
+                                }
+                            }
+                        }
+                        <th hidden="hidden">GroupId</th>
+                        <th>Group Code</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+
+                @*<tbody id="tblChildGrp"></tbody>*@
+                <tbody>
+                    @foreach (var item in ViewBag.grpList)
+                    {
+                        <tr>
+                            @foreach (var grp in ViewBag.Groupchild)
+                            {
+                                if (grp.menu_Id == 7)
+                                {
+                                    if (grp.access_View == "True")
+                                    {
+
+                                    }
+                                    if (grp.access_Delete == "True" || grp.access_Modify == "True")
+                                    {
+                                        <td>
+
+                                            @if (grp.access_Modify == "True" && grp.access_Delete == "False")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editGroupChilld(@item.group_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                            }
+                                            @if (grp.access_Delete == "True" && grp.access_Modify == "False")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-danger btn-bold" onclick="DeleteGroup(@item.group_Id)" title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                            }
+                                            @if (grp.access_Delete == "True" && grp.access_Modify == "True")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editGroupChilld(@item.group_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                                <button class="btn btn-minier btn-white btn-danger btn-bold" onclick="DeleteGroup(@item.group_Id)" title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                            }
+                                        </td>
+                                    }
+                                }
+                            }
+                            <td hidden="hidden">@item.group_Id</td>
+                            <td>@item.group_Name</td>
+                            <td>@item.remark</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </fieldset>
+        @*<div style="margin-top: 15px !important">
+                <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                    <thead>
+                        <tr>
+                            <th style="width: 130px !important;">Action</th>
+                            <th>Group Code</th>
+                            <th>Description</th>
+                            <th>Assign Menu</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in ViewBag.GetData)
+                        {
+                            <tr>
+                                <td>
+                                    <button class="btn btn-success fa fa-pencil allActionButton" onclick="editEmployee(@item.GroupID)"></button>
+
+                                    <button class="btn btn-danger fa fa-trash allActionButton" onclick="deltEmployee(@item.GroupID)"></button>
+                                </td>
+                                <td>@item.GroupName</td>
+                                <td>@item.GroupDescription</td>
+                                <td>@item.MenuName</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>*@
+    </div>
+</div>
+
+<div class="modal" id="MenuModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                @*<div class="table-header">*@
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Group Creation
+                @*</div>*@
+            </div>
+            <div class="modal-body no-padding">
+                <form id="frmMenu">
+                    <div class="row">
+                        <input type="hidden" id="group_Id" name="group_Id" class="form-control" placeholder="" />
+                        <input type="hidden" id="groupChilld_Id" name="groupChilld_Id" class="form-control" placeholder="" />
+                        <div class="col-sm-12">
+                            <div class="form-group"></div>
+                            <label for="form-field-8">Group Code <span style="color:red;">*</span></label>
+                            <input type="text" class="form-control" name="group_Name" id="group_Name" placeholder="Enter Group Name" onchange="ValidateGroup()" />
+                            <label class="error" for="group_Name" id="group_Name_error" style="color:red;" hidden>Enter Group Name.</label>
+                            <label class="error" for="group_Name" id="group_Name_error_Dublicate" style="color:red;" hidden>Found Duplicate Group.</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group"></div>
+                            <label for="form-field-9">Description <span style="color:red;">*</span></label>
+                            <textarea type="text" class="form-control" name="remark" id="Description" placeholder="Enter Description"></textarea>
+                            <label class="error" for="Description" id="Description_error" style="color:red;" hidden>Enter Description.</label>
+                        </div>
+                    </div>
+                    <div class="form-group"></div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="tblMenuMaster" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th hidden="hidden">MenuId</th>
+                                        <th>Assign Menu</th>
+                                        <th>View</th>
+                                        <th>Create</th>
+                                        <th>Modify</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="tblMenuList">
+                                    @foreach (var item in ViewBag.Menu)
+                                    {
+                                        <tr>
+                                            <td hidden="hidden" class="menuId">@item.menu_Id</td>
+                                            <td class="MenuName">@item.menu_Name</td>
+                                            <td><input type="checkbox" name="Check_View" /></td>
+                                            <td><input type="checkbox" name="Check_Create" /></td>
+                                            <td><input type="checkbox" name="Check_Modify" /></td>
+                                            <td><input type="checkbox" name="Check_Delete" /></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <thead>
+                                    <tr>
+                                        <th hidden="hidden">MenuId</th>
+                                        <th>Assign Menu</th>
+                                        <th>View</th>
+                                        <th>Create</th>
+                                        <th>Modify</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                            @*<label for="form-field-11">Menu @*<span style="color:red;">*</span>*</label>
+                                @*Html.DropDownList("menu_Id", new SelectList(ViewBag.Menu, "menu_Id", "menu_Name"), "Please Select Menu", new { @id = "menu_Id", @class = "form-control" })*
+                                <select multiple="" class="chosen-select form-control" id="MenuList" data-placeholder="Choose a Menu...">
+                                    @foreach (var item in ViewBag.Menu)
+                                    {
+                                        <option value="@item.menu_Id">@item.menu_Name</option>
+                                    }
+                                </select>
+                                <input type="text" autocomplete="off" class="width-100 no-padding select2 clsreq" placeholder="Select Menu" name="MenuList" id="MenuList">*@
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" style="margin-top: 10px;" onclick="CreateGroup()">
+                <i class="ace-icon fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    (function ($) {
+        $('#tblGroupMaster').dataTable({
+            "order": [[1, "desc"]]
+        });
+        //GetData();
+    }(jQuery));
+    function loadTable() {
+        location.reload(true);
+    }
+
+    //$('.table').DataTable({
+    //});
+
+    //function bindDatawithTable() {
+    //    var oTable = $('#tblgrpMasterWithChild').dataTable({
+    //        "bPaginate": true,
+    //        "bDeferRender": true,
+    //        "bProcessing": true,
+    //        "bJqueryUI": true,
+    //        "sDom": '<"toolbar">frtrip',
+    //        "sAjaxSource": "/AccessRight/bindData",
+    //        "iDisplayLength": 5,
+    //        "bDestroy": true,
+    //        "aoColumns": [
+    //            { "mData": "Button", "sTitle": "Action", "sWidth": "5%", "bSortable": false },
+    //            { "mData": "GroupID", "sTitle": "Group Id", "sWidth": "10%", "bSortable": false },
+    //            { "mData": "GroupName", "sTitle": "Group Name", "sWidth": "10%", "bSortable": false },
+    //            { "mData": "GroupDescription", "sTitle": "Menu Name", "sWidth": "10%", "bSortable": false },
+
+    //        ]
+    //    })
+    //};
+    //(function ($) {
+    //    $("#MenuList").select2({
+    //        multiple: false,
+    //        allowClear: true,
+    //        ajax: {
+    //            cache: true,
+    //            url: "/AccessRight/menuList",
+    //            dataType: 'json',
+    //            quietMillis: 100,
+    //            data: function (term) {
+    //                return {
+    //                    menu_Id: term,
+    //                    menu_Name: term,
+    //                };
+    //            },
+    //            results: function (data) {
+    //                return {
+    //                    results: data,
+    //                };
+
+    //            }
+    //        }
+    //    }).on('change', function () {
+
+    //    });
+    //})(jQuery)
+    function ClearTextBox() {
+
+        $('#group_Id').val("");
+        $('#groupChilld_Id').val("");
+        $('#group_Name').val("");
+        $('#Description').val("");
+
+
+        $("#tblMenuList").find("tr").each(function () {
+            var tr = $(this);
+            tr.find("td").each(function () {
+                $(this).find("input[type=checkbox]").prop("checked", false);
+            });
+        })
+    }
+    //function GetData() {
+    //    $.get("/AccessRight/bindData", function (res) {
+
+    //        console.log(res.Data);
+    //        $.each(res.Data, function (index, value) {
+    //            console.log(value);
+    //            var tr = "<tr>";
+    //            tr += "<td>" + "<button class='btn btn-minier btn-white btn-info btn-bold' id='" + value.group_Id + "' onclick='editGroupChilld(" + value.group_Id + ")' title='Edit Service'><i class='ace-icon fa fa-pencil bigger-80'></i></button> <button class='btn btn-minier btn-white btn-danger btn-bold' id='" + value.group_Id + "'data-toggle='modal' data-target='#DeleteModal' value='Delete' onclick = 'GetID(" + value.group_Id + ")' title='Delete Service'><i class='ace-icon fa fa-trash bigger-80'></i></button>" + "</td>";
+    //            tr += "<td hidden='hidden'>" + value.group_Id + "</td>";
+    //            tr += "<td>" + value.group_Name + "</td>";
+    //            tr += "<td>" + value.remark + "</td>";
+    //            //tr += "<td hidden='hidden'>" + value.MenuID + "</td>";
+    //            //tr += "<td>" + value.MenuName + "</td>" + "</tr>";
+    //            $("#tblChildGrp").append(tr);
+    //        });
+    //        $("#tblGroupChild").DataTable();
+    //    });
+    //}
+
+    function Validation() {
+        var isValid = true;
+        if ($('#group_Name').val().trim() == "") {
+            $('#group_Name_error').show();
+            $("#group_Name_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#group_Name_error').hide();
+        }
+        if ($('#Description').val().trim() == "") {
+            $('#Description_error').show();
+            $("#Description_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#Description_error').hide();
+        }
+        return isValid;
+    }
+    function ValidateGroup() {
+        var Group = $("#group_Name").val();
+        $.ajax({
+            method: "POST",
+            url: "/AccessRight/ValidateGroup/",
+            data: { GroupName: Group }
+        })
+            .done(function (msg) {
+                if (msg == 1) {
+                    $('#group_Name_error_Dublicate').show();
+                    $("#group_Name_error_Dublicate").fadeOut(2000);
+                    $("#group_Name").val("");
+                    $("#group_Name").focus();
+                } else {
+                    $('#group_Name_error_Dublicate').hide();
+                }
+            });
+    }
+    function CreateGroup() {
+        var res = Validation();
+        if (res == false) {
+            return false;
+        }
+
+        $('#DivwaitingSchedule').removeClass('hide')
+        var data = {
+            group_Id: $('#group_Id').val(),
+            group_Name: $('#group_Name').val(),
+            remark: $('#Description').val(),
+        }
+        //var serializeform = $('#frmAccessGroup').serialize();
+        $.post('/AccessRight/CreateAccessGroup', data, function (res) {
+            $('#DivwaitingSchedule').addClass('hide');
+            if (res.msg == "Add") {
+                //$("#Save-alert").fadeTo(2000, 5000).slideUp(5000, function () {
+                //    $("#Save-alert").slideUp(5000);
+                //});
+                $('#group_Id').val(res.id);
+                console.log($('#group_Id').val());
+                AddgroupChild($('#group_Id').val());
+
+            } else {
+                AddgroupChild($('#group_Id').val());
+                //$("#Update-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                //    $("#Update-alert").slideUp(10000);
+                //});
+            }
+        })
+    }
+    //function newFunction(frmMenu) {
+    //    var ser = $('#frmMenu').serialize();
+    //    console.log(ser);
+    //}
+
+
+    //function getSelectValues(select) {
+    //    var result = [];
+    //    var options = select && select.options;
+    //    var opt;
+
+    //    for (var i = 0, iLen = options.length; i < iLen; i++) {
+    //        opt = options[i];
+
+    //        if (opt.selected) {
+    //            result.push(opt.value || opt.text);
+    //        }
+    //    }
+    //    return result;
+    //}
+    function AddgroupChild(groupId) {
+
+        var menuList = [];
+        console.log(groupId);
+
+        menuList.push({ group_Id: groupId, })
+
+        $("#tblMenuList").find("tr").each(function () {
+
+            var tr = $(this);
+            var Id = tr.find(".menuId").html();
+            var Name = tr.find(".MenuName").html();
+            var check = "";
+            tr.find("td").not(":first").each(function () {
+                if ($(this).find(":checkbox").prop("checked")) {
+                    check += "True" + ",";
+                }
+                else {
+                    check += "False" + ",";
+                }
+            });
+            var strarray = check.split(',');
+            console.log(strarray.length);
+            var View; var create; var modify; var Delete;
+            for (var i = 1; i < strarray.length - 1; i++) {
+                if (i == 1) {
+                    View = strarray[i];
+                }
+                if (i == 2) {
+                    create = strarray[i];
+                }
+                if (i == 3)
+                    modify = strarray[i];
+                if (i == 4)
+                    Delete = strarray[i];
+            }
+            menuList.push({
+                menu_Id: Id,
+                access_View: View,
+                access_Create: create,
+                access_Modify: modify,
+                access_Delete: Delete,
+            })
+        });
+        console.log(menuList);
+        var data = { lst: menuList }
+        $.post('/AccessRight/AddAccessGroupChild', data, function (res) {
+            $('#MenuModal').modal('hide');
+            $('#DivwaitingSchedule').addClass('hide');
+            loadTable();
+            $("#Save-alert").fadeTo(2000, 5000).slideUp(5000, function () {
+                $("#Save-alert").slideUp(5000);
+            });
+        })
+
+        //var el = document.getElementsByTagName('select')[0];
+        //var menuList = getSelectValues(el);
+        //for (let i = 0; i < menuList.length; i++) {
+        //    console.log(menuList[i]);
+        //var data = {
+        //    group_Id= $('#GId').val(),
+        //};
+
+        //var menu_Id = menuList[i];
+
+        // }
+        //$('#DivwaitingSchedule').removeClass('hide')
+        //var data = {
+        //    group_Id= $('#GId').val(),
+        //};
+        //$.post('/AccessRight/AddAccessGroupChild', data, function (res) {
+        //    $('#DivwaitingSchedule').addClass('hide');
+        //    if (res == "Add") {
+        //        $("#Save-alert").fadeTo(2000, 5000).slideUp(5000, function () {
+        //            $("#Save-alert").slideUp(5000);
+        //        });
+        //    } else {
+        //        $("#Update-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+        //            $("#Update-alert").slideUp(10000);
+        //        });
+        //    }
+        //})
+    }
+    function editGroupChilld(id) {
+        ClearTextBox();
+        $('#group_Id').val(id);
+        console.log(id);
+        $('#DivwaitingTreatment').removeClass('hide')
+        var id = { id: id };
+        $.get("/AccessRight/editGroupName", id, function (result) {
+            $('#group_Name').val(result.group_Name);
+            $('#Description').val(result.remark);
+            $('#DivwaitingTreatment').addClass('hide')
+        });
+
+        $.get("/AccessRight/editGroupChild", id, function (res) {
+            $.each(res.data, function (index, value) {
+                $("#groupChilld_Id").val(value.groupChild_Id);
+
+                $("#tblMenuList").find("tr").each(function () {
+                    var tr = $(this);
+                    var Id = tr.find(".menuId").html();
+                    if (Id == value.menu_Id) {
+                        tr.find("td").each(function () {
+                            if (value.access_Create == "True") {
+                                $(this).find("input[name=Check_Create]").prop("checked", true);
+                            }
+                            if (value.access_Modify == "True") {
+                                $(this).find("input[name=Check_Modify]").prop("checked", true);
+                            }
+                            if (value.access_Modify == "True") {
+                                $(this).find("input[name=Check_Delete]").prop("checked", true);
+                            }
+                            if (value.access_View == "True") {
+                                $(this).find("input[name=Check_View]").prop("checked", true);
+                            }
+                        });
+                    }
+                })
+            })
+            // console.log(result);
+            $('#DivwaitingTreatment').addClass('hide')
+            $('#MenuModal').modal('toggle')
+
+        });
+    }
+
+    function DeleteGroup(id) {
+        var data = { Id: id }
+        $.post('/AccessRight/EmployeeCount', data, function (res) {
+            if (res != 0) {
+                bootbox.confirm({
+                    //Zuber Khan
+                    titel: 'Confirm message',
+                    message: 'This Group Is Not Delete because already assign ' + res + ' employees!!..',
+                    button: {
+                        'confirm': {
+                            label: 'Confirm',
+                            className: 'btn-sm btn-info'
+                        },
+                        'cancle': {
+                            label: 'Cancel',
+                            className: 'btn-sm btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result == true) {
+                        }
+                    }
+                })
+                console.log(res);
+            }
+            else {
+                bootbox.confirm({
+                    //Zuber Khan
+                    titel: 'Confirm message',
+                    message: 'Are you sure you want to delete!!..',
+                    button: {
+                        'confirm': {
+                            label: 'Confirm',
+                            className: 'btn-sm btn-info'
+                        },
+                        'cancle': {
+                            label: 'Cancel',
+                            className: 'btn-sm btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result == true) {
+                            $('#DivwaitingTreatment').removeClass('hide')
+                            $.get("/AccessRight/DeleteGroup", data, function (result) {
+                                loadTable();
+                                $('#DivwaitingTreatment').addClass('hide')
+                                $("#Delete-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                                    $("#Delete-alert").slideUp(10000);
+                                });
+                            });
+                        }
+                    }
+
+                })
+            }
+        });
+    }
+</script>

@@ -1,0 +1,726 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SchedulManagementSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ScheduleMachine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MachineId" Type="bigint" Nullable="false" />
+          <Property Name="MachineLocation" Type="nvarchar" MaxLength="50" />
+          <Property Name="ScheduleType" Type="nchar" MaxLength="10" />
+          <Property Name="StartScheduleDate" Type="datetime" />
+          <Property Name="EndScheduleDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="AsignTo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="nvarchar" MaxLength="30" />
+          <Property Name="AsignType" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApprovedDate" Type="datetime" />
+          <Property Name="CreatedDepartment" Type="bigint" />
+          <Property Name="EmployeeHead" Type="bigint" />
+        </EntityType>
+        <EntityType Name="tblAccessGroupChild">
+          <Key>
+            <PropertyRef Name="groupChild_Id" />
+          </Key>
+          <Property Name="groupChild_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="group_Id" Type="bigint" />
+          <Property Name="menu_Id" Type="bigint" />
+          <Property Name="access_Create" Type="nvarchar" MaxLength="10" />
+          <Property Name="access_Modify" Type="nvarchar" MaxLength="10" />
+          <Property Name="access_Delete" Type="nvarchar" MaxLength="10" />
+          <Property Name="access_View" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="tblAccessGroupMaster">
+          <Key>
+            <PropertyRef Name="group_Id" />
+          </Key>
+          <Property Name="group_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="group_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="remark" Type="nvarchar" MaxLength="100" />
+          <Property Name="SiteId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="tblAccessMenuMaster">
+          <Key>
+            <PropertyRef Name="menu_Id" />
+          </Key>
+          <Property Name="menu_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="menu_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="menu_Link" Type="nvarchar" MaxLength="50" />
+          <Property Name="menu_Icon" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblAssignEmployeeGroup">
+          <Key>
+            <PropertyRef Name="assignGroupId" />
+          </Key>
+          <Property Name="assignGroupId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="employee_Id" Type="bigint" />
+          <Property Name="group_Id" Type="bigint" />
+        </EntityType>
+        <EntityType Name="tblDepartment">
+          <Key>
+            <PropertyRef Name="Department_Id" />
+          </Key>
+          <Property Name="Department_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Department_Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Department_Head" Type="nvarchar" MaxLength="100" />
+          <Property Name="Parent_Department" Type="nvarchar" MaxLength="100" />
+          <Property Name="Status" Type="nvarchar" MaxLength="15" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="SiteId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="tblDesignation">
+          <Key>
+            <PropertyRef Name="Designation_Id" />
+          </Key>
+          <Property Name="Designation_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Designation_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="nvarchar" MaxLength="15" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="SiteId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="tblEmployee">
+          <Key>
+            <PropertyRef Name="Employee_Id" />
+          </Key>
+          <Property Name="Employee_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Employee_Department" Type="bigint" Nullable="false" />
+          <Property Name="Employee_Designation" Type="bigint" Nullable="false" />
+          <Property Name="EmpID" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmpProfilePhoto" Type="varchar(max)" />
+          <Property Name="Employee_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Employee_Contact" Type="nvarchar" MaxLength="50" />
+          <Property Name="Employee_Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Employee_Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="group_Id" Type="bigint" />
+          <Property Name="Employee_UserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Employee_Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="nvarchar" MaxLength="15" />
+          <Property Name="FirstTimeLoginStatus" Type="nvarchar" MaxLength="10" />
+          <Property Name="CreatedBy" Type="nchar" MaxLength="10" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="SiteId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="tblHistory">
+          <Key>
+            <PropertyRef Name="H_Id" />
+          </Key>
+          <Property Name="H_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Emp_Id" Type="bigint" />
+          <Property Name="Old_Action" Type="nvarchar" MaxLength="50" />
+          <Property Name="New_Action" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="100" />
+          <Property Name="EntryDatetime" Type="datetime" />
+          <Property Name="ActionRowId" Type="bigint" />
+          <Property Name="FromName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Department_Id" Type="bigint" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SiteId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="tblMachineCreation">
+          <Key>
+            <PropertyRef Name="Machine_Id" />
+          </Key>
+          <Property Name="Machine_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Machine_Department" Type="bigint" />
+          <Property Name="MachineID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Machine_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Machine_Location" Type="nvarchar" MaxLength="50" />
+          <Property Name="Machine_Workflow" Type="bigint" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Instru_Equip_StatusId" Type="bigint" />
+          <Property Name="WfMovedStep" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="SiteId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="tblPayroll">
+          <Key>
+            <PropertyRef Name="Payroll_Id" />
+          </Key>
+          <Property Name="Payroll_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Head_Id" Type="bigint" />
+          <Property Name="FromDate" Type="datetime" />
+          <Property Name="ToDate" Type="datetime" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="100" />
+          <Property Name="NoOfDays" Type="bigint" />
+          <Property Name="EmergencyContactNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedDatetime" Type="datetime" />
+          <Property Name="ApprovedDateTime" Type="datetime" />
+          <Property Name="HeadName" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserId" Type="bigint" />
+          <Property Name="Status" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="tblScheduleMaster">
+          <Key>
+            <PropertyRef Name="Schecule_Id" />
+          </Key>
+          <Property Name="Schecule_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Schedule_Name" Type="nchar" MaxLength="10" />
+          <Property Name="Schedule_Type" Type="nchar" MaxLength="10" />
+          <Property Name="Schedule_description" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="tblSetting">
+          <Key>
+            <PropertyRef Name="setting_Id" />
+          </Key>
+          <Property Name="setting_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Password_Limit" Type="bigint" />
+          <Property Name="Password_Security" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password_age" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password_Age_Notify" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password_attempt_Limit" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password_Reopen" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password_History_Store_Limit" Type="nvarchar" MaxLength="50" />
+          <Property Name="Auto_Logout_Limit" Type="nvarchar" MaxLength="50" />
+          <Property Name="Login_For_All_Action" Type="nvarchar" MaxLength="10" />
+          <Property Name="Password_in_Logout" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="tblSite">
+          <Key>
+            <PropertyRef Name="Site_Id" />
+          </Key>
+          <Property Name="Site_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Site_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Site_Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="Status" Type="nvarchar" MaxLength="15" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblWorkFlowChild">
+          <Key>
+            <PropertyRef Name="WFChild_Id" />
+          </Key>
+          <Property Name="WFChild_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WorFlowId" Type="bigint" />
+          <Property Name="FlowStep" Type="nvarchar" MaxLength="50" />
+          <Property Name="StepName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmpId" Type="bigint" />
+          <Property Name="GrpRoleId" Type="bigint" />
+        </EntityType>
+        <EntityType Name="tblWorkFlowMaster">
+          <Key>
+            <PropertyRef Name="WorkFlowId" />
+          </Key>
+          <Property Name="WorkFlowId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WorkFlowName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="nvarchar" MaxLength="15" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityContainer Name="SchedulManagementSystemModelStoreContainer">
+          <EntitySet Name="ScheduleMachine" EntityType="Self.ScheduleMachine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblAccessGroupChild" EntityType="Self.tblAccessGroupChild" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblAccessGroupMaster" EntityType="Self.tblAccessGroupMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblAccessMenuMaster" EntityType="Self.tblAccessMenuMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblAssignEmployeeGroup" EntityType="Self.tblAssignEmployeeGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblDepartment" EntityType="Self.tblDepartment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblDesignation" EntityType="Self.tblDesignation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblEmployee" EntityType="Self.tblEmployee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblHistory" EntityType="Self.tblHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMachineCreation" EntityType="Self.tblMachineCreation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPayroll" EntityType="Self.tblPayroll" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblScheduleMaster" EntityType="Self.tblScheduleMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblSetting" EntityType="Self.tblSetting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblSite" EntityType="Self.tblSite" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblWorkFlowChild" EntityType="Self.tblWorkFlowChild" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblWorkFlowMaster" EntityType="Self.tblWorkFlowMaster" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SchedulManagementSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ScheduleMachine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MachineId" Type="Int64" Nullable="false" />
+          <Property Name="MachineLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ScheduleType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="StartScheduleDate" Type="DateTime" Precision="3" />
+          <Property Name="EndScheduleDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="AsignTo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="AsignType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDepartment" Type="Int64" />
+          <Property Name="EmployeeHead" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblAccessGroupChild">
+          <Key>
+            <PropertyRef Name="groupChild_Id" />
+          </Key>
+          <Property Name="groupChild_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="group_Id" Type="Int64" />
+          <Property Name="menu_Id" Type="Int64" />
+          <Property Name="access_Create" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="access_Modify" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="access_Delete" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="access_View" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblAccessGroupMaster">
+          <Key>
+            <PropertyRef Name="group_Id" />
+          </Key>
+          <Property Name="group_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="group_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="remark" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SiteId" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblAccessMenuMaster">
+          <Key>
+            <PropertyRef Name="menu_Id" />
+          </Key>
+          <Property Name="menu_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="menu_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="menu_Link" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="menu_Icon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblAssignEmployeeGroup">
+          <Key>
+            <PropertyRef Name="assignGroupId" />
+          </Key>
+          <Property Name="assignGroupId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="employee_Id" Type="Int64" />
+          <Property Name="group_Id" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblDepartment">
+          <Key>
+            <PropertyRef Name="Department_Id" />
+          </Key>
+          <Property Name="Department_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Department_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Department_Head" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Parent_Department" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="SiteId" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblDesignation">
+          <Key>
+            <PropertyRef Name="Designation_Id" />
+          </Key>
+          <Property Name="Designation_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Designation_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="SiteId" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblEmployee">
+          <Key>
+            <PropertyRef Name="Employee_Id" />
+          </Key>
+          <Property Name="Employee_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Employee_Department" Type="Int64" Nullable="false" />
+          <Property Name="Employee_Designation" Type="Int64" Nullable="false" />
+          <Property Name="EmpID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmpProfilePhoto" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Employee_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Employee_Contact" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Employee_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Employee_Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="group_Id" Type="Int64" />
+          <Property Name="Employee_UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Employee_Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="FirstTimeLoginStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="SiteId" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblHistory">
+          <Key>
+            <PropertyRef Name="H_Id" />
+          </Key>
+          <Property Name="H_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Emp_Id" Type="Int64" />
+          <Property Name="Old_Action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="New_Action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EntryDatetime" Type="DateTime" Precision="3" />
+          <Property Name="ActionRowId" Type="Int64" />
+          <Property Name="FromName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Department_Id" Type="Int64" />
+          <Property Name="EmployeeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SiteId" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblMachineCreation">
+          <Key>
+            <PropertyRef Name="Machine_Id" />
+          </Key>
+          <Property Name="Machine_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Machine_Department" Type="Int64" />
+          <Property Name="MachineID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Machine_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Machine_Location" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Machine_Workflow" Type="Int64" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Instru_Equip_StatusId" Type="Int64" />
+          <Property Name="WfMovedStep" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="SiteId" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblPayroll">
+          <Key>
+            <PropertyRef Name="Payroll_Id" />
+          </Key>
+          <Property Name="Payroll_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Head_Id" Type="Int64" />
+          <Property Name="FromDate" Type="DateTime" Precision="3" />
+          <Property Name="ToDate" Type="DateTime" Precision="3" />
+          <Property Name="Reason" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NoOfDays" Type="Int64" />
+          <Property Name="EmergencyContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedDatetime" Type="DateTime" Precision="3" />
+          <Property Name="ApprovedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="HeadName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int64" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblScheduleMaster">
+          <Key>
+            <PropertyRef Name="Schecule_Id" />
+          </Key>
+          <Property Name="Schecule_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Schedule_Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Schedule_Type" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Schedule_description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblSetting">
+          <Key>
+            <PropertyRef Name="setting_Id" />
+          </Key>
+          <Property Name="setting_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Password_Limit" Type="Int64" />
+          <Property Name="Password_Security" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password_age" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password_Age_Notify" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password_attempt_Limit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password_Reopen" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password_History_Store_Limit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Auto_Logout_Limit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Login_For_All_Action" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Password_in_Logout" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="dbScheduleModel" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ScheduleMachines" EntityType="Self.ScheduleMachine" />
+          <EntitySet Name="tblAccessGroupChilds" EntityType="Self.tblAccessGroupChild" />
+          <EntitySet Name="tblAccessGroupMasters" EntityType="Self.tblAccessGroupMaster" />
+          <EntitySet Name="tblAccessMenuMasters" EntityType="Self.tblAccessMenuMaster" />
+          <EntitySet Name="tblAssignEmployeeGroups" EntityType="Self.tblAssignEmployeeGroup" />
+          <EntitySet Name="tblDepartments" EntityType="Self.tblDepartment" />
+          <EntitySet Name="tblDesignations" EntityType="Self.tblDesignation" />
+          <EntitySet Name="tblEmployees" EntityType="Self.tblEmployee" />
+          <EntitySet Name="tblHistories" EntityType="Self.tblHistory" />
+          <EntitySet Name="tblMachineCreations" EntityType="Self.tblMachineCreation" />
+          <EntitySet Name="tblPayrolls" EntityType="Self.tblPayroll" />
+          <EntitySet Name="tblScheduleMasters" EntityType="Self.tblScheduleMaster" />
+          <EntitySet Name="tblSettings" EntityType="Self.tblSetting" />
+          <EntitySet Name="tblSites" EntityType="SchedulManagementSystemModel.tblSite" />
+          <EntitySet Name="tblWorkFlowChilds" EntityType="SchedulManagementSystemModel.tblWorkFlowChild" />
+          <EntitySet Name="tblWorkFlowMasters" EntityType="SchedulManagementSystemModel.tblWorkFlowMaster" />
+        </EntityContainer>
+        <EntityType Name="tblSite">
+          <Key>
+            <PropertyRef Name="Site_Id" />
+          </Key>
+          <Property Name="Site_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Site_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Site_Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tblWorkFlowChild">
+          <Key>
+            <PropertyRef Name="WFChild_Id" />
+          </Key>
+          <Property Name="WFChild_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WorFlowId" Type="Int64" />
+          <Property Name="FlowStep" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StepName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmpId" Type="Int64" />
+          <Property Name="GrpRoleId" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblWorkFlowMaster">
+          <Key>
+            <PropertyRef Name="WorkFlowId" />
+          </Key>
+          <Property Name="WorkFlowId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WorkFlowName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SchedulManagementSystemModelStoreContainer" CdmEntityContainer="dbScheduleModel">
+          <EntitySetMapping Name="ScheduleMachines">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.ScheduleMachine">
+              <MappingFragment StoreEntitySet="ScheduleMachine">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MachineId" ColumnName="MachineId" />
+                <ScalarProperty Name="MachineLocation" ColumnName="MachineLocation" />
+                <ScalarProperty Name="ScheduleType" ColumnName="ScheduleType" />
+                <ScalarProperty Name="StartScheduleDate" ColumnName="StartScheduleDate" />
+                <ScalarProperty Name="EndScheduleDate" ColumnName="EndScheduleDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="AsignTo" ColumnName="AsignTo" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="AsignType" ColumnName="AsignType" />
+                <ScalarProperty Name="ApprovedDate" ColumnName="ApprovedDate" />
+                <ScalarProperty Name="CreatedDepartment" ColumnName="CreatedDepartment" />
+                <ScalarProperty Name="EmployeeHead" ColumnName="EmployeeHead" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblAccessGroupChilds">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblAccessGroupChild">
+              <MappingFragment StoreEntitySet="tblAccessGroupChild">
+                <ScalarProperty Name="groupChild_Id" ColumnName="groupChild_Id" />
+                <ScalarProperty Name="group_Id" ColumnName="group_Id" />
+                <ScalarProperty Name="menu_Id" ColumnName="menu_Id" />
+                <ScalarProperty Name="access_Create" ColumnName="access_Create" />
+                <ScalarProperty Name="access_Modify" ColumnName="access_Modify" />
+                <ScalarProperty Name="access_Delete" ColumnName="access_Delete" />
+                <ScalarProperty Name="access_View" ColumnName="access_View" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblAccessGroupMasters">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblAccessGroupMaster">
+              <MappingFragment StoreEntitySet="tblAccessGroupMaster">
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="group_Id" ColumnName="group_Id" />
+                <ScalarProperty Name="group_Name" ColumnName="group_Name" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblAccessMenuMasters">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblAccessMenuMaster">
+              <MappingFragment StoreEntitySet="tblAccessMenuMaster">
+                <ScalarProperty Name="menu_Id" ColumnName="menu_Id" />
+                <ScalarProperty Name="menu_Name" ColumnName="menu_Name" />
+                <ScalarProperty Name="menu_Link" ColumnName="menu_Link" />
+                <ScalarProperty Name="menu_Icon" ColumnName="menu_Icon" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblAssignEmployeeGroups">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblAssignEmployeeGroup">
+              <MappingFragment StoreEntitySet="tblAssignEmployeeGroup">
+                <ScalarProperty Name="assignGroupId" ColumnName="assignGroupId" />
+                <ScalarProperty Name="employee_Id" ColumnName="employee_Id" />
+                <ScalarProperty Name="group_Id" ColumnName="group_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDepartments">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblDepartment">
+              <MappingFragment StoreEntitySet="tblDepartment">
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+                <ScalarProperty Name="Department_Name" ColumnName="Department_Name" />
+                <ScalarProperty Name="Department_Head" ColumnName="Department_Head" />
+                <ScalarProperty Name="Parent_Department" ColumnName="Parent_Department" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDesignations">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblDesignation">
+              <MappingFragment StoreEntitySet="tblDesignation">
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="Designation_Id" ColumnName="Designation_Id" />
+                <ScalarProperty Name="Designation_Name" ColumnName="Designation_Name" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblEmployees">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblEmployee">
+              <MappingFragment StoreEntitySet="tblEmployee">
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="Employee_Id" ColumnName="Employee_Id" />
+                <ScalarProperty Name="Employee_Department" ColumnName="Employee_Department" />
+                <ScalarProperty Name="Employee_Designation" ColumnName="Employee_Designation" />
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="EmpProfilePhoto" ColumnName="EmpProfilePhoto" />
+                <ScalarProperty Name="Employee_Name" ColumnName="Employee_Name" />
+                <ScalarProperty Name="Employee_Contact" ColumnName="Employee_Contact" />
+                <ScalarProperty Name="Employee_Email" ColumnName="Employee_Email" />
+                <ScalarProperty Name="Employee_Address" ColumnName="Employee_Address" />
+                <ScalarProperty Name="group_Id" ColumnName="group_Id" />
+                <ScalarProperty Name="Employee_UserName" ColumnName="Employee_UserName" />
+                <ScalarProperty Name="Employee_Password" ColumnName="Employee_Password" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="FirstTimeLoginStatus" ColumnName="FirstTimeLoginStatus" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblHistories">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblHistory">
+              <MappingFragment StoreEntitySet="tblHistory">
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="H_Id" ColumnName="H_Id" />
+                <ScalarProperty Name="Emp_Id" ColumnName="Emp_Id" />
+                <ScalarProperty Name="Old_Action" ColumnName="Old_Action" />
+                <ScalarProperty Name="New_Action" ColumnName="New_Action" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="EntryDatetime" ColumnName="EntryDatetime" />
+                <ScalarProperty Name="ActionRowId" ColumnName="ActionRowId" />
+                <ScalarProperty Name="FromName" ColumnName="FromName" />
+                <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMachineCreations">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblMachineCreation">
+              <MappingFragment StoreEntitySet="tblMachineCreation">
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="Machine_Id" ColumnName="Machine_Id" />
+                <ScalarProperty Name="Machine_Department" ColumnName="Machine_Department" />
+                <ScalarProperty Name="MachineID" ColumnName="MachineID" />
+                <ScalarProperty Name="Machine_Name" ColumnName="Machine_Name" />
+                <ScalarProperty Name="Machine_Location" ColumnName="Machine_Location" />
+                <ScalarProperty Name="Machine_Workflow" ColumnName="Machine_Workflow" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Instru_Equip_StatusId" ColumnName="Instru_Equip_StatusId" />
+                <ScalarProperty Name="WfMovedStep" ColumnName="WfMovedStep" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPayrolls">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblPayroll">
+              <MappingFragment StoreEntitySet="tblPayroll">
+                <ScalarProperty Name="Payroll_Id" ColumnName="Payroll_Id" />
+                <ScalarProperty Name="Head_Id" ColumnName="Head_Id" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="NoOfDays" ColumnName="NoOfDays" />
+                <ScalarProperty Name="EmergencyContactNo" ColumnName="EmergencyContactNo" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDatetime" ColumnName="CreatedDatetime" />
+                <ScalarProperty Name="ApprovedDateTime" ColumnName="ApprovedDateTime" />
+                <ScalarProperty Name="HeadName" ColumnName="HeadName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblScheduleMasters">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblScheduleMaster">
+              <MappingFragment StoreEntitySet="tblScheduleMaster">
+                <ScalarProperty Name="Schecule_Id" ColumnName="Schecule_Id" />
+                <ScalarProperty Name="Schedule_Name" ColumnName="Schedule_Name" />
+                <ScalarProperty Name="Schedule_Type" ColumnName="Schedule_Type" />
+                <ScalarProperty Name="Schedule_description" ColumnName="Schedule_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSettings">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblSetting">
+              <MappingFragment StoreEntitySet="tblSetting">
+                <ScalarProperty Name="setting_Id" ColumnName="setting_Id" />
+                <ScalarProperty Name="Password_Limit" ColumnName="Password_Limit" />
+                <ScalarProperty Name="Password_Security" ColumnName="Password_Security" />
+                <ScalarProperty Name="Password_age" ColumnName="Password_age" />
+                <ScalarProperty Name="Password_Age_Notify" ColumnName="Password_Age_Notify" />
+                <ScalarProperty Name="Password_attempt_Limit" ColumnName="Password_attempt_Limit" />
+                <ScalarProperty Name="Password_Reopen" ColumnName="Password_Reopen" />
+                <ScalarProperty Name="Password_History_Store_Limit" ColumnName="Password_History_Store_Limit" />
+                <ScalarProperty Name="Auto_Logout_Limit" ColumnName="Auto_Logout_Limit" />
+                <ScalarProperty Name="Login_For_All_Action" ColumnName="Login_For_All_Action" />
+                <ScalarProperty Name="Password_in_Logout" ColumnName="Password_in_Logout" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSites">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblSite">
+              <MappingFragment StoreEntitySet="tblSite">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Site_Description" ColumnName="Site_Description" />
+                <ScalarProperty Name="Site_Name" ColumnName="Site_Name" />
+                <ScalarProperty Name="Site_Id" ColumnName="Site_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblWorkFlowChilds">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblWorkFlowChild">
+              <MappingFragment StoreEntitySet="tblWorkFlowChild">
+                <ScalarProperty Name="GrpRoleId" ColumnName="GrpRoleId" />
+                <ScalarProperty Name="EmpId" ColumnName="EmpId" />
+                <ScalarProperty Name="StepName" ColumnName="StepName" />
+                <ScalarProperty Name="FlowStep" ColumnName="FlowStep" />
+                <ScalarProperty Name="WorFlowId" ColumnName="WorFlowId" />
+                <ScalarProperty Name="WFChild_Id" ColumnName="WFChild_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblWorkFlowMasters">
+            <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblWorkFlowMaster">
+              <MappingFragment StoreEntitySet="tblWorkFlowMaster">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="WorkFlowName" ColumnName="WorkFlowName" />
+                <ScalarProperty Name="WorkFlowId" ColumnName="WorkFlowId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SchedulManagementSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="ScheduleMachine">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MachineId" Type="Int64" Nullable="false" />
+    <Property Name="MachineLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ScheduleType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="StartScheduleDate" Type="DateTime" Precision="3" />
+    <Property Name="EndScheduleDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int64" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="AsignTo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="AsignType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ApprovedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedDepartment" Type="Int64" />
+    <Property Name="EmployeeHead" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblAccessGroupChild">
+    <Key>
+      <PropertyRef Name="groupChild_Id" />
+    </Key>
+    <Property Name="groupChild_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="group_Id" Type="Int64" />
+    <Property Name="menu_Id" Type="Int64" />
+    <Property Name="access_Create" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="access_Modify" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="access_Delete" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="access_View" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tblAccessGroupMaster">
+    <Key>
+      <PropertyRef Name="group_Id" />
+    </Key>
+    <Property Name="group_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="group_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="remark" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="SiteId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblAccessMenuMaster">
+    <Key>
+      <PropertyRef Name="menu_Id" />
+    </Key>
+    <Property Name="menu_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="menu_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="menu_Link" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="menu_Icon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tblAssignEmployeeGroup">
+    <Key>
+      <PropertyRef Name="assignGroupId" />
+    </Key>
+    <Property Name="assignGroupId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="employee_Id" Type="Int64" />
+    <Property Name="group_Id" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblDepartment">
+    <Key>
+      <PropertyRef Name="Department_Id" />
+    </Key>
+    <Property Name="Department_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Department_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Department_Head" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Parent_Department" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int64" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="SiteId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblDesignation">
+    <Key>
+      <PropertyRef Name="Designation_Id" />
+    </Key>
+    <Property Name="Designation_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Designation_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int64" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="SiteId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblEmployee">
+    <Key>
+      <PropertyRef Name="Employee_Id" />
+    </Key>
+    <Property Name="Employee_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Employee_Department" Type="Int64" Nullable="false" />
+    <Property Name="Employee_Designation" Type="Int64" Nullable="false" />
+    <Property Name="EmpID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EmpProfilePhoto" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Employee_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Employee_Contact" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Employee_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Employee_Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="group_Id" Type="Int64" />
+    <Property Name="Employee_UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Employee_Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="FirstTimeLoginStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="SiteId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblHistory">
+    <Key>
+      <PropertyRef Name="H_Id" />
+    </Key>
+    <Property Name="H_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Emp_Id" Type="Int64" />
+    <Property Name="Old_Action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="New_Action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Remark" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="EntryDatetime" Type="DateTime" Precision="3" />
+    <Property Name="ActionRowId" Type="Int64" />
+    <Property Name="FromName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Department_Id" Type="Int64" />
+    <Property Name="EmployeeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SiteId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblMachineCreation">
+    <Key>
+      <PropertyRef Name="Machine_Id" />
+    </Key>
+    <Property Name="Machine_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Machine_Department" Type="Int64" />
+    <Property Name="MachineID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Machine_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Machine_Location" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Machine_Workflow" Type="Int64" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Instru_Equip_StatusId" Type="Int64" />
+    <Property Name="WfMovedStep" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int64" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="SiteId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblPayroll">
+    <Key>
+      <PropertyRef Name="Payroll_Id" />
+    </Key>
+    <Property Name="Payroll_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Head_Id" Type="Int64" />
+    <Property Name="FromDate" Type="DateTime" Precision="3" />
+    <Property Name="ToDate" Type="DateTime" Precision="3" />
+    <Property Name="Reason" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="NoOfDays" Type="Int64" />
+    <Property Name="EmergencyContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int64" />
+    <Property Name="CreatedDatetime" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedDateTime" Type="DateTime" Precision="3" />
+    <Property Name="HeadName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="UserId" Type="Int64" />
+    <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tblScheduleMaster">
+    <Key>
+      <PropertyRef Name="Schecule_Id" />
+    </Key>
+    <Property Name="Schecule_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Schedule_Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Schedule_Type" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Schedule_description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tblSetting">
+    <Key>
+      <PropertyRef Name="setting_Id" />
+    </Key>
+    <Property Name="setting_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Password_Limit" Type="Int64" />
+    <Property Name="Password_Security" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password_age" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password_Age_Notify" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password_attempt_Limit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password_Reopen" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password_History_Store_Limit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Auto_Logout_Limit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Login_For_All_Action" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Password_in_Logout" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityContainer Name="dbScheduleModel" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="ScheduleMachines" EntityType="Self.ScheduleMachine" />
+    <EntitySet Name="tblAccessGroupChilds" EntityType="Self.tblAccessGroupChild" />
+    <EntitySet Name="tblAccessGroupMasters" EntityType="Self.tblAccessGroupMaster" />
+    <EntitySet Name="tblAccessMenuMasters" EntityType="Self.tblAccessMenuMaster" />
+    <EntitySet Name="tblAssignEmployeeGroups" EntityType="Self.tblAssignEmployeeGroup" />
+    <EntitySet Name="tblDepartments" EntityType="Self.tblDepartment" />
+    <EntitySet Name="tblDesignations" EntityType="Self.tblDesignation" />
+    <EntitySet Name="tblEmployees" EntityType="Self.tblEmployee" />
+    <EntitySet Name="tblHistories" EntityType="Self.tblHistory" />
+    <EntitySet Name="tblMachineCreations" EntityType="Self.tblMachineCreation" />
+    <EntitySet Name="tblPayrolls" EntityType="Self.tblPayroll" />
+    <EntitySet Name="tblScheduleMasters" EntityType="Self.tblScheduleMaster" />
+    <EntitySet Name="tblSettings" EntityType="Self.tblSetting" />
+    <EntitySet Name="tblSites" EntityType="SchedulManagementSystemModel.tblSite" />
+    <EntitySet Name="tblWorkFlowChilds" EntityType="SchedulManagementSystemModel.tblWorkFlowChild" />
+    <EntitySet Name="tblWorkFlowMasters" EntityType="SchedulManagementSystemModel.tblWorkFlowMaster" />
+  </EntityContainer>
+  <EntityType Name="tblSite">
+    <Key>
+      <PropertyRef Name="Site_Id" />
+    </Key>
+    <Property Name="Site_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Site_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Site_Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int64" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="tblWorkFlowChild">
+    <Key>
+      <PropertyRef Name="WFChild_Id" />
+    </Key>
+    <Property Name="WFChild_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WorFlowId" Type="Int64" />
+    <Property Name="FlowStep" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="StepName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EmpId" Type="Int64" />
+    <Property Name="GrpRoleId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblWorkFlowMaster">
+    <Key>
+      <PropertyRef Name="WorkFlowId" />
+    </Key>
+    <Property Name="WorkFlowId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WorkFlowName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int64" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+  </EntityType>
+</Schema>

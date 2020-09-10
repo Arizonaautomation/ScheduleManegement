@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Reviewer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-xs-12 col-sm-12">
+    @foreach (var grp in ViewBag.Groupchild)
+    {
+        if (grp.menu_Id == 13)
+        {
+            if (grp.access_Create == "true")
+            {
+
+
+                @Html.Action("partialFormForAllUser", "Asset")
+            }
+        }
+    }
+</div>
+
+<table id="tblschMachineRev" class="table table-striped table-bordered table-hover table-condensed width-100"></table>
+<script>
+    (function ($) {
+        tblschMachineRev();
+    }(jQuery));
+    function tblschMachineRev() {
+        var oTable = $('#tblschMachineRev').dataTable({
+            "bPaginate": true,
+            "bDeferRender": true,
+            "bProcessing": true,
+            "bJqueryUI": true,
+            "sDom": '<"toolbar">frtrip',
+            "sAjaxSource": "/Asset/bindData",
+            "iDisplayLength": 5,
+            "bDestroy": true,
+            "aoColumns": [
+                { "mData": "Button", "sTitle": "Action", "sWidth": "5%", "bSortable": false },
+                { "mData": "MachineId", "sTitle": "Instrument Id", "sWidth": "10%", "bSortable": false },
+                { "mData": "MachineLocation", "sTitle": "Instrument Location", "sWidth": "10%", "bSortable": false },
+
+            ]
+        })
+    };
+</script>
+

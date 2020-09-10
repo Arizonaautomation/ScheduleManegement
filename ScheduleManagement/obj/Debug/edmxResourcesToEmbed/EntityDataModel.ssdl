@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SchedulManagementSystemModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ScheduleMachine">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MachineId" Type="bigint" Nullable="false" />
+    <Property Name="MachineLocation" Type="nvarchar" MaxLength="50" />
+    <Property Name="ScheduleType" Type="nchar" MaxLength="10" />
+    <Property Name="StartScheduleDate" Type="datetime" />
+    <Property Name="EndScheduleDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="bigint" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="AsignTo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="nchar" MaxLength="10" />
+    <Property Name="AsignType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ApprovedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblDepartment">
+    <Key>
+      <PropertyRef Name="Department_Id" />
+    </Key>
+    <Property Name="Department_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Department_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Department_Description" Type="nvarchar" MaxLength="150" />
+    <Property Name="CreatedBy" Type="bigint" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblDesignation">
+    <Key>
+      <PropertyRef Name="Designation_Id" />
+    </Key>
+    <Property Name="Designation_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Designation_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Designation_Description" Type="nvarchar" MaxLength="150" />
+    <Property Name="CreatedBy" Type="bigint" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblEmployee">
+    <Key>
+      <PropertyRef Name="Employee_Id" />
+    </Key>
+    <Property Name="Employee_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Employee_Department" Type="bigint" Nullable="false" />
+    <Property Name="Employee_Designation" Type="bigint" Nullable="false" />
+    <Property Name="Employee_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Employee_Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="Employee_Contact" Type="nvarchar" MaxLength="50" />
+    <Property Name="Employee_Password" Type="nvarchar" MaxLength="50" />
+    <Property Name="Employee_Type" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedBy" Type="nchar" MaxLength="10" />
+    <Property Name="CreateDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblMachineCreation">
+    <Key>
+      <PropertyRef Name="Machine_Id" />
+    </Key>
+    <Property Name="Machine_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Machine_Department" Type="bigint" Nullable="false" />
+    <Property Name="Machine_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Machine_Location" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Machine_InstallationTime" Type="datetime" Nullable="false" />
+    <Property Name="Machine_ScheduleType" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CreatedBy" Type="bigint" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblScheduleMaster">
+    <Key>
+      <PropertyRef Name="Schecule_Id" />
+    </Key>
+    <Property Name="Schecule_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Schedule_Name" Type="nchar" MaxLength="10" />
+    <Property Name="Schedule_Type" Type="nchar" MaxLength="10" />
+    <Property Name="Schedule_description" Type="nvarchar" MaxLength="150" />
+  </EntityType>
+  <EntityContainer Name="SchedulManagementSystemModel1StoreContainer">
+    <EntitySet Name="ScheduleMachine" EntityType="Self.ScheduleMachine" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblDepartment" EntityType="Self.tblDepartment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblDesignation" EntityType="Self.tblDesignation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblEmployee" EntityType="Self.tblEmployee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblMachineCreation" EntityType="Self.tblMachineCreation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblScheduleMaster" EntityType="Self.tblScheduleMaster" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
