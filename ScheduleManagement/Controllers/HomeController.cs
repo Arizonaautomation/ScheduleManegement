@@ -46,7 +46,11 @@ namespace TrainningManagement.Controllers
                                   AccessModify=GCC.GC.access_Modify,
                                   AccessDelete=GCC.GC.access_Delete,
                                   AccessView=GCC.GC.access_View,
+<<<<<<< HEAD
                               }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True") && x.EmployeeID == EmployeeId).Distinct().ToList();
+=======
+                              }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True") && x.EmployeeID == EmployeeId).ToList();
+>>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
             List<tblAccessMenuMaster> MenuList = new List<tblAccessMenuMaster>();
             foreach (var item in AccessGroupChildDetail)
             {

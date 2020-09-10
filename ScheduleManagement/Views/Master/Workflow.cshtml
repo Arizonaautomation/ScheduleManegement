@@ -33,7 +33,10 @@
 <div class="row">
     <div class="col-sm-1"></div>
     <div class="col-sm-5">
+<<<<<<< HEAD
         <input class="form-control" type="hidden" id="WorkFlowId" name="WorkFlowId" placeholder="" />
+=======
+>>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
         <div class="form-group"></div>
         <label for="form-field-11">WorkFlow Name <span style="color:red;">*</span></label>
         <input class="form-control" type="text" id="WorkFlowName" name="WorkFlowName" placeholder="WorkFlow Name" onkeypress="return checkAlphaNumeric()" />
@@ -111,7 +114,11 @@
 
 <button class="btn btn-info" style="border-radius: 20px; margin-top:20px;">
     <i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>
+<<<<<<< HEAD
     <a href="#" class="white" id="Submit" onclick="ValidationWorkflow()"> Create</a>
+=======
+    <a href="#" class="white" onclick="ValidationWorkflow()"> Create</a>
+>>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
 </button>
 
 
@@ -154,6 +161,7 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 
 
 <fieldset>
@@ -228,6 +236,10 @@
         location.reload(true);
     }
 
+=======
+<script>
+
+>>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
     function CheckEmployee() {
         if ($('#isEmployee').prop("checked") == true) {
             BindEmployee();
@@ -264,8 +276,13 @@
             BindRoleList();
         }
         else {
+<<<<<<< HEAD
             var ddlRole = $("#RoleList");
             ddlRole.empty().append('<option selected="selected" value="0">Select Role</option>');
+=======
+            var ddlEmployee = $("#RoleList");
+            ddlEmployee.empty().append('<option selected="selected" value="0">Select Role</option>');
+>>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
         }
     }
 
@@ -300,7 +317,11 @@
             EmployeeName = $("#EmployeeList option:selected").text();
         if ($("#RoleList").val() != "Select Role")
             RoleName = $("#RoleList option:selected").text();
+<<<<<<< HEAD
         $("#SubData tbody").append('<tr><td><a href="#">&times;</td><td>' + (count++) + '</td><td>' + $("#Flow").val() + '</td><td>' + $("#Flowname").val() + '</td><td hidden>' + $("#EmployeeList").val() + '</td><td>' + EmployeeName + '</td><td hidden>' + $("#RoleList").val() + '</td><td>' + RoleName + '</td></tr>');
+=======
+        $("table tbody").append('<tr><td><a href="#">&times;</td><td>' + (count++) + '</td><td>' + $("#Flow").val() + '</td><td>' + $("#Flowname").val() + '</td><td hidden>' + $("#EmployeeList").val() + '</td><td>' + EmployeeName + '</td><td hidden>' + $("#RoleList").val() + '</td><td>' + RoleName + '</td></tr>');
+>>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
         $("#Flow").val("0");
         $("#Flowname").val("");
         $("#EmployeeList").val("0");
@@ -331,13 +352,21 @@
             }
 
         }
+<<<<<<< HEAD
         else if ($('#ButtonId').val() == "WorkFlowDelete") {
+=======
+        else if ($('#ButtonId').val() == "DepartmentDelete") {
+>>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
             if ($('#Remark').val().trim() == "") {
                 $('#messageBody_error').show();
                 $("#messageBody_error").fadeOut(2000);
             }
             else {
+<<<<<<< HEAD
                 deltWorkFlow($('#Id').val());
+=======
+                deltDepartment($('#Id').val());
+>>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
             }
         }
     }
@@ -367,7 +396,10 @@
         var otherdata = {};
         otherdata.Remark = $('#Remark').val();
         var wp = {};
+<<<<<<< HEAD
         wp.WorkFlowId = $('#WorkFlowId').val();
+=======
+>>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
         wp.WorkFlowName = $('#WorkFlowName').val();
         wp.otherdata = otherdata;
         var WpC = new Array();
@@ -403,6 +435,7 @@
             }
         })
     }
+<<<<<<< HEAD
 
 
     function editWorkFlow(id) {
@@ -474,4 +507,6 @@
 
     }
 
+=======
+>>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
 </script>
