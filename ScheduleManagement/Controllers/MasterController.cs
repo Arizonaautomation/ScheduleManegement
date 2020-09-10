@@ -283,13 +283,10 @@ namespace TrainningManagement.Controllers
                     at.InsrtHistory((tblEmployee)Session["EmployeeData"], empCreation.Employee_Id, "Employee", olditem.CreatedDate.ToString(), DateTime.Now.ToString(), empCreation.otherdata.Remark);
                     scheModel.SaveChanges();
 
-<<<<<<< HEAD
                     scheModel.tblAssignEmployeeGroups.RemoveRange(scheModel.tblAssignEmployeeGroups.Where(c => c.employee_Id == empCreation.Employee_Id));
                     scheModel.SaveChanges();
 
 
-=======
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
                     string[] grpId = empCreation.otherdata.grpid.Split(',');
                     foreach (var item in grpId)
                     {
@@ -335,13 +332,8 @@ namespace TrainningManagement.Controllers
             try
             {
                 var lstEmp = scheModel.tblEmployees.Where(x => x.Employee_Id == id).FirstOrDefault();
-<<<<<<< HEAD
                 // if (lstEmp.EmpProfilePhoto != null)
                 //   lstEmp.EmpProfilePhoto = Base64Decode(lstEmp.EmpProfilePhoto);
-=======
-               // if (lstEmp.EmpProfilePhoto != null)
-                 //   lstEmp.EmpProfilePhoto = Base64Decode(lstEmp.EmpProfilePhoto);
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
                 return Json(lstEmp, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -730,11 +722,8 @@ namespace TrainningManagement.Controllers
         #region
         public ActionResult Workflow()
         {
-<<<<<<< HEAD
             ViewBag.Groupchild = grpchildList();
             ViewBag.WorkflowList = lstWorkflow();
-=======
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
             return View();
         }
 
@@ -785,7 +774,6 @@ namespace TrainningManagement.Controllers
                 throw;
             }
         }
-<<<<<<< HEAD
 
         public List<tblWorkFlowMaster> lstWorkflow()
         {
@@ -814,8 +802,6 @@ namespace TrainningManagement.Controllers
             return _context.tblWorkFlowMasters.Single(p => p.WorkFlowId == id);
         }
 
-=======
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
         public ActionResult CreateWorkflow(tblWorkFlowMaster wp, List<tblWorkFlowChild> wpC)
         {
             try
@@ -845,7 +831,6 @@ namespace TrainningManagement.Controllers
                     at.InsrtHistory((tblEmployee)Session["EmployeeData"], wp.WorkFlowId, "WorkFlowMaster", "NA", "New WorkFlow Created", wp.otherdata.Remark);
                     return Json("Save Success", JsonRequestBehavior.AllowGet);
                 }
-<<<<<<< HEAD
                 else
                 {
                     tblWorkFlowMaster olditem = oldWorkflowdata(wp.WorkFlowId);
@@ -889,16 +874,12 @@ namespace TrainningManagement.Controllers
                     }
                     return Json("Update Success", JsonRequestBehavior.AllowGet);
                 }
-=======
-
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
 
             }
             catch (Exception e)
             {
                 throw;
             }
-<<<<<<< HEAD
         }
 
         public ActionResult WorkFlowEdit(long id)
@@ -941,10 +922,6 @@ namespace TrainningManagement.Controllers
             }
         }
 
-=======
-            return Json(JsonRequestBehavior.AllowGet);
-        }
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
         #endregion
 
 
@@ -992,11 +969,7 @@ namespace TrainningManagement.Controllers
             try
             {
                 List<tblWorkFlowMaster> wflist = new List<tblWorkFlowMaster>();
-<<<<<<< HEAD
                 var WF = scheModel.tblWorkFlowMasters.Where(x => x.Status == "Active").ToList();
-=======
-                var WF = scheModel.tblWorkFlowMasters.Where(x=>x.Status=="Active").ToList();
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
                 for (int i = 0; i < WF.Count; i++)
                 {
                     wflist.Add(WF[i]);
@@ -1019,7 +992,6 @@ namespace TrainningManagement.Controllers
         {
             try
             {
-<<<<<<< HEAD
                 var wfstep = scheModel.tblWorkFlowChilds.Where(x => x.WorFlowId == machine.Machine_Workflow).ToList();
                 foreach (var item in wfstep)
                 {
@@ -1027,8 +999,6 @@ namespace TrainningManagement.Controllers
 
                 }
 
-=======
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
                 machine.CreatedDate = DateTime.Now;
                 machine.CreatedBy = ((tblEmployee)(Session["EmployeeData"])).Employee_Id;
                 var isExistm = scheModel.tblMachineCreations.Any(x => x.Machine_Id == machine.Machine_Id);
@@ -1059,20 +1029,12 @@ namespace TrainningManagement.Controllers
                     if (olditem.MachineID != machine.MachineID)
                     {
                         at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.MachineID.ToString(), machine.MachineID.ToString(), machine.otherdata.Remark);
-<<<<<<< HEAD
                         scheModel.Entry(machine).Property(x => x.MachineID).IsModified = true;
-=======
-                        scheModel.Entry(machine).Property(x => x.Machine_Department).IsModified = true;
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
                     }
                     if (olditem.Machine_Name != machine.Machine_Name)
                     {
                         at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Name.ToString(), machine.Machine_Name.ToString(), machine.otherdata.Remark);
-<<<<<<< HEAD
                         scheModel.Entry(machine).Property(x => x.Machine_Name).IsModified = true;
-=======
-                        scheModel.Entry(machine).Property(x => x.Machine_Department).IsModified = true;
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
                     }
                     if (olditem.Machine_Location != machine.Machine_Location)
                     {
@@ -1082,20 +1044,12 @@ namespace TrainningManagement.Controllers
                     if (olditem.Machine_Workflow != machine.Machine_Workflow)
                     {
                         at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Workflow.ToString(), machine.Machine_Workflow.ToString(), machine.otherdata.Remark);
-<<<<<<< HEAD
                         scheModel.Entry(machine).Property(x => x.Machine_Workflow).IsModified = true;
-=======
-                        scheModel.Entry(machine).Property(x => x.Machine_Location).IsModified = true;
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
                     }
                     if (olditem.Status != machine.Status)
                     {
                         at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Status.ToString(), machine.Status.ToString(), machine.otherdata.Remark);
-<<<<<<< HEAD
                         scheModel.Entry(machine).Property(x => x.Status).IsModified = true;
-=======
-                        scheModel.Entry(machine).Property(x => x.CreatedBy).IsModified = true;
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
                     }
 
                     if (olditem.CreatedBy != machine.CreatedBy)
@@ -1153,7 +1107,6 @@ namespace TrainningManagement.Controllers
                 throw;
             }
         }
-<<<<<<< HEAD
         public List<Machine> lstMachine()
         {
             try
@@ -1198,37 +1151,15 @@ namespace TrainningManagement.Controllers
                         Newmachine.Status = item.machineStatus;
                         Newmachine.Instru_Equip_StatusId = Convert.ToInt64(item.StatusId);
                         lstMachine.Add(Newmachine);
-=======
-        public List<tblMachineCreation> lstMachine()
-        {
-            try
-            {
-                List<tblMachineCreation> lstMachine = new List<tblMachineCreation>();
-                var sessionData = ((tblEmployee)(Session["EmployeeData"]));
-                if (sessionData.SiteId == null)
-                {
-                    var machine = scheModel.tblMachineCreations.Where(y => y.Machine_Department == sessionData.Employee_Department).ToList();
-                    for (int i = 0; i < machine.Count; i++)
-                    {
-                        lstMachine.Add(machine[i]);
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
                     }
                 }
                 else
                 {
-<<<<<<< HEAD
                     //var machine = scheModel.tblMachineCreations.Where(y => y.Machine_Department == sessionData.Employee_Department && y.SiteId == sessionData.SiteId).ToList();
                     //for (int i = 0; i < machine.Count; i++)
                     //{
                     //    lstMachine.Add(machine[i]);
                     //}
-=======
-                    var machine = scheModel.tblMachineCreations.Where(y => y.Machine_Department == sessionData.Employee_Department && y.SiteId == sessionData.SiteId).ToList();
-                    for (int i = 0; i < machine.Count; i++)
-                    {
-                        lstMachine.Add(machine[i]);
-                    }
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
                 }
                 return lstMachine;
             }
@@ -1368,7 +1299,6 @@ namespace TrainningManagement.Controllers
     }
 
 
-<<<<<<< HEAD
     public class Machine
     {
         public long Machine_Id { get; set; }
@@ -1380,9 +1310,6 @@ namespace TrainningManagement.Controllers
         public string WorkflowName { get; set; }
         public long Instru_Equip_StatusId { get; set; }
     }
-=======
-
->>>>>>> fe7be6aee4c70844e3a7015f7bd246bab40b759b
 
 }
 //public class employee
