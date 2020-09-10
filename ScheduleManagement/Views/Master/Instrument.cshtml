@@ -1,0 +1,442 @@
+﻿@model TrainningManagement.Models.tblMachineCreation
+@{
+    ViewBag.Title = "Instrument";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="alert alert-success" id="Save-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Save Data Successfully.
+</div>
+<div class="alert alert-success" id="Update-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Update Data Successfully.
+</div>
+<div class="alert alert-success" id="Deactive-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Deactive Data Successfully.
+</div>
+
+<div id="NewMachine">
+    <div class="row">
+        <div class="col-sm-12">
+            @foreach (var grp in ViewBag.Groupchild)
+            {
+                if (grp.menu_Id == 4)
+                {
+                    if (grp.access_Create == "True")
+                    {
+                        <button class="btn btn-info pull-right" style="border-radius: 20px">
+                            <i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>
+                            <a href="#modal-Instrument" data-toggle="modal" class="white" onclick="ClearTextBox();">New Create</a>
+                        </button>
+                    }
+                }
+            }
+        </div>
+    </div>
+    <label for="form-field-8" id="ButtonId"> </label>
+    <label for="form-field-8" id="Id"> </label>
+
+    <fieldset>
+        <legend>Instrument</legend>
+
+        <div style="margin-top: 15px !important">
+            <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                <thead>
+                    <tr>
+                        @foreach (var grp in ViewBag.Groupchild)
+                        {
+                            if (grp.menu_Id == 4)
+                            {
+                                if (grp.access_Modify == "True" || grp.access_Delete == "True")
+                                {
+                                    <th style="width: 130px !important;">Action</th>
+                                }
+                            }
+                        }
+                        <th hidden>ID</th>
+                        <th>Instrument ID</th>
+                        <th>Instrument Name</th>
+                        <th>Instrument Department</th>
+                        <th>Instrument Location</th>
+                        <th>Instrument WorkFlow</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in ViewBag.lstMachine)
+                    {
+                        if (item.Instru_Equip_StatusId == 1)
+                        {
+                            <tr>
+                                @foreach (var grp in ViewBag.Groupchild)
+                                {
+                                    if (grp.menu_Id == 4)
+                                    {
+                                        if (grp.access_View == "True")
+                                        {
+
+                                        }
+                                        if (grp.access_Modify == "True" && grp.access_Delete == "True")
+                                        {
+
+                                            <td>
+                                                @if (grp.access_Modify == "True" && grp.access_Delete == "False")
+                                                {
+                                                    <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                                }
+                                                @if (grp.access_Delete == "True" && grp.access_Modify == "False")
+                                                {
+                                                    <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                                }
+                                                @if (grp.access_Delete == "True" && grp.access_Modify == "True")
+                                                {
+                                                    <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                                    <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                                }
+                                            </td>
+                                        }
+                                    }
+                                }
+                                <td hidden>@item.Machine_Id</td>
+                                <td>@item.MachineID</td>
+                                <td>@item.Machine_Name</td>
+                                <td>@item.DepartmentName</td>
+                                <td>@item.Machine_Location</td>
+                                <td>@item.WorkflowName</td>
+                                <td>@item.Status</td>
+                            </tr>
+                        }
+
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </fieldset>
+</div>
+
+<div class="modal" id="modal-Instrument" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Instrument
+            </div>
+            <div id="DivwaitingDesignation" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+                <form id="frmmachine">
+                    <input class="form-control" type="hidden" id="Machine_Id" name="Machine_Id" placeholder="Department Name" />
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-5">
+                            <div class="form-group"></div>
+                            <label for="form-field-11">Instrument ID <span style="color:red;">*</span></label>
+                            @Html.EditorFor(model => model.MachineID, new { htmlAttributes = new { @class = "form-control", id = "MachineID", name = "MachineID", placeholder = "Machine ID", onchange = "ValidateMachineId()" } })
+                            <label class="error" for="MachineID" id="MachineID_error" style="color:red;" hidden>Enter Instrument ID.</label>
+                            <label class="error" for="MachineID" id="MachineID_error_Dublicate" style="color:red;" hidden>Found Duplicate InstrumentID.</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="form-group"></div>
+                            <label for="form-field-11">Instrument Name <span style="color:red;">*</span></label>
+                            @Html.EditorFor(model => model.Machine_Name, new { htmlAttributes = new { @class = "form-control", id = "Machine_Name", name = "Machine_Name", placeholder = "Machine Name" } })
+                            <label class="error" for="Machine_Name" id="MachineName_error" style="color:red;" hidden>Enter Machine Name.</label>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-5">
+                            <label for="form-field-11">Instrument Department <span style="color:red;">*</span></label>
+                            @Html.DropDownList("Machine_Department", new SelectList(ViewBag.MachineDepartment, "Department_Id", "Department_Name"), "Please Select Department", new { @id = "Machine_Department", @class = "form-control" })
+                            <label class="error" for="Machine_Department" id="MachineDepartment_error" style="color:red;" hidden>Select Machine Department.</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <label for="form-field-11">Instrument Location <span style="color:red;">*</span></label>
+                            @Html.EditorFor(model => model.Machine_Location, new { htmlAttributes = new { @class = "form-control", @id = "Machine_Location", @name = "Machine_Location", @placeholder = "Location Name" } })
+                            <label class="error" for="Machine_Location" id="MachineLocation_error" style="color:red;" hidden>Enter Machine Location.</label>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-10">
+                            <label for="form-field-11">Instrument Workflow <span style="color:red;">*</span></label>
+                            @Html.DropDownList("Machine_Workflow", new SelectList(ViewBag.workFlowList, "WorkFlowId", "WorkFlowName"), "Please Select Workflow", new { @id = "Machine_Workflow", @class = "form-control" })
+                            <label class="error" for="Machine_Workflow" id="MachineWorkflow_error" style="color:red;" hidden>Select Machine WorkFlow.</label>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group"></div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" id="Submit" style="margin-top: 10px;" onclick=" ValidationMachine()">
+                <i class="ace-icon fa fa-save"></i>
+                Create
+            </button>
+        </div>
+    </div>
+</div>
+<!-- /.modal-content -->
+
+<div class="modal" id="AddRemark" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Add Remark
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+                <form id="frmRemark">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-8">Remark <span style="color:red;">*</span></label>
+                            <textarea class="form-control" type="text" id="Remark" name="Remark" placeholder="Enter Remark"></textarea>
+                            <label class="error" for="messageBody" id="messageBody_error" style="color:red;" hidden>Please Enter Remark.</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" style="margin-top: 10px;" onclick="CallFunctionUsingId()">
+                <i class="ace-icon fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    $('.table').DataTable({
+        "order": [[1, "desc"]]
+    });
+
+    (function ($) {
+        $('#Machine_InstallationTime').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+        $('#Calibration_Date').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+        $('#FirstDueCalibration_Date').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+    }(jQuery));
+    function loadTable() {
+        location.reload(true);
+    }
+    function ClearTextBox() {
+        $('#Machine_Id').val("");
+        $('#MachineID').val("");
+        $('#Machine_Department').val("");
+        $('#Machine_Name').val("");
+        $('#Machine_Location').val("");
+        $('#Machine_Workflow').val("");
+    }
+
+
+    function GetID(button, id) {
+        $('#ButtonId').val(button);
+        $('#Id').val(id);
+        console.log($('#ButtonId').val());
+        console.log($('#Id').val());
+    }
+    function CallFunctionUsingId() {
+        if ($('#ButtonId').val() == "MachineSubmit") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                submitMachine();
+            }
+
+        }
+        else if ($('#ButtonId').val() == "MachineDelete") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                deltMachine($('#Id').val());
+            }
+        }
+    }
+
+
+    //Validation Function
+    function ValidationMachine() {
+        var isValid = true;
+        if ($('#MachineID').val().trim() == "") {
+            $('#MachineID_error').show();
+            $("#MachineID_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineID_error').hide();
+        }
+        if ($('#Machine_Name').val().trim() == "") {
+            $('#MachineName_error').show();
+            $("#MachineName_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineName_error').hide();
+        }
+        if ($('#Machine_Department').val().trim() == "") {
+            $('#MachineDepartment_error').show();
+            $("#MachineDepartment_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineDepartment_error').hide();
+        }
+
+        if ($('#Machine_Location').val().trim() == "") {
+            $('#MachineLocation_error').show();
+            $("#MachineLocation_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineLocation_error').hide();
+        }
+        if ($('#Machine_Workflow').val().trim() == "") {
+            $('#MachineWorkflow_error').show();
+            $("#MachineWorkflow_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineWorkflow_error').hide();
+        }
+
+        if (isValid == true) {
+            $('#modal-Instrument').modal('hide');
+            $('#AddRemark').modal('show');
+            GetID('MachineSubmit', '');
+        }
+        return isValid;
+    }
+
+    function ValidateMachineId() {
+        var empId = $("#MachineID").val();
+        $.ajax({
+            method: "POST",
+            url: "/Master/ValidateMachineId/",
+            data: { id: empId }
+        })
+            .done(function (msg) {
+                if (msg == 1) {
+                    $('#MachineID_error_Dublicate').show();
+                    $("#MachineID_error_Dublicate").fadeOut(2000);
+                    $("#MachineID").val("");
+                    $("#MachineID").focus();
+                } else {
+                    $('#MachineID_error_Dublicate').hide();
+                }
+            });
+    }
+
+
+    function submitMachine() {
+        var res = ValidationMachine();
+        if (res == false) {
+            return false;
+        }
+        var machine = $('#frmmachine').serialize();
+        var name = "Instrument";
+        machine = machine + "&otherdata.Remark=" + $('#Remark').val() + "&otherdata.FormName=" + name;
+        $('#DivwaitingDesignation').removeClass('hide')
+        $.post("/Master/MachineCreation", machine, function (result) {
+            $('#AddRemark').modal('hide');
+            loadTable();
+            $('#DivwaitingDesignation').addClass('hide')
+            if (result == "Save Success") {
+                $("#Save-alert").fadeTo(2000, 1000).slideUp(1000, function () {
+                    $("#Save-alert").slideUp(1000);
+                });
+            } else {
+                $("#Update-alert").fadeTo(2000, 1000).slideUp(1000, function () {
+                    $("#Update-alert").slideUp(1000);
+                });
+            }
+        })
+    }
+
+    function editMachine(id) {
+        var id = { id: id };
+        $.get("/Master/MachineEdit", id, function (result) {
+            $('#modal-Instrument').modal('toggle');
+            $("#Submit").text('Update');
+            $('#Machine_Id').val(result.Machine_Id);
+            $('#MachineID').val(result.MachineID);
+            $('#Machine_Name').val(result.Machine_Name);
+            $('#Machine_Location').val(result.Machine_Location);
+            $('#Machine_Department').val(result.Machine_Department);
+            $('#Machine_Workflow').val(result.Machine_Workflow);
+        });
+    }
+    function deltMachine(id) {
+        $('#AddRemark').modal('toggle');
+        //var id = { id: id };
+        bootbox.confirm({
+            titel: 'Confirm message',
+            message: 'Are you sure you want to Deactive!!..',
+            button: {
+                'confirm': {
+                    label: 'Confirm',
+                    className: 'btn-sm btn-info'
+                },
+                'cancle': {
+                    label: 'Cancel',
+                    className: 'btn-sm btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    var data = {
+                        id: id,
+                        remark: $('#Remark').val(),
+                    }
+
+                    $('#DivwaitingTreatment').removeClass('hide')
+                    $.get("/Master/MachineDeActive", data, function (result) {
+                        loadTable();
+                        $('#DivwaitingTreatment').addClass('hide')
+                        $("#Deactive-alert").fadeTo(2000, 500).slideUp(500, function () {
+                            $("#Deactive-alert").slideUp(500);
+                        });
+                    });
+                }
+            }
+
+        })
+
+    }
+</script>
+

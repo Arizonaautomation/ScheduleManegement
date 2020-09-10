@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SchedulManagementSystemModelStoreContainer" CdmEntityContainer="dbScheduleModel">
+    <EntitySetMapping Name="ScheduleMachines">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.ScheduleMachine">
+        <MappingFragment StoreEntitySet="ScheduleMachine">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="MachineId" ColumnName="MachineId" />
+          <ScalarProperty Name="MachineLocation" ColumnName="MachineLocation" />
+          <ScalarProperty Name="ScheduleType" ColumnName="ScheduleType" />
+          <ScalarProperty Name="StartScheduleDate" ColumnName="StartScheduleDate" />
+          <ScalarProperty Name="EndScheduleDate" ColumnName="EndScheduleDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="AsignTo" ColumnName="AsignTo" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="AsignType" ColumnName="AsignType" />
+          <ScalarProperty Name="ApprovedDate" ColumnName="ApprovedDate" />
+          <ScalarProperty Name="CreatedDepartment" ColumnName="CreatedDepartment" />
+          <ScalarProperty Name="EmployeeHead" ColumnName="EmployeeHead" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblAccessGroupChilds">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblAccessGroupChild">
+        <MappingFragment StoreEntitySet="tblAccessGroupChild">
+          <ScalarProperty Name="groupChild_Id" ColumnName="groupChild_Id" />
+          <ScalarProperty Name="group_Id" ColumnName="group_Id" />
+          <ScalarProperty Name="menu_Id" ColumnName="menu_Id" />
+          <ScalarProperty Name="access_Create" ColumnName="access_Create" />
+          <ScalarProperty Name="access_Modify" ColumnName="access_Modify" />
+          <ScalarProperty Name="access_Delete" ColumnName="access_Delete" />
+          <ScalarProperty Name="access_View" ColumnName="access_View" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblAccessGroupMasters">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblAccessGroupMaster">
+        <MappingFragment StoreEntitySet="tblAccessGroupMaster">
+          <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+          <ScalarProperty Name="group_Id" ColumnName="group_Id" />
+          <ScalarProperty Name="group_Name" ColumnName="group_Name" />
+          <ScalarProperty Name="remark" ColumnName="remark" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblAccessMenuMasters">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblAccessMenuMaster">
+        <MappingFragment StoreEntitySet="tblAccessMenuMaster">
+          <ScalarProperty Name="menu_Id" ColumnName="menu_Id" />
+          <ScalarProperty Name="menu_Name" ColumnName="menu_Name" />
+          <ScalarProperty Name="menu_Link" ColumnName="menu_Link" />
+          <ScalarProperty Name="menu_Icon" ColumnName="menu_Icon" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblAssignEmployeeGroups">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblAssignEmployeeGroup">
+        <MappingFragment StoreEntitySet="tblAssignEmployeeGroup">
+          <ScalarProperty Name="assignGroupId" ColumnName="assignGroupId" />
+          <ScalarProperty Name="employee_Id" ColumnName="employee_Id" />
+          <ScalarProperty Name="group_Id" ColumnName="group_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblDepartments">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblDepartment">
+        <MappingFragment StoreEntitySet="tblDepartment">
+          <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+          <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+          <ScalarProperty Name="Department_Name" ColumnName="Department_Name" />
+          <ScalarProperty Name="Department_Head" ColumnName="Department_Head" />
+          <ScalarProperty Name="Parent_Department" ColumnName="Parent_Department" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblDesignations">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblDesignation">
+        <MappingFragment StoreEntitySet="tblDesignation">
+          <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+          <ScalarProperty Name="Designation_Id" ColumnName="Designation_Id" />
+          <ScalarProperty Name="Designation_Name" ColumnName="Designation_Name" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblEmployees">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblEmployee">
+        <MappingFragment StoreEntitySet="tblEmployee">
+          <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+          <ScalarProperty Name="Employee_Id" ColumnName="Employee_Id" />
+          <ScalarProperty Name="Employee_Department" ColumnName="Employee_Department" />
+          <ScalarProperty Name="Employee_Designation" ColumnName="Employee_Designation" />
+          <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+          <ScalarProperty Name="EmpProfilePhoto" ColumnName="EmpProfilePhoto" />
+          <ScalarProperty Name="Employee_Name" ColumnName="Employee_Name" />
+          <ScalarProperty Name="Employee_Contact" ColumnName="Employee_Contact" />
+          <ScalarProperty Name="Employee_Email" ColumnName="Employee_Email" />
+          <ScalarProperty Name="Employee_Address" ColumnName="Employee_Address" />
+          <ScalarProperty Name="group_Id" ColumnName="group_Id" />
+          <ScalarProperty Name="Employee_UserName" ColumnName="Employee_UserName" />
+          <ScalarProperty Name="Employee_Password" ColumnName="Employee_Password" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="FirstTimeLoginStatus" ColumnName="FirstTimeLoginStatus" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblHistories">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblHistory">
+        <MappingFragment StoreEntitySet="tblHistory">
+          <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+          <ScalarProperty Name="H_Id" ColumnName="H_Id" />
+          <ScalarProperty Name="Emp_Id" ColumnName="Emp_Id" />
+          <ScalarProperty Name="Old_Action" ColumnName="Old_Action" />
+          <ScalarProperty Name="New_Action" ColumnName="New_Action" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="EntryDatetime" ColumnName="EntryDatetime" />
+          <ScalarProperty Name="ActionRowId" ColumnName="ActionRowId" />
+          <ScalarProperty Name="FromName" ColumnName="FromName" />
+          <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+          <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblMachineCreations">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblMachineCreation">
+        <MappingFragment StoreEntitySet="tblMachineCreation">
+          <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+          <ScalarProperty Name="Machine_Id" ColumnName="Machine_Id" />
+          <ScalarProperty Name="Machine_Department" ColumnName="Machine_Department" />
+          <ScalarProperty Name="MachineID" ColumnName="MachineID" />
+          <ScalarProperty Name="Machine_Name" ColumnName="Machine_Name" />
+          <ScalarProperty Name="Machine_Location" ColumnName="Machine_Location" />
+          <ScalarProperty Name="Machine_Workflow" ColumnName="Machine_Workflow" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Instru_Equip_StatusId" ColumnName="Instru_Equip_StatusId" />
+          <ScalarProperty Name="WfMovedStep" ColumnName="WfMovedStep" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblPayrolls">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblPayroll">
+        <MappingFragment StoreEntitySet="tblPayroll">
+          <ScalarProperty Name="Payroll_Id" ColumnName="Payroll_Id" />
+          <ScalarProperty Name="Head_Id" ColumnName="Head_Id" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+          <ScalarProperty Name="Reason" ColumnName="Reason" />
+          <ScalarProperty Name="NoOfDays" ColumnName="NoOfDays" />
+          <ScalarProperty Name="EmergencyContactNo" ColumnName="EmergencyContactNo" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDatetime" ColumnName="CreatedDatetime" />
+          <ScalarProperty Name="ApprovedDateTime" ColumnName="ApprovedDateTime" />
+          <ScalarProperty Name="HeadName" ColumnName="HeadName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblScheduleMasters">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblScheduleMaster">
+        <MappingFragment StoreEntitySet="tblScheduleMaster">
+          <ScalarProperty Name="Schecule_Id" ColumnName="Schecule_Id" />
+          <ScalarProperty Name="Schedule_Name" ColumnName="Schedule_Name" />
+          <ScalarProperty Name="Schedule_Type" ColumnName="Schedule_Type" />
+          <ScalarProperty Name="Schedule_description" ColumnName="Schedule_description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblSettings">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblSetting">
+        <MappingFragment StoreEntitySet="tblSetting">
+          <ScalarProperty Name="setting_Id" ColumnName="setting_Id" />
+          <ScalarProperty Name="Password_Limit" ColumnName="Password_Limit" />
+          <ScalarProperty Name="Password_Security" ColumnName="Password_Security" />
+          <ScalarProperty Name="Password_age" ColumnName="Password_age" />
+          <ScalarProperty Name="Password_Age_Notify" ColumnName="Password_Age_Notify" />
+          <ScalarProperty Name="Password_attempt_Limit" ColumnName="Password_attempt_Limit" />
+          <ScalarProperty Name="Password_Reopen" ColumnName="Password_Reopen" />
+          <ScalarProperty Name="Password_History_Store_Limit" ColumnName="Password_History_Store_Limit" />
+          <ScalarProperty Name="Auto_Logout_Limit" ColumnName="Auto_Logout_Limit" />
+          <ScalarProperty Name="Login_For_All_Action" ColumnName="Login_For_All_Action" />
+          <ScalarProperty Name="Password_in_Logout" ColumnName="Password_in_Logout" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblSites">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblSite">
+        <MappingFragment StoreEntitySet="tblSite">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Site_Description" ColumnName="Site_Description" />
+          <ScalarProperty Name="Site_Name" ColumnName="Site_Name" />
+          <ScalarProperty Name="Site_Id" ColumnName="Site_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblWorkFlowChilds">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblWorkFlowChild">
+        <MappingFragment StoreEntitySet="tblWorkFlowChild">
+          <ScalarProperty Name="GrpRoleId" ColumnName="GrpRoleId" />
+          <ScalarProperty Name="EmpId" ColumnName="EmpId" />
+          <ScalarProperty Name="StepName" ColumnName="StepName" />
+          <ScalarProperty Name="FlowStep" ColumnName="FlowStep" />
+          <ScalarProperty Name="WorFlowId" ColumnName="WorFlowId" />
+          <ScalarProperty Name="WFChild_Id" ColumnName="WFChild_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblWorkFlowMasters">
+      <EntityTypeMapping TypeName="SchedulManagementSystemModel.tblWorkFlowMaster">
+        <MappingFragment StoreEntitySet="tblWorkFlowMaster">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="WorkFlowName" ColumnName="WorkFlowName" />
+          <ScalarProperty Name="WorkFlowId" ColumnName="WorkFlowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

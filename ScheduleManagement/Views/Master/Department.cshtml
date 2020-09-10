@@ -1,0 +1,387 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="alert alert-success" id="Save-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Save Data Successfully.
+</div>
+<div class="alert alert-success" id="Update-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Update Data Successfully.
+</div>
+<div class="alert alert-success" id="Deactive-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Deactive Data Successfully.
+</div>
+
+<div id="Department">
+    <div class="row">
+        <div class="col-sm-12">
+            @foreach (var grp in ViewBag.Groupchild)
+            {
+                if (grp.menu_Id == 1)
+                {
+                    if (grp.access_Create == "True")
+                    {
+                        <button class="btn btn-info pull-right" style="border-radius: 20px">
+                            <i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>
+                            <a href="#modal-Department" data-toggle="modal" class="white" onclick="ClearTextBox();">New Create</a>
+                        </button>
+                    }
+                }
+            }
+        </div>
+    </div>
+    <label for="form-field-8" id="ButtonId"> </label>
+    <label for="form-field-8" id="Id"> </label>
+
+    <fieldset>
+        <legend>Department</legend>
+
+        <div style="margin-top: 15px !important">
+            <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                <thead>
+                    <tr>
+                        @foreach (var grp in ViewBag.Groupchild)
+                        {
+                            if (grp.menu_Id == 1)
+                            {
+                                if (grp.access_Modify == "True" || grp.access_Delete == "True")
+                                {
+                                    <th style="width: 130px !important;">Action</th>
+                                }
+                            }
+                        }
+                        <th hidden>ID</th>
+                        <th>Department Name</th>
+                        <th>Department Head</th>
+                        <th>Status</th>
+                        @*<th>Department Description</th>*@
+                        @*<th>Created Date</th>*@
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in ViewBag.LstDpart)
+                    {
+                        <tr>
+                            @foreach (var grp in ViewBag.Groupchild)
+                            {
+                                if (grp.menu_Id == 1)
+                                {
+                                    if (grp.access_View == "True")
+                                    {
+
+                                    }
+                                    if (grp.access_Delete == "True" || grp.access_Modify == "True")
+                                    {
+                                        <td>
+
+                                            @if (grp.access_Modify == "True" && grp.access_Delete == "False")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editDepartment(@item.Department_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                            }
+                                            @if (grp.access_Delete == "True" && grp.access_Modify == "False")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("DepartmentDelete",@item.Department_Id) title="Deactive Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                            }
+                                            @if (grp.access_Delete == "True" && grp.access_Modify == "True")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editDepartment(@item.Department_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                                <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("DepartmentDelete",@item.Department_Id) title="Deactive Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                            }
+                                        </td>
+                                    }
+                                }
+                            }
+                            <td hidden>@item.Department_Id</td>
+                            <td>@item.Department_Name</td>
+                            <td></td>
+                            <td>@item.Status</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+</div>
+
+<div class="modal" id="modal-Department" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Department
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+                <form id="frmDepartment">
+                    <input class="form-control" type="hidden" id="Department_Id" name="Department_Id" placeholder="" />
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-5">
+                            <div class="form-group"></div>
+                            <label for="form-field-11">Department Name <span style="color:red;">*</span></label>
+                            <input class="form-control" type="text" id="Department_Name" name="Department_Name" placeholder="Department Name" onkeypress="return checkAlphaNumeric()" />
+                            <label class="error" for="DepartmentName" id="DepartmentName_error" style="color:red;" hidden>Enter Department Name.</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="form-group"></div>
+                            <label for="form-field-8">Department Head <span style="color:red;">*</span></label>
+                            <select class="form-control" id="Department_Head" name="Department_Head">
+                                <option></option>
+                            </select>
+                            <label class="error" for="Department_Head" id="DepartmentHead_error" style="color:red;" hidden>Select Department Head.</label>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-5">
+                            <div class="form-group"></div>
+                            <label><input type="checkbox" id="isSubDepartment">Sub Department</label>
+                            <label class="error" for="SubDepartment" id="SubDepartment_error" style="color:red;" hidden>Enter Department Description.</label>
+                        </div>
+                        <div class="col-sm-5" id="ParentDepartment" hidden>
+                            <label for="form-field-8">Parent Department <span style="color:red;">*</span></label>
+                            <select class="form-control" id="Parent_Department" name="Parent_Department">
+                                <option></option>
+                            </select>
+                            <label class="error" for="Parent_Department" id="ParentDepartment_error" style="color:red;" hidden>Select Parent Department.</label>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group"></div>
+                </form>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" id="Submit" style="margin-top: 10px;" onclick="ValidationDepartment()">
+                <i class="ace-icon fa fa-save"></i>
+                Create
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="AddRemark" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Add Remark
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+                <form id="frmRemark">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-8">Remark <span style="color:red;">*</span></label>
+                            <textarea class="form-control" type="text" id="Remark" name="Remark" placeholder="Enter Remark"></textarea>
+                            <label class="error" for="messageBody" id="messageBody_error" style="color:red;" hidden>Please Enter Remark.</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" style="margin-top: 10px;" onclick="CallFunctionUsingId()">
+                <i class="ace-icon fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    $('.table').DataTable({
+        "order": [[1, "desc"]]
+    });
+
+    $('#isSubDepartment').click(function () {
+        $("#ParentDepartment").toggle(this.checked);
+    });
+
+    function loadTable() {
+        location.reload(true);
+    }
+    function GetID(button, id) {
+        $('#ButtonId').val(button);
+        $('#Id').val(id);
+        console.log($('#ButtonId').val());
+        console.log($('#Id').val());
+    }
+    function CallFunctionUsingId() {
+        if ($('#ButtonId').val() == "DepartmentSubmit") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                submitDepartment();
+            }
+
+        }
+        else if ($('#ButtonId').val() == "DepartmentDelete") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                deltDepartment($('#Id').val());
+            }
+        }
+    }
+    function ClearTextBox() {
+        $('#Department_Id').val("");
+        $('#Department_Name').val("");
+        $('#Department_Head').val("0");
+        $("#isSubDepartment").prop("checked", false);
+        $("#ParentDepartment").hide();
+        $('#Parent_Department').val("0");
+
+    }
+    //Validation Function
+    function ValidationDepartment() {
+        var isValid = true;
+        if ($('#Department_Name').val().trim() == "") {
+            $('#DepartmentName_error').show();
+            $("#DepartmentName_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#DepartmentName_error').hide();
+        }
+        if ($("#isSubDepartment").prop("checked") == true) {
+            if ($('#Parent_Department').val().trim() == "0") {
+                $('#ParentDepartment_error').show();
+                $("#ParentDepartment_error").fadeOut(2000);
+                isValid = false;
+            }
+            else {
+                $('#ParentDepartment_error').hide();
+            }
+        }
+        //if ($('#Department_Description').val().trim() == "") {
+        //    $('#DepartmentDescription_error').show();
+        //    $("#DepartmentDescription_error").fadeOut(2000);
+        //    isValid = false;
+        //}
+        //else {
+        //    $('#DepartmentDescription_error').hide();
+        //}
+
+        if (isValid == true) {
+            $('#modal-Department').modal('hide');
+            $('#AddRemark').modal('show');
+            GetID('DepartmentSubmit', '');
+        }
+        return isValid;
+    }
+
+    function submitDepartment() {
+        var res = ValidationDepartment();
+        if (res == false) {
+            return false;
+        }
+        var deprtment = $('#frmDepartment').serialize();
+        deprtment = deprtment + "&otherdata.Remark=" + $('#Remark').val();
+        console.log(deprtment);
+        $('#DivwaitingTreatment').removeClass('hide')
+        $.post("/Master/DepartmentCreation", deprtment, function (result) {
+            $('#AddRemark').modal('hide');
+            loadTable();
+            $('#DivwaitingTreatment').addClass('hide')
+
+            if (result == "Save Success") {
+                $("#Save-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                    $("#Save-alert").slideUp(10000);
+                });
+            } else {
+                $("#Update-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                    $("#Update-alert").slideUp(10000);
+                });
+            }
+        })
+    }
+
+    function editDepartment(id) {
+        $('#DivwaitingTreatment').removeClass('hide')
+        var id = { id: id };
+        $.get("/Master/DepartmentEdit", id, function (result) {
+            console.log(result);
+            $('#modal-Department').modal('toggle');
+            $("#Submit").text('Update');
+            $('#Department_Id').val(result.Department_Id);
+            $('#Department_Name').val(result.Department_Name);
+            $('#Department_Head').val(result.Department_Head);
+            $('#Parent_Department').val(result.Parent_Department);
+            if (result.Parent_Department != null)
+                $("#isSubDepartment").prop("checked", true);
+
+            // $('#Department_Description').val(result.Department_Description);
+            //loadTable();
+            $('#DivwaitingTreatment').addClass('hide')
+        });
+    }
+    function deltDepartment(id) {
+        $('#AddRemark').modal('toggle');
+        //var id = { id: id };
+        bootbox.confirm({
+            titel: 'Confirm message',
+            message: 'Are you sure you want to Deactive!!..',
+            button: {
+                'confirm': {
+                    label: 'Confirm',
+                    className: 'btn-sm btn-info'
+                },
+                'cancle': {
+                    label: 'Cancel',
+                    className: 'btn-sm btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    var data = {
+                        id: id,
+                        remark: $('#Remark').val(),
+                    }
+
+                    $('#DivwaitingTreatment').removeClass('hide')
+                    $.get("/Master/DepartmentDeactive", data, function (result) {
+                        loadTable();
+                        $('#DivwaitingTreatment').addClass('hide')
+                        $("#Deactive-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                            $("#Deactive-alert").slideUp(10000);
+                        });
+                    });
+                }
+            }
+
+        })
+
+    }
+</script>

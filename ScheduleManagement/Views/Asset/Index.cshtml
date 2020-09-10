@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="alert alert-success" id="Save-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Save Data Successfully.
+</div>
+<div class="alert alert-success" id="Update-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Update Data Successfully.
+</div>
+<div class="alert alert-success" id="Delete-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Delete Data Successfully.
+</div>
+<div class="alert alert-success" id="Send-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Send Mail Successfully.
+</div>
+<div id="DivwaitingSchedule" class="hide widget-box-overlay">
+    <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+        <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-12">
+    @foreach (var grp in ViewBag.Groupchild)
+    {
+        if (grp.menu_Id == 12)
+        {
+            if (grp.access_Create == "true")
+            {
+
+
+                @Html.Action("partialFormForAllUser", "Asset")
+            }
+        }
+    }
+</div>
+
+<div class="col-xs-12 col-sm-12">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4 class="widget-title">Detais</h4>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="ace-icon fa fa-chevron-up"></i>
+                </a>
+
+                @*<a href="#" data-action="close">
+                        <i class="ace-icon fa fa-times"></i>
+                    </a>*@
+            </div>
+        </div>
+
+        <div class="widget-body" style="display: none;">
+            <table id="tblschMachine" class="table table-striped table-bordered table-hover table-condensed width-100"></table>
+        </div>
+    </div>
+</div>
+<script>
+    (function ($) {
+        bindDatawithTable();
+    }(jQuery));
+
+    function bindDatawithTable() {
+        var oTable = $('#tblschMachine').dataTable({
+            "bPaginate": true,
+            "bDeferRender": true,
+            "bProcessing": true,
+            "bJqueryUI": true,
+            "sDom": '<"toolbar">frtrip',
+            "sAjaxSource": "/Asset/bindData",
+            "iDisplayLength": 5,
+            "bDestroy": true,
+            "aoColumns": [
+                { "mData": "Button", "sTitle": "Action", "sWidth": "5%", "bSortable": false },
+                { "mData": "MachineId", "sTitle": "Instrument Id", "sWidth": "10%", "bSortable": false },
+                { "mData": "MachineLocation", "sTitle": "Instrument Location", "sWidth": "10%", "bSortable": false },
+
+            ]
+        })
+    };
+
+</script>

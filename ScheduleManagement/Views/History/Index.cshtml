@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>Index</h2>
+
+    <button type="button" id="btn_id" value="Click" onclick="Click()">Click</button>*@
+@*<table id="logHistory" class="table table-striped table-bordered table-hover table-condensed width-100"></table>*@
+
+
+<form id="frmMachineSchedule">
+    <div class="widget-main">
+        <div class="row">
+            <div class="col-sm-3">
+                <label for="form-field-8">From Date</label>
+                <input type="text" id="fromDate" class="form-control" placeholder="From Date" />
+                <label class="error" for="MachineId" id="MachineId_error" style="color:red;" hidden>Select From Date.</label>
+            </div>
+            <div class="col-sm-3">
+                <label for="form-field-9">To Date</label>
+                <input type="text" id="todate" class="form-control" placeholder="To Date" />
+                <label class="error" for="MachineLocation" id="MachineLocation_error" style="color:red;" hidden>Select To Date.</label>
+            </div>
+            <div class="col-sm-3">
+                <label for="form-field-10">Department</label>
+                @Html.DropDownList("Employee_Department", new SelectList(ViewBag.Department, "Department_Id", "Department_Name"), "Please Select Department", new { @id = "Employee_Department", @class = "form-control" })
+                <label class="error" for="ScheduleType" id="ScheduleType_error" style="color:red;" hidden>Select Department.</label>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group"></div>
+                <div class="form-group"></div>
+                <div class="form-group"></div>
+                <button class="btn btn-info" style="border-radius: 20px">
+                    <i class="ace-icon fa fa-search icon-animated-hand-pointer white"></i>
+                    <a href="#modal-User" data-toggle="modal" class="white" onclick="GetData();">Search</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+<table id="logHistory" class="table table-bordered table-striped table-condensed width-100">
+    <thead>
+        <tr>
+            <th hidden>ID</th>
+            <th>Employee Name</th>
+            <th>Form Name</th>
+            <th>New Action</th>
+            <th>Old Action</th>
+            <th>Date Time</th>
+            <th>Remark</th>
+        </tr>
+    </thead>
+
+    <tbody id="tblChild">
+        @*@foreach (var item in ViewBag.log)
+            {
+                <tr>
+                    <td>@item.EmployeeName</td>
+                    <td>@item.FromName</td>
+                    <td>@item.Old_Action</td>
+
+                    <td>@item.New_Action</td>
+                    <td>@item.EntryDatetime</td>
+                    <td>@item.Remark</td>
+                </tr>
+            }*@
+    </tbody>
+</table>
+
+<script>
+
+    (function ($) {
+        GetData();
+        // bindDatawithTable();
+        $('#fromDate').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+
+        $('#todate').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+
+
+        // $("#logHistory").DataTable();
+
+    }(jQuery));
+
+    var table;
+    function GetData() {
+
+        if ($.fn.DataTable.isDataTable('#logHistory')) {
+            console.log("Yes");
+            $('#logHistory').DataTable().destroy();
+        }
+
+        $('#logHistory tbody').empty();
+
+        if ($('#fromDate').val() == "" && $('#todate').val() == "" && $('#Employee_Department').val() == "") {
+            $.get("/History/BindData", function (res) {
+                $.each(res.data, function (index, value) {
+                    var tr = "<tr>";
+                    tr += "<td hidden>" + value.H_Id + "</td>";
+                    tr += "<td>" + value.EmployeeName + "</td>";
+                    tr += "<td>" + value.FromName + "</td>";
+                    tr += "<td>" + value.New_Action + "</td>";
+                    tr += "<td>" + value.Old_Action + "</td>";
+                    tr += "<td>" + moment(value.EntryDatetime).format('DD/MM/YYYY hh:mm a') + "</td>";
+                    tr += "<td>" + value.Remark + "</td>" + "</tr>";
+                    $("#tblChild").append(tr);
+                });
+                $("#logHistory").DataTable({
+                    "order": [[0, "desc"]]
+                });
+            });
+        }
+        else {
+            if ($.fn.DataTable.isDataTable('#logHistory')) {
+                console.log("Yes");
+                $('#logHistory').DataTable().destroy();
+            }
+
+            $('#logHistory tbody').empty();
+
+
+            var data = {
+                fromdate: $('#fromDate').val(),
+                toDate: $('#todate').val(),
+                DeparmentId: $('#Employee_Department').val(),
+            }
+            $.get("/History/BindSearchData", data, function (res) {
+                $.each(res.data, function (index, value) {
+                    var tr = "<tr>";
+                    tr += "<td hidden>" + value.H_Id + "</td>";
+                    tr += "<td>" + value.EmployeeName + "</td>";
+                    tr += "<td>" + value.FromName + "</td>";
+                    tr += "<td>" + value.New_Action + "</td>";
+                    tr += "<td>" + value.Old_Action + "</td>";
+                    tr += "<td>" + moment(value.EntryDatetime).format('DD/MM/YYYY hh:mm a') + "</td>";
+                    tr += "<td>" + value.Remark + "</td>" + "</tr>";
+                    newdata = $("#tblChild").append(tr);
+                });
+                $("#logHistory").DataTable({
+                    "order": [[0, "desc"]]
+                });
+            });
+        }
+    }
+
+    //$.fn.dataTable.ext.search.push(
+    //    function (settings, data, dataIndex) {
+    //        var min = moment($('#fromDate').val()).format('DD MMM YYYY');
+    //        var max = moment($('#todate').val()).format('DD MMM YYYY');
+    //        var Date = data[4] || 0; // use data for the age column
+    //        console.log(min);
+    //        console.log(max);
+    //        console.log(Date);
+    //        if ((min != "Invalid date" && max != "Invalid date") || (min != "Invalid date" && Date <= max) || (min <= Date && max != "Invalid date") || (min <= Date && Date <= max)) {
+    //            console.log("true");
+    //            return true;
+    //        }
+    //        console.log("false");
+    //        return false;
+    //    }
+    //);
+    //$('#fromDate, #todate').click(function () {
+    //    console.log("keyup");
+    //    table.draw();
+    //});
+
+    //function bindHistoryLog() {
+    //    var oTable = $('#logHistory').dataTable({
+    //        "bPaginate": true,
+    //        "bDeferRender": true,
+    //        "bProcessing": true,
+    //        "bJqueryUI": true,
+    //        "sDom": '<"toolbar">frtrip',
+    //        "sAjaxSource": "/History/BindData",
+    //        //"iDisplayLength": 7,
+    //        "bDestroy": true,
+    //        "aoColumns": [
+    //            { "mData": "EmpName", "sTitle": "Employee Name", "sWidth": "10%", "bSortable": false },
+    //            { "mData": "formName", "sTitle": "Form Name", "sWidth": "10%", "bSortable": false },
+    //            { "mData": "oldAction", "sTitle": "Old Action", "sWidth": "10%", "bSortable": false },
+    //            { "mData": "newAction", "sTitle": "New Action", "sWidth": "10%", "bSortable": false },
+    //            { "mData": "entryDatetime", "sTitle": "Date Time", "sWidth": "10%", "bSortable": false },
+    //            { "mData": "remark", "sTitle": "Remark", "sWidth": "10%", "bSortable": false }
+    //        ]
+    //    });
+    //};
+
+
+</script>

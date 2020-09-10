@@ -1,0 +1,557 @@
+﻿<div class="">
+    <div class="">
+        <label for="form-field-8" id="ButtonId"> </label>
+
+        <form id="frmMachineSchedule">
+            <div class="col-sm-6">
+                <div class="widget-main">
+                    <div>
+                        <input type="hidden" id="Id" name="Id" class="form-control" placeholder="" />
+                        <label for="form-field-8">Instrument Name <span style="color:red;">*</span></label>
+                        @Html.DropDownList("MachineId", new SelectList(ViewBag.Machine, "Machine_Id", "Machine_Name"), "Please Select Instument", new { @id = "MachineId", @class = "form-control" })
+                        <label class="error" for="MachineId" id="MachineId_error" style="color:red;" hidden>Select Instument Name.</label>
+                        @*<input type="text" id="" class="form-control" placeholder="" />*@
+                        @*<textarea class="form-control" id="form-field-8" placeholder="Default Text"></textarea>*@
+                    </div>
+                    <div>
+                        <label for="form-field-9">Instrument Location <span style="color:red;">*</span></label>
+                        <input type="text" id="MachineLocation" name="MachineLocation" class="form-control" placeholder="Instument Location" />
+                        <label class="error" for="MachineLocation" id="MachineLocation_error" style="color:red;" hidden>Enter Instument Location.</label>
+                        @*<textarea class="form-control limited" id="form-field-9" maxlength="50"></textarea>*@
+                    </div>
+                    <div>
+                        <label for="form-field-11">Schedule type <span style="color:red;">*</span></label>
+                        <input type="text" id="ScheduleType" name="ScheduleType" class="form-control" placeholder="" />
+                        <label class="error" for="ScheduleType" id="ScheduleType_error" style="color:red;" hidden>Enter Schedule Type.</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="widget-main">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div>
+                                <label for="form-field-8">StartScheduleDate <span style="color:red;">*</span></label>
+                                <input type="text" id="StartScheduleDate" name="StartScheduleDate" class="form-control" placeholder="" />
+                                <label class="error" for="StartScheduleDate" id="StartScheduleDate_error" style="color:red;" hidden>Select Start Schedule Date.</label>
+                                @*<div class="input-group">
+                                        <input class="form-control date-picker" id="id-date-picker-1" type="text" data-date-format="dd-mm-yyyy">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                    </div>*@
+                                @*<textarea class="form-control" id="form-field-8" placeholder="Default Text"></textarea>*@
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div>
+                                <label for="form-field-9">EndScheduleDate <span style="color:red;">*</span></label>
+                                <input type="text" id="EndScheduleDate" name="EndScheduleDate" class="form-control" placeholder="" />
+                                <label class="error" for="EndScheduleDate" id="EndScheduleDate_error" style="color:red;" hidden>Select End Schedule Date.</label>
+                                @*<textarea class="form-control limited" id="form-field-9" maxlength="50"></textarea>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="col-sm-6">
+                            <label for="form-field-8">Asign to <span style="color:red;">*</span></label>
+                            @Html.DropDownList("AsignTo", new SelectList(ViewBag.Employeename, "Employee_Id", "Employee_Name"), "Please select User", new { @id = "AsignTo", @class = "form-control" })
+                            <label class="error" for="AsignTo" id="AsignTo_error" style="color:red;" hidden>Select Assign to.</label>
+                        </div>
+                        <div class="col-sm-6 ">
+                            <label for="form-field-9">Asign Type <span style="color:red;">*</span></label>
+                            <input type="text" id="AsignType" name="AsignType" class="form-control " placeholder="Type " />
+                            <label class="error" for="AsignType" id="AsignType_error" style="color:red;" hidden>Enter Assign Type.</label>
+                        </div>
+                        <label for="form-field-11"></label>
+
+                        @*<input type="text" id="" class="form-control" placeholder="" />*@
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div>
+                                <label for="form-field-11">Status</label>
+                                <select id="Status" name="Status" class="form-control">
+                                    <option value="0">Select Status</option>
+                                    <option>Pass</option>
+                                    <option>Fail</option>
+                                    <option>Under Reviewer</option>
+                                    <option>Under Approver</option>
+                                </select>
+                                @*<input type="text" id="" class="form-control" placeholder="" />*@
+                            </div>
+                        </div>
+                        <div class="col-sm-6" style="margin-top: 20px">
+                            <div>
+                                <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#AddRemark" onclick="GetID('Submit')">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="SendMailmodal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                @*<div class="table-header">*@
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="white">×</span>
+                </button>
+                Mail
+                @*</div>*@
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+                <form id="frmEmail">
+                    <input class="form-control" type="hidden" id="User_Id" name="User_Id" placeholder="" />
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-11">From EmailID <span style="color:red;">*</span></label>
+                            <input class="form-control" type="text" id="fromEmailAddress" name="fromEmailAddress" placeholder="From EmailID" />
+                            <label class="error" for="From_EmailID" id="FromEmailID_error" style="color:red;" hidden>Enter From EmailId.</label>
+                            <label class="error" for="From_EmailID" id="FromEmailID_error_Reg" style="color:red;" hidden>Enter Correct EmailID.</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-8">From Email Password <span style="color:red;">*</span></label>
+                            <input class="form-control" type="password" id="password" name="password" placeholder="From Email Password" /><i class="fa fa-eye pull-right" style="margin:-25px 10px;" id="togglePassword" onclick="viewPassword()"></i>
+                            <label class="error" for="FromEmail_Password" id="FromEmailPassword_error" style="color:red;" hidden>Enter Form Email Password.</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-8">To EmailID <span style="color:red;">*</span></label>
+                            <input class="form-control" type="text" id="toEmailAddress" name="toEmailAddress" placeholder="To EmailID" />
+                            <label class="error" for="To_EmailID" id="ToEmailID_error" style="color:red;" hidden>Enter To Email.</label>
+                            <label class="error" for="To_EmailID" id="ToEmailID_error_Reg" style="color:red;" hidden>Enter Correct EmailID.</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-8">Email Subject <span style="color:red;">*</span></label>
+                            <input class="form-control" type="text" id="mailSubject" name="mailSubject" placeholder="Email Subject" onkeypress="return checkAlphaNumeric()" />
+                            <label class="error" for="mailSubject" id="mailSubject_error" style="color:red;" hidden>Enter To Email Subject.</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-8">Massage Body <span style="color:red;">*</span></label>
+                            <textarea class="form-control" type="text" id="messageBody" name="messageBody" placeholder="Massage Body"></textarea>
+                            <label class="error" for="messageBody" id="messageBody_error" style="color:red;" hidden>Enter To Massage Body.</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" style="margin-top: 10px;" onclick="SendMail()">
+                <i class="ace-icon fa fa-plus"></i>
+                Send
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="AddRemark" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                @*<div class="table-header">*@
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Add Remark
+                @*</div>*@
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+                <form id="frmRemark">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-8" id="DeleteId"> </label>
+                            <label for="form-field-8">Remark <span style="color:red;">*</span></label>
+                            <textarea class="form-control" type="text" id="Remark" name="Remark" placeholder="Enter Remark"></textarea>
+                            <label class="error" for="messageBody" id="messageBody_error" style="color:red;" hidden>Please Enter Remark.</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" style="margin-top: 10px;" onclick="CallFunctionUsingId()">
+                <i class="ace-icon fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    (function ($) {
+        bindDatawithTable();
+        $('#StartScheduleDate').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+        $('#EndScheduleDate').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+    }(jQuery));
+
+    function loadTable() {
+        location.reload(true);
+    }
+    function GetID(id) {
+        $('#ButtonId').val(id);
+        console.log($('#ButtonId').val());
+    }
+    function bindDatawithTable() {
+        var oTable = $('#tblschMachine').dataTable({
+            "bPaginate": true,
+            "bDeferRender": true,
+            "bProcessing": true,
+            "bJqueryUI": true,
+            "sDom": '<"toolbar">frtrip',
+            "sAjaxSource": "/Asset/bindData",
+            "iDisplayLength": 5,
+            "bDestroy": true,
+            "aoColumns": [
+                { "mData": "Button", "sTitle": "Action", "sWidth": "5%", "bSortable": false },
+                { "mData": "MachineId", "sTitle": "Instrument Id", "sWidth": "10%", "bSortable": false },
+                { "mData": "MachineLocation", "sTitle": "Instrument Location", "sWidth": "10%", "bSortable": false },
+
+            ]
+        })
+    };
+
+    function ClearMail() {
+        $('#fromEmailAddress').val("");
+        $('#password').val("");
+        $('#toEmailAddress').val("");
+        $('#mailSubject').val("");
+        $('#messageBody').val("");
+    }
+
+
+    //Validation Function
+    function Validation() {
+        var isValid = true;
+        if ($('#MachineId').val().trim() == "") {
+            $('#MachineId_error').show();
+            $("#MachineId_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineId_error').hide();
+        }
+        if ($('#MachineLocation').val().trim() == "") {
+            $('#MachineLocation_error').show();
+            $("#MachineLocation_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#MachineLocation_error').hide();
+        }
+        if ($('#ScheduleType').val().trim() == "") {
+            $('#ScheduleType_error').show();
+            $("#ScheduleType_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#ScheduleType_error').hide();
+        }
+        if ($('#StartScheduleDate').val().trim() == "") {
+            $('#StartScheduleDate_error').show();
+            $("#StartScheduleDate_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#StartScheduleDate_error').hide();
+        }
+        if ($('#EndScheduleDate').val().trim() == "") {
+            $('#EndScheduleDate_error').show();
+            $("#EndScheduleDate_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#EndScheduleDate_error').hide();
+        }
+        if ($('#AsignTo').val().trim() == "") {
+            $('#AsignTo_error').show();
+            $("#AsignTo_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#AsignTo_error').hide();
+        }
+        if ($('#AsignType').val().trim() == "") {
+            $('#AsignType_error').show();
+            $("#AsignType_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#AsignType_error').hide();
+        }
+        return isValid;
+    }
+    function CallFunctionUsingId() {
+        if ($('#ButtonId').val() == "Submit") {
+            submitSchedule();
+        }
+        else {
+            deleteSchedule($('#ButtonId').val());
+        }
+    }
+    function submitSchedule() {
+        var res = Validation();
+        if (res == false) {
+            return false;
+        }
+        var remark = $('#Remark').val();
+        if (remark != "") {
+            console.log(remark);
+        }
+        $('#DivwaitingSchedule').removeClass('hide')
+        var serializeform = $('#frmMachineSchedule').serialize();
+        console.log(serializeform);
+        serializeform = serializeform + "&Remark=" + $('#Remark').val();
+        console.log(serializeform);
+        $.post('/Asset/CreateSchedule', serializeform, function (res) {
+            $('#DivwaitingSchedule').addClass('hide');
+            $('#AddRemark').modal('hide');
+            if (res == "Schedule Generate") {
+                loadTable();
+                $("#Save-alert").fadeTo(2000, 5000).slideUp(5000, function () {
+                    $("#Save-alert").slideUp(5000);
+                });
+            } else {
+                loadTable();
+                $("#Update-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                    $("#Update-alert").slideUp(10000);
+                });
+            }
+        })
+    };
+    function editSchedule(id) {
+        $('#DivwaitingSchedule').removeClass('hide')
+        var data = { id: id };
+        $.get("/Asset/editSchedule", data, function (res) {
+            $('#MachineId').val(res.MachineId);
+            $('#AsignTo').val(res.AsignTo);
+            $('#AsignType').val(res.AsignType);
+            $('#MachineLocation').val(res.MachineLocation);
+            $('#ScheduleType').val(res.ScheduleType);
+            $('#StartScheduleDate').val(moment(res.StartScheduleDate).format('DD/MM/YYYY hh:mm a'));
+            $('#EndScheduleDate').val(moment(res.EndScheduleDate).format('DD/MM/YYYY hh:mm a'));
+            $('#Status').val(res.Status);
+            $('#DivwaitingSchedule').addClass('hide')
+            $('#Id').val(res.Id);
+        });
+    }
+    function deleteSchedule(id) {
+
+        //var id = { id: id };
+        bootbox.confirm({
+            titel: 'Confirm message',
+            message: 'Are you sure you want to delete!!..',
+            button: {
+                'confirm': {
+                    label: 'Confirm',
+                    className: 'btn-sm btn-info'
+                },
+                'cancle': {
+                    label: 'Cancel',
+                    className: 'btn-sm btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    data = {
+                        id: id,
+                        remark: $('#Remark').val(),
+                    }
+                    $('#DivwaitingSchedule').removeClass('hide')
+                    $.get("/Asset/deleteSchedule", data, function (res) {
+                        $('#AddRemark').modal('hide');
+                        bindDatawithTable();
+                        $('#DivwaitingSchedule').addClass('hide')
+                        $("#Delete-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                            $("#Delete-alert").slideUp(10000);
+                        });
+                    });
+
+                }
+            }
+
+        })
+        //$('#DivwaitingSchedule').removeClass('hide')
+        ////var data = { id: id };
+        //$.get("/Asset/deleteSchedule", data, function (res) {
+        //    bindDatawithTable();
+        //    $('#DivwaitingSchedule').addClass('hide')
+
+        //    $("#Delete-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+        //        $("#Delete-alert").slideUp(10000);
+        //    });
+        //});
+    }
+
+    function ScheduleMail(id) {
+        var id = { id: id };
+        bootbox.confirm({
+            titel: 'Confirm message',
+            message: 'Are you sure you want send mail!!..',
+            button: {
+                'confirm': {
+                    label: 'Confirm',
+                    className: 'btn-sm btn-info'
+                },
+                'cancle': {
+                    label: 'Cancel',
+                    className: 'btn-sm btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    $('#SendMailmodal').modal('toggle');
+                    ClearMail();
+                    $('#User_Id').val(id);
+                    $('#DivwaitingTreatment').removeClass('hide')
+                    $.get('/Asset/getAsignEmail', id, function (res) {
+                        $('#toEmailAddress').val(res.EmailId)
+                        $('#DivwaitingTreatment').addClass('hide')
+                    })
+                }
+            }
+
+        })
+    }
+    function MailValidation() {
+        var emailReg = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        var Fromemail = $('#fromEmailAddress').val();
+        var Toemail = $('#toEmailAddress').val();
+
+        var isValid = true;
+
+        if ($('#fromEmailAddress').val().trim() == "") {
+            $('#FromEmailID_error_Reg').hide();
+            $('#FromEmailID_error').show();
+            $("#FromEmailID_error").fadeOut(2000);
+            isValid = false;
+        }
+        else if (!emailReg.test(Fromemail)) {
+            $('#FromEmailID_error').hide();
+            $('#FromEmailID_error_Reg').show();
+            $("#FromEmailID_error_Reg").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#FromEmailID_error').hide();
+            $('#FromEmailID_error_Reg').hide();
+        }
+        if ($('#password').val().trim() == "") {
+            $('#FromEmailPassword_error').show();
+            $("#FromEmailPassword_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#FromEmailPassword_error').hide();
+        }
+        if ($('#toEmailAddress').val().trim() == "") {
+            $('#ToEmailID_error_Reg').hide();
+            $('#ToEmailID_error').show();
+            $("#ToEmailID_error").fadeOut(2000);
+            isValid = false;
+        }
+        else if (!emailReg.test(Toemail)) {
+            $('#ToEmailID_error').hide();
+            $('#ToEmailID_error_Reg').show();
+            $("#ToEmailID_error_Reg").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#ToEmailID_error').hide();
+            $('#ToEmailID_error_Reg').hide();
+        }
+        if ($('#mailSubject').val().trim() == "") {
+            $('#mailSubject_error').show();
+            $("#mailSubject_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#mailSubject_error').hide();
+        }
+        if ($('#messageBody').val().trim() == "") {
+            $('#messageBody_error').show();
+            $("#messageBody_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#messageBody_error').hide();
+        }
+    }
+
+    function viewPassword() {
+        var passwordInput = document.getElementById('password');
+        var passStatus = document.getElementById('togglePassword');
+        console.log(passwordInput.type);
+        if (passwordInput.type == 'password') {
+            passwordInput.type = 'text';
+            passStatus.className = 'fa fa-eye-slash pull-right';
+        }
+        else {
+            passwordInput.type = 'password';
+            passStatus.className = 'fa fa-eye pull-right';
+        }
+    }
+    function SendMail() {
+        var res = MailValidation();
+        if (res == false) {
+            return false;
+        }
+        var SendEmail = $('#frmEmail').serialize();
+        $('#DivwaitingTreatment').removeClass('hide')
+        $.post('/Asset/sendMail', SendEmail, function (result) {
+            $('#DivwaitingTreatment').addClass('hide')
+            $('#SendMailmodal').modal('hide');
+            if (result == "Mail Send Success") {
+                $("#Send-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                    $("#Send-alert").slideUp(10000);
+                });
+            }
+        });
+    }
+    $('#AsignTo').on("change", function () {
+
+        if (this.value != "") {
+            $('#DivwaitingSchedule').removeClass('hide')
+            var AsignId = { AsignId: this.value }
+            $.get('/Asset/getAsignType', AsignId, function (res) {
+                $('#AsignType').val(res)
+                $('#DivwaitingSchedule').addClass('hide')
+            })
+        } else
+            $('#AsignType').val("")
+
+    })
+</script>
