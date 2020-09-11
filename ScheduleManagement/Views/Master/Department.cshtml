@@ -136,9 +136,8 @@
                         <div class="col-sm-5">
                             <div class="form-group"></div>
                             <label for="form-field-8">Department Head <span style="color:red;">*</span></label>
-                            <select class="form-control" id="Department_Head" name="Department_Head">
-                                <option></option>
-                            </select>
+                            @Html.DropDownList("Department_Head", new SelectList(ViewBag.EmpList, "Employee_Id", "Employee_Name"), "Please Select Department Head", new { @id = "Department_Head", @class = "form-control" })
+
                             <label class="error" for="Department_Head" id="DepartmentHead_error" style="color:red;" hidden>Select Department Head.</label>
                         </div>
                         <div class="col-sm-1"></div>
@@ -152,9 +151,7 @@
                         </div>
                         <div class="col-sm-5" id="ParentDepartment" hidden>
                             <label for="form-field-8">Parent Department <span style="color:red;">*</span></label>
-                            <select class="form-control" id="Parent_Department" name="Parent_Department">
-                                <option></option>
-                            </select>
+                            @Html.DropDownList("Parent_Department", new SelectList(ViewBag.Department, "Department_Id", "Department_Name"), "Please Select Department", new { @id = "Parent_Department", @class = "form-control" })
                             <label class="error" for="Parent_Department" id="ParentDepartment_error" style="color:red;" hidden>Select Parent Department.</label>
                         </div>
                         <div class="col-sm-1"></div>

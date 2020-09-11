@@ -451,9 +451,27 @@ namespace TrainningManagement.Controllers
         public ActionResult Department()
         {
             ViewBag.LstDpart = lstDprt();
+            ViewBag.Department = fillDepartmentDropDown();
             ViewBag.Groupchild = grpchildList();
+            ViewBag.EmpList = EmpList();
             return View();
         }
+
+        public List<tblEmployee> EmpList()
+        {
+            try
+            {
+                List<tblEmployee> emp = new List<tblEmployee>();
+                emp = scheModel.tblEmployees.Where(x => x.Status == "Active").ToList();
+                return emp;
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
 
         private tblDepartment oldDepartmentdata(long id)
         {
@@ -719,13 +737,14 @@ namespace TrainningManagement.Controllers
         }
         #endregion
 
-        #region
+        #region Workflow
         public ActionResult Workflow()
         {
             ViewBag.Groupchild = grpchildList();
             ViewBag.WorkflowList = lstWorkflow();
             return View();
         }
+
 
         public ActionResult EmployeeList()
         {
@@ -741,7 +760,6 @@ namespace TrainningManagement.Controllers
             }
         }
 
-
         public ActionResult RoleList()
         {
             try
@@ -756,8 +774,8 @@ namespace TrainningManagement.Controllers
                   (GM, GC) => new
                   {
                       GroupID = GM.group_Id,
-                      GroupName = GM.group_Name
-                  }).Distinct().ToList();
+                      GroupName = GM.group_Name,
+                  }).ToList();
 
                 foreach (var item in grp)
                 {
