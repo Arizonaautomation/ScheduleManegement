@@ -68,9 +68,9 @@ namespace TrainningManagement.Controllers
         {
             try
             {
-                var endDate = DateTime.Today.AddDays(15);
-                var data = scheModel.ScheduleMachines.Where(x => x.ApprovedDate == endDate).ToList();
-                return Json(data, JsonRequestBehavior.AllowGet);
+                //var endDate = DateTime.Today.AddDays(15);
+               // var data = scheModel.ScheduleMachines.Where(x => x.ApprovedDate == endDate).ToList();
+                return Json( JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
