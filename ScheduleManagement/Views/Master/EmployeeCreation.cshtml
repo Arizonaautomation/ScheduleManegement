@@ -147,7 +147,7 @@
                         <div class="col-sm-3">
                             <div class="form-group"></div>
                             <label for="form-field-11">Employee ID <span style="color:red;">*</span></label>
-                            <input class="form-control" type="text" id="EmpID" name="EmpID" placeholder="Employee ID" onkeypress="return checkAlphaNumeric()"  onchange="ValidateEmpId();"/>
+                            <input class="form-control" type="text" id="EmpID" name="EmpID" placeholder="Employee ID" onkeypress="return checkAlphaNumeric()" onchange="ValidateEmpId();" />
                             <label class="error" for="EmpID" id="EmpID_error" style="color:red;" hidden>Enter Employee ID.</label>
                             <label class="error" for="EmpID" id="EmpID_error_Dublicate" style="color:red;" hidden>Found Duplicate EmployeeID.</label>
                         </div>
@@ -173,7 +173,12 @@
                             @Html.DropDownList("Employee_Department", new SelectList(ViewBag.Department, "Department_Id", "Department_Name"), "Please Select Department", new { @id = "Employee_Department", @class = "form-control" })
                             <label class="error" for="Employee_Department" id="EmployeeDepartment_error" style="color:red;" hidden>Select Employee Department.</label>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-1" id="DepartmentHead" hidden>
+                            <div class="form-group"></div>
+                            <label><input type="checkbox" id="isDepartmentHead">Head</label>
+                        </div>
+
+                        <div class="col-sm-3">
                             <label for="form-field-8">Designation <span style="color:red;">*</span></label>
                             @Html.DropDownList("Employee_Designation", new SelectList(ViewBag.Designation, "Designation_Id", "Designation_Name"), "Please Select Designation", new { @id = "Employee_Designation", @class = "form-control" })
                             <label class="error" for="Employee_Designation" id="EmployeeDesignation_error" style="color:red;" hidden>Select Employee Designation.</label>
@@ -283,6 +288,21 @@
         // BindGroup();
         BindEmployeeType();
         $('#Employee_Type').val("0");
+
+
+        $("#Employee_Department").on("change", function () {
+
+            var data = { id: $(this).val() };
+            $.post("/Master/CheckDepartmentHead", data, function (result) {
+                console.log(result.Department_Head);
+                if (result.Department_Head == null)
+                    $('#DepartmentHead').show();
+                else
+                    $('#DepartmentHead').hide();
+            })
+
+        })
+
     }(jQuery));
 
 
@@ -419,6 +439,7 @@
         $('#EmpProfilePhoto').val("");
         $("#imagePreview").attr("src", "/Image/defaultAvtar.png");
         $('#Employee_Department').val("");
+        $('DepartmentHead').hide();
         $('#Employee_Designation').val("");
         $('#Employee_Name').val("");
         $('#Employee_Email').val("");
@@ -610,8 +631,11 @@
         $.each($("#group_Id option:selected"), function () {
             gId.push($(this).val());
         });
+        var HeadCheck = 0;
+        if ($('#isDepartmentHead').prop("checked") == true)
+            HeadCheck = 1;
         var empCreation = $('#frmemployee').serialize();
-        empCreation = empCreation + "&otherdata.Remark=" + $('#Remark').val() + "&otherdata.grpid=" + gId + "&EmpProfilePhoto=" + filename;
+        empCreation = empCreation + "&otherdata.Remark=" + $('#Remark').val() + "&otherdata.grpid=" + gId + "&EmpProfilePhoto=" + filename + "&otherdata.CheckDeptHead=" + HeadCheck;
         console.log(empCreation);
         $('#DivwaitingTreatment').removeClass('hide')
         $.post("/Master/EmpCreation", empCreation, function (result) {

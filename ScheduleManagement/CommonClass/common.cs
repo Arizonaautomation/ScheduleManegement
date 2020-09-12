@@ -50,5 +50,6 @@ namespace TrainningManagement.CommonClass
         public string Button { get; set; }
         public string grpid { get; set; }
         public string FormName { get; set; }
+        public long CheckDeptHead { get; set; }
     }
 }

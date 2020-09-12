@@ -157,10 +157,10 @@
 
 
 <fieldset>
-    <legend>Department</legend>
+    <legend>WorkFlow</legend>
 
     <div style="margin-top: 15px !important">
-        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+        <table id="WF" class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
             <thead>
                 <tr>
                     @foreach (var grp in ViewBag.Groupchild)
@@ -223,6 +223,9 @@
     </div>
 </fieldset>
 <script>
+    $('#WF').DataTable({
+        "order": [[1, "desc"]]
+    });
 
     function loadTable() {
         location.reload(true);

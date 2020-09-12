@@ -108,6 +108,8 @@ namespace TrainningManagement.Controllers
 
             return grpChildAccessList;
         }
+
+
         public ActionResult EmployeeCreation()
         {
             ViewBag.RoleList = lstRole();
@@ -139,6 +141,16 @@ namespace TrainningManagement.Controllers
 
             }
             return lsdept;
+        }
+
+        public ActionResult CheckDepartmentHead(long id)
+        {
+            try
+            {
+                var dept = scheModel.tblDepartments.Where(x => x.Department_Id == id).FirstOrDefault();
+                return Json(dept, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { throw; }
         }
         public List<tblDesignation> fillDesigationDropDown()
         {
@@ -201,7 +213,7 @@ namespace TrainningManagement.Controllers
         {
             try
             {
-                empCreation.CreatedBy = ((tblEmployee)(Session["EmployeeData"])).Employee_Name;
+                empCreation.CreatedBy = ((tblEmployee)(Session["EmployeeData"])).Employee_Id;
                 var isExistm = scheModel.tblEmployees.Any(x => x.Employee_Id == empCreation.Employee_Id);
                 if (!isExistm)
                 {
@@ -222,6 +234,17 @@ namespace TrainningManagement.Controllers
                         scheModel.SaveChanges();
                     }
                     at.InsrtHistory((tblEmployee)Session["EmployeeData"], empCreation.Employee_Id, "Employee", "NA", "New Employee Created", empCreation.otherdata.Remark);
+
+                    tblDepartment deprtment = new tblDepartment();
+                    if (empCreation.otherdata.CheckDeptHead == 1)
+                    {
+                        deprtment = scheModel.tblDepartments.Where(x => x.Department_Id == empCreation.Employee_Department).FirstOrDefault();
+                        scheModel.tblDepartments.Attach(deprtment);
+                        deprtment.Department_Head = empCreation.Employee_Id;
+                        scheModel.Entry(deprtment).Property(x => x.Department_Head).IsModified = true;
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], deprtment.Department_Id, "Department", "NA", deprtment.Department_Head.ToString(), empCreation.otherdata.Remark);
+                    }
+                    scheModel.SaveChanges();
                     return Json("Save Success", JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -277,7 +300,7 @@ namespace TrainningManagement.Controllers
                     }
                     if (olditem.CreatedBy != empCreation.CreatedBy)
                     {
-                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], empCreation.Employee_Id, "Employee", olditem.CreatedBy, empCreation.CreatedBy, empCreation.otherdata.Remark);
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], empCreation.Employee_Id, "Employee", olditem.CreatedBy.ToString(), empCreation.CreatedBy.ToString(), empCreation.otherdata.Remark);
                         scheModel.Entry(empCreation).Property(x => x.CreatedBy).IsModified = true;
                     }
                     at.InsrtHistory((tblEmployee)Session["EmployeeData"], empCreation.Employee_Id, "Employee", olditem.CreatedDate.ToString(), DateTime.Now.ToString(), empCreation.otherdata.Remark);
@@ -574,26 +597,71 @@ namespace TrainningManagement.Controllers
                 throw;
             }
         }
-        public List<tblDepartment> lstDprt()
+        public List<Department> lstDprt()
         {
             try
             {
-                List<tblDepartment> lstdepart = new List<tblDepartment>();
+                List<Department> lstdepart = new List<Department>();
+                // List<tblDepartment> lstdepart = new List<tblDepartment>();
                 var SiteId = ((tblEmployee)(Session["EmployeeData"])).SiteId;
                 if (SiteId == null)
                 {
-                    var depart = scheModel.tblDepartments.ToList();
-                    for (int i = 0; i < depart.Count; i++)
+
+                    var depart = scheModel.tblDepartments
+                               .Join(
+                                scheModel.tblEmployees,
+                                 D => D.Department_Head,
+                                 E => E.Employee_Id,
+                                 (D, E) => new
+                                 {
+                                     DepartmentId = D.Department_Id,
+                                     DepartmentName = D.Department_Name,
+                                     DepartmentHead = E.Employee_Name,
+                                     status = D.Status
+                                 }
+                                 ).ToList();
+
+                    Department dept;
+                    foreach (var item in depart)
                     {
-                        lstdepart.Add(depart[i]);
+                        dept = new Department();
+                        dept.Department_Id = item.DepartmentId;
+                        dept.Department_Name = item.DepartmentName;
+                        dept.Department_Head = item.DepartmentHead;
+                        dept.Status = item.status;
+                        lstdepart.Add(dept);
                     }
+                    //for (int i = 0; i < depart.Count; i++)
+                    //{
+                    //    lstdepart.Add(depart[i]);
+                    //}
                 }
                 else
                 {
-                    var depart = scheModel.tblDepartments.Where(x => x.SiteId == SiteId).ToList();
-                    for (int i = 0; i < depart.Count; i++)
+                    var depart = scheModel.tblDepartments
+                               .Join(
+                                scheModel.tblEmployees,
+                                 D => D.Department_Head,
+                                 E => E.Employee_Id,
+                                 (D, E) => new
+                                 {
+                                     DepartmentId = D.Department_Id,
+                                     DepartmentName = D.Department_Name,
+                                     DepartmentHead = E.Employee_Name,
+                                     status = D.Status,
+                                     siteId = D.SiteId
+                                 }
+                                 ).Where(x => x.siteId == SiteId).ToList();
+
+                    Department dept;
+                    foreach (var item in depart)
                     {
-                        lstdepart.Add(depart[i]);
+                        dept = new Department();
+                        dept.Department_Id = item.DepartmentId;
+                        dept.Department_Name = item.DepartmentName;
+                        dept.Department_Head = item.DepartmentHead;
+                        dept.Status = item.status;
+                        lstdepart.Add(dept);
                     }
                 }
                 return lstdepart;
@@ -775,7 +843,7 @@ namespace TrainningManagement.Controllers
                   {
                       GroupID = GM.group_Id,
                       GroupName = GM.group_Name,
-                  }).ToList();
+                  }).Distinct().ToList();
 
                 foreach (var item in grp)
                 {
@@ -1013,10 +1081,20 @@ namespace TrainningManagement.Controllers
                 var wfstep = scheModel.tblWorkFlowChilds.Where(x => x.WorFlowId == machine.Machine_Workflow).ToList();
                 foreach (var item in wfstep)
                 {
-
-
+                    if (item.FlowStep == "Creater")
+                    {
+                        machine.WfMovedStep = item.WFChild_Id + 1;
+                        break;
+                    }
+                    else
+                    {
+                        machine.WfMovedStep = item.WFChild_Id;
+                        break;
+                    }
                 }
-
+                var wfstepUpdated = scheModel.tblWorkFlowChilds.Where(x => x.WFChild_Id == machine.WfMovedStep).FirstOrDefault();
+                if (wfstepUpdated == null)
+                    machine.WfMovedStep = 0;
                 machine.CreatedDate = DateTime.Now;
                 machine.CreatedBy = ((tblEmployee)(Session["EmployeeData"])).Employee_Id;
                 var isExistm = scheModel.tblMachineCreations.Any(x => x.Machine_Id == machine.Machine_Id);
@@ -1064,6 +1142,12 @@ namespace TrainningManagement.Controllers
                         at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Workflow.ToString(), machine.Machine_Workflow.ToString(), machine.otherdata.Remark);
                         scheModel.Entry(machine).Property(x => x.Machine_Workflow).IsModified = true;
                     }
+                    if (olditem.WfMovedStep != machine.WfMovedStep)
+                    {
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", "NA", wfstepUpdated.FlowStep.ToString(), machine.otherdata.Remark);
+                        scheModel.Entry(machine).Property(x => x.WfMovedStep).IsModified = true;
+                    }
+
                     if (olditem.Status != machine.Status)
                     {
                         at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Status.ToString(), machine.Status.ToString(), machine.otherdata.Remark);
@@ -1113,8 +1197,8 @@ namespace TrainningManagement.Controllers
                 machine.Status = "Deactive";
                 scheModel.tblMachineCreations.Attach(machine);
                 scheModel.Entry(machine).Property(x => x.Status).IsModified = true;
-                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "Designation", oldItem.Status.ToString(), machine.Status.ToString(), remark);
-                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "Designation", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), remark);
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.Status.ToString(), machine.Status.ToString(), remark);
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), remark);
                 scheModel.SaveChanges();
 
                 return Json("Data Deactive Successfull", JsonRequestBehavior.AllowGet);
@@ -1153,9 +1237,10 @@ namespace TrainningManagement.Controllers
                                      machineLocation = MWF.M.Machine_Location,
                                      machineWorkflow = WF.WorkFlowName,
                                      machineStatus = MWF.M.Status,
-                                     StatusId = MWF.M.Instru_Equip_StatusId
+                                     StatusId = MWF.M.Instru_Equip_StatusId,
+                                     WfMoveStep = MWF.M.WfMovedStep,
 
-                                 }).Where(y => y.MachineDepId == sessionData.Employee_Department).ToList();
+                                 }).Where(y => y.MachineDepId == sessionData.Employee_Department && y.WfMoveStep == 0).ToList();
                     Machine Newmachine;
                     foreach (var item in machine)
                     {
@@ -1316,6 +1401,13 @@ namespace TrainningManagement.Controllers
         #endregion
     }
 
+    public class Department
+    {
+        public long Department_Id { get; set; }
+        public string Department_Name { get; set; }
+        public string Department_Head { get; set; }
+        public string Status { get; set; }
+    }
 
     public class Machine
     {

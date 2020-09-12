@@ -1,10 +1,203 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+
+<div class="alert alert-success" id="Approved-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Approved Data Successfully.
+</div>
+<div class="alert alert-success" id="Reject-alert" hidden="hidden">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> Reject Data Successfully.
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <button class="btn btn-info" style="border-radius: 20px">
+            @*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
+            <a href="#modal-Reviewer" data-toggle="modal" class="white">For Reviewer</a>
+        </button>
+
+        <button class="btn btn-info" style="border-radius: 20px">
+            @*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
+            <a href="#modal-Approver" data-toggle="modal" class="white">For Approver</a>
+        </button>
+    </div>
+</div>
+<div class="form-group"></div>
 @*Added By Zuber Khan On 21-08-2020*@
 <div id="calendarMonth" class="col-sm-12"></div>
 
+
+
+<label for="form-field-8" id="ButtonId"> </label>
+<label for="form-field-8" id="Id"> </label>
+
+<div class="modal" id="modal-Reviewer" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Machine List
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+
+                <fieldset>
+                    <legend>Reviewer</legend>
+
+                    <div style="margin-top: 15px !important">
+                        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                            <thead>
+                                <tr>
+                                    <th style="width: 160px !important;">Action</th>
+                                    <th hidden>ID</th>
+                                    <th>Instrument ID</th>
+                                    <th>Instrument Name</th>
+                                    <th>Instrument Department</th>
+                                    <th>Instrument Location</th>
+                                    <th>Instrument WorkFlow</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in ViewBag.Reviewer)
+                                {
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Edit Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Delete Service">Reject</button>
+                                        </td>
+                                        <td hidden>@item.Machine_Id</td>
+                                        <td>@item.MachineID</td>
+                                        <td>@item.Machine_Name</td>
+                                        <td>@item.DepartmentName</td>
+                                        <td>@item.Machine_Location</td>
+                                        <td>@item.WorkflowName</td>
+                                        <td>@item.Status</td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-Approver" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Machine List
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+
+                <fieldset>
+                    <legend>Approver</legend>
+
+                    <div style="margin-top: 15px !important">
+                        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                            <thead>
+                                <tr>
+                                    <th style="width: 150px !important;">Action</th>
+                                    <th hidden>ID</th>
+                                    <th>Instrument ID</th>
+                                    <th>Instrument Name</th>
+                                    <th>Instrument Department</th>
+                                    <th>Instrument Location</th>
+                                    <th>Instrument WorkFlow</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in ViewBag.Approver)
+                                {
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Edit Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Delete Service">Reject</button>
+                                        </td>
+                                        <td hidden>@item.Machine_Id</td>
+                                        <td>@item.MachineID</td>
+                                        <td>@item.Machine_Name</td>
+                                        <td>@item.DepartmentName</td>
+                                        <td>@item.Machine_Location</td>
+                                        <td>@item.WorkflowName</td>
+                                        <td>@item.Status</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="AddRemark" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Add Remark
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+                <form id="frmRemark">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="form-field-8">Remark <span style="color:red;">*</span></label>
+                            <textarea class="form-control" type="text" id="Remark" name="Remark" placeholder="Enter Remark"></textarea>
+                            <label class="error" for="messageBody" id="messageBody_error" style="color:red;" hidden>Please Enter Remark.</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" style="margin-top: 10px;" onclick="CallFunctionUsingId()">
+                <i class="ace-icon fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
+    $('.table').DataTable({
+        "order": [[1, "desc"]]
+    });
+    function loadTable() {
+        location.reload(true);
+    }
+
     $('#calendarMonth').fullCalendar({
         buttonHtml: {
             prev: '<i class="ace-icon fa fa-chevron-left"></i>',
@@ -17,5 +210,71 @@
             //right: 'month,agendaWeek,agendaDay'
         },
     });
+
+    function GetID(button, id) {
+        $('#ButtonId').val(button);
+        $('#Id').val(id);
+        console.log($('#ButtonId').val());
+        console.log($('#Id').val());
+    }
+    function CallFunctionUsingId() {
+        if ($('#ButtonId').val() == "MachineApproved") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                MachineApproved($('#Id').val());
+            }
+
+        }
+        else if ($('#ButtonId').val() == "MachineReject") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                MachineReject($('#Id').val());
+            }
+        }
+    }
+    function MachineApproved(id) {
+        var data = {
+            ID: id,
+            Remark: $('#Remark').val(),
+        };
+        $.post("/Home/MachineApprove", data, function (result) {
+            if (result == 1) {
+                $('#modal-Reviewer').modal('hide');
+                $('#modal-Approver').modal('hide');
+
+                loadTable();
+                $("#Approved-alert").fadeTo(2000, 1000).slideUp(1000, function () {
+                    $("#Approved-alert").slideUp(1000);
+                });
+            }
+        })
+    }
+
+    function MachineReject(id) {
+
+        var data = {
+            ID: id,
+            Remark: $('#Remark').val(),
+        };
+        $.post("/Home/MachineReject", data, function (result) {
+            if (result == 1) {
+                $('#modal-Reviewer').modal('hide');
+                $('#modal-Approver').modal('hide');
+
+                loadTable();
+                $("#Reject-alert").fadeTo(2000, 1000).slideUp(1000, function () {
+                    $("#Reject-alert").slideUp(1000);
+                });
+            }
+
+        })
+    }
+
 </script>
 @*---------------------------------------------------------------------*@
