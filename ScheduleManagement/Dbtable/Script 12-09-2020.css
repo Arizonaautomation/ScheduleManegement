@@ -1,0 +1,260 @@
+﻿USE [SchedulManagementSystem]
+GO
+/****** Object:  Table [dbo].[ScheduleMachine]    Script Date: 12-09-2020 20:08:18 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ScheduleMachine](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[MachineId] [bigint] NULL,
+	[ScheduleType] [nvarchar](50) NULL,
+	[FrequencyType] [nvarchar](50) NULL,
+	[InstallationDate] [datetime] NULL,
+	[ScheduleDueDate] [datetime] NULL,
+	[BGracedPeriod] [nvarchar](50) NULL,
+	[AGrancedPeriod] [nvarchar](50) NULL,
+	[TillDate] [datetime] NULL,
+	[Comment] [nvarchar](200) NULL,
+	[CreatedBy] [bigint] NULL,
+	[CreatedDate] [datetime] NULL,
+	[Status] [nvarchar](15) NULL,
+	[CreatedDepartment] [bigint] NULL,
+ CONSTRAINT [PK_ScheduleMachine] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[tblAccessGroupChild]    Script Date: 12-09-2020 20:08:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblAccessGroupChild](
+	[groupChild_Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[group_Id] [bigint] NULL,
+	[menu_Id] [bigint] NULL,
+	[access_Create] [nvarchar](10) NULL,
+	[access_Modify] [nvarchar](10) NULL,
+	[access_Delete] [nvarchar](10) NULL,
+	[access_View] [nvarchar](10) NULL,
+ CONSTRAINT [PK_tblAccessGroupChild] PRIMARY KEY CLUSTERED 
+(
+	[groupChild_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[tblAccessGroupMaster]    Script Date: 12-09-2020 20:08:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblAccessGroupMaster](
+	[group_Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[group_Name] [nvarchar](50) NULL,
+	[remark] [nvarchar](100) NULL,
+	[SiteId] [bigint] NULL,
+	[Status] [nvarchar](15) NULL,
+ CONSTRAINT [PK_tblAccessGroupMaster] PRIMARY KEY CLUSTERED 
+(
+	[group_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[tblAccessMenuMaster]    Script Date: 12-09-2020 20:08:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblAccessMenuMaster](
+	[menu_Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[menu_Name] [nvarchar](50) NULL,
+	[menu_Link] [nvarchar](50) NULL,
+	[menu_Icon] [nvarchar](50) NULL,
+ CONSTRAINT [PK_tblAccessMenuMaster] PRIMARY KEY CLUSTERED 
+(
+	[menu_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[tblDepartment]    Script Date: 12-09-2020 20:08:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblDepartment](
+	[Department_Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[Department_Name] [nvarchar](100) NULL,
+	[Department_Head] [bigint] NULL,
+	[Parent_Department] [nvarchar](100) NULL,
+	[Status] [nvarchar](15) NULL,
+	[CreatedBy] [bigint] NULL,
+	[CreatedDate] [datetime] NULL,
+	[SiteId] [bigint] NULL,
+ CONSTRAINT [PK_tblDepartment] PRIMARY KEY CLUSTERED 
+(
+	[Department_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[tblEmployee]    Script Date: 12-09-2020 20:08:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[tblEmployee](
+	[Employee_Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[Employee_Department] [bigint] NOT NULL,
+	[Employee_Designation] [bigint] NOT NULL,
+	[EmpID] [nvarchar](50) NULL,
+	[EmpProfilePhoto] [varchar](max) NULL,
+	[Employee_Name] [nvarchar](50) NOT NULL,
+	[Employee_Contact] [nvarchar](50) NULL,
+	[Employee_Email] [nvarchar](50) NULL,
+	[Employee_Address] [nvarchar](100) NULL,
+	[group_Id] [bigint] NULL,
+	[Employee_UserName] [nvarchar](50) NULL,
+	[Employee_Password] [nvarchar](50) NULL,
+	[Status] [nvarchar](15) NULL,
+	[FirstTimeLoginStatus] [nvarchar](10) NULL,
+	[CreatedBy] [bigint] NULL,
+	[CreatedDate] [datetime] NULL,
+	[SiteId] [bigint] NULL,
+ CONSTRAINT [PK_tblEmployee] PRIMARY KEY CLUSTERED 
+(
+	[Employee_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[tblScheduleExecution]    Script Date: 12-09-2020 20:08:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblScheduleExecution](
+	[ScheduleExe_Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[MachineId] [bigint] NULL,
+	[Schedule_Status] [nvarchar](15) NULL,
+	[Schedule_Report_File] [nvarchar](max) NULL,
+	[Comment] [nvarchar](200) NULL,
+	[CreatedBy] [bigint] NULL,
+	[CreatedDate] [datetime] NULL,
+ CONSTRAINT [PK_tblScheduleExecution] PRIMARY KEY CLUSTERED 
+(
+	[ScheduleExe_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET IDENTITY_INSERT [dbo].[tblAccessGroupChild] ON
+
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (1, 1, 1, N'True', N'True', N'True', N'True')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (2, 1, 2, N'True', N'True', N'True', N'True')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (3, 1, 3, N'True', N'True', N'True', N'True')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (4, 1, 4, N'True', N'True', N'True', N'True')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (5, 1, 5, N'True', N'True', N'True', N'True')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (6, 1, 6, N'True', N'True', N'True', N'True')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (7, 1, 7, N'True', N'True', N'True', N'True')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (15, 2, 1, N'False', N'False', N'False', N'False')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (16, 2, 2, N'False', N'False', N'False', N'False')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (17, 2, 3, N'False', N'False', N'False', N'False')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (18, 2, 4, N'False', N'False', N'False', N'False')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (19, 2, 5, N'True', N'False', N'False', N'True')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (20, 2, 6, N'False', N'False', N'False', N'False')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (21, 2, 7, N'False', N'False', N'False', N'False')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (22, 1, 8, N'True', N'True', N'True', N'True')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (23, 1, 9, N'True', N'True', N'True', N'True')
+GO
+INSERT [dbo].[tblAccessGroupChild] ([groupChild_Id], [group_Id], [menu_Id], [access_Create], [access_Modify], [access_Delete], [access_View]) VALUES (24, 1, 10, N'True', N'True', N'True', N'True')
+GO
+SET IDENTITY_INSERT [dbo].[tblAccessGroupChild] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tblAccessGroupMaster] ON
+
+GO
+INSERT [dbo].[tblAccessGroupMaster] ([group_Id], [group_Name], [remark], [SiteId], [Status]) VALUES (1, N'Admin', NULL, NULL, NULL)
+GO
+INSERT [dbo].[tblAccessGroupMaster] ([group_Id], [group_Name], [remark], [SiteId], [Status]) VALUES (2, N'Create', N'For Create', NULL, NULL)
+GO
+SET IDENTITY_INSERT [dbo].[tblAccessGroupMaster] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tblAccessMenuMaster] ON
+
+GO
+INSERT [dbo].[tblAccessMenuMaster] ([menu_Id], [menu_Name], [menu_Link], [menu_Icon]) VALUES (1, N'Department', N'http://localhost:50631/Master/Department', N'menu-icon fa fa-building-o')
+GO
+INSERT [dbo].[tblAccessMenuMaster] ([menu_Id], [menu_Name], [menu_Link], [menu_Icon]) VALUES (2, N'Designation', N'http://localhost:50631/Master/Designation', N'menu-icon fa fa-pencil')
+GO
+INSERT [dbo].[tblAccessMenuMaster] ([menu_Id], [menu_Name], [menu_Link], [menu_Icon]) VALUES (3, N'Employee', N'http://localhost:50631/Master/EmployeeCreation', N'menu-icon fa fa-user')
+GO
+INSERT [dbo].[tblAccessMenuMaster] ([menu_Id], [menu_Name], [menu_Link], [menu_Icon]) VALUES (4, N'Instrument', N'http://localhost:50631/Master/Instrument', N'menu-icon fa fa-industry')
+GO
+INSERT [dbo].[tblAccessMenuMaster] ([menu_Id], [menu_Name], [menu_Link], [menu_Icon]) VALUES (5, N'Equipment', N'http://localhost:50631/Master/Equipment', N'menu-icon fa fa-cogs')
+GO
+INSERT [dbo].[tblAccessMenuMaster] ([menu_Id], [menu_Name], [menu_Link], [menu_Icon]) VALUES (6, N'Audit Trail', N'http://localhost:50631/History/Index', N'menu-icon fa fa-cog')
+GO
+INSERT [dbo].[tblAccessMenuMaster] ([menu_Id], [menu_Name], [menu_Link], [menu_Icon]) VALUES (7, N'Access Right', N'http://localhost:50631/AccessRight/Index', N'menu-icon fa fa-check-circle')
+GO
+INSERT [dbo].[tblAccessMenuMaster] ([menu_Id], [menu_Name], [menu_Link], [menu_Icon]) VALUES (8, N'SIte', N'http://localhost:50631/Master/Site', N'menu-icon fa fa-building-o')
+GO
+INSERT [dbo].[tblAccessMenuMaster] ([menu_Id], [menu_Name], [menu_Link], [menu_Icon]) VALUES (9, N'WorkFlow', N'http://localhost:50631/Master/Workflow', N'menu-icon fa fa-pencil')
+GO
+INSERT [dbo].[tblAccessMenuMaster] ([menu_Id], [menu_Name], [menu_Link], [menu_Icon]) VALUES (10, N'Schedule Creation', N'http://localhost:50631/ScheduleCreation/Index', N'menu-icon fa fa-industry')
+GO
+SET IDENTITY_INSERT [dbo].[tblAccessMenuMaster] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tblDepartment] ON
+
+GO
+INSERT [dbo].[tblDepartment] ([Department_Id], [Department_Name], [Department_Head], [Parent_Department], [Status], [CreatedBy], [CreatedDate], [SiteId]) VALUES (1, N'IT', 4, NULL, N'Active', 1, NULL, NULL)
+GO
+INSERT [dbo].[tblDepartment] ([Department_Id], [Department_Name], [Department_Head], [Parent_Department], [Status], [CreatedBy], [CreatedDate], [SiteId]) VALUES (2, N'Engineering', NULL, NULL, N'Active', 1, CAST(0x0000AC2F01127DF5 AS DateTime), NULL)
+GO
+SET IDENTITY_INSERT [dbo].[tblDepartment] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tblEmployee] ON
+
+GO
+INSERT [dbo].[tblEmployee] ([Employee_Id], [Employee_Department], [Employee_Designation], [EmpID], [EmpProfilePhoto], [Employee_Name], [Employee_Contact], [Employee_Email], [Employee_Address], [group_Id], [Employee_UserName], [Employee_Password], [Status], [FirstTimeLoginStatus], [CreatedBy], [CreatedDate], [SiteId]) VALUES (1, 1, 1, N'A123', NULL, N'Moin', NULL, NULL, N'hkjdhf', 1, N'Admin', N'Admin@123', N'Active', N'True', NULL, NULL, NULL)
+GO
+INSERT [dbo].[tblEmployee] ([Employee_Id], [Employee_Department], [Employee_Designation], [EmpID], [EmpProfilePhoto], [Employee_Name], [Employee_Contact], [Employee_Email], [Employee_Address], [group_Id], [Employee_UserName], [Employee_Password], [Status], [FirstTimeLoginStatus], [CreatedBy], [CreatedDate], [SiteId]) VALUES (2, 2, 2, N'A124', NULL, N'Safik', NULL, NULL, N'Address', 2, N'Safik', N'Sa@1', N'Active', N'FALSE', NULL, CAST(0x0000AC2F0143D428 AS DateTime), NULL)
+GO
+INSERT [dbo].[tblEmployee] ([Employee_Id], [Employee_Department], [Employee_Designation], [EmpID], [EmpProfilePhoto], [Employee_Name], [Employee_Contact], [Employee_Email], [Employee_Address], [group_Id], [Employee_UserName], [Employee_Password], [Status], [FirstTimeLoginStatus], [CreatedBy], [CreatedDate], [SiteId]) VALUES (3, 1, 1, N'A125', N'MS5qcGc=', N'Xyz', NULL, N'XYZ@gmail.com', N'XYZ', 2, N'Xyz', N'Xy@123', N'Active', N'FALSE', NULL, CAST(0x0000AC320012D068 AS DateTime), NULL)
+GO
+INSERT [dbo].[tblEmployee] ([Employee_Id], [Employee_Department], [Employee_Designation], [EmpID], [EmpProfilePhoto], [Employee_Name], [Employee_Contact], [Employee_Email], [Employee_Address], [group_Id], [Employee_UserName], [Employee_Password], [Status], [FirstTimeLoginStatus], [CreatedBy], [CreatedDate], [SiteId]) VALUES (4, 1, 1, N'A126', NULL, N'It Head', NULL, NULL, N'Address', 1, N'Head', N'Head@1', N'Active', N'FALSE', NULL, CAST(0x0000AC330174F269 AS DateTime), NULL)
+GO
+INSERT [dbo].[tblEmployee] ([Employee_Id], [Employee_Department], [Employee_Designation], [EmpID], [EmpProfilePhoto], [Employee_Name], [Employee_Contact], [Employee_Email], [Employee_Address], [group_Id], [Employee_UserName], [Employee_Password], [Status], [FirstTimeLoginStatus], [CreatedBy], [CreatedDate], [SiteId]) VALUES (5, 1, 1, N'A127', NULL, N'Reviewer', NULL, NULL, N'Address', 2, N'R1', N'Re@1', N'Active', N'FALSE', 1, CAST(0x0000AC3400E8E4B6 AS DateTime), NULL)
+GO
+INSERT [dbo].[tblEmployee] ([Employee_Id], [Employee_Department], [Employee_Designation], [EmpID], [EmpProfilePhoto], [Employee_Name], [Employee_Contact], [Employee_Email], [Employee_Address], [group_Id], [Employee_UserName], [Employee_Password], [Status], [FirstTimeLoginStatus], [CreatedBy], [CreatedDate], [SiteId]) VALUES (6, 1, 1, N'A128', NULL, N'Approver', NULL, NULL, N'Address', 2, N'A1', N'Ap!1', N'Active', N'FALSE', 1, CAST(0x0000AC3400E92236 AS DateTime), NULL)
+GO
+SET IDENTITY_INSERT [dbo].[tblEmployee] OFF
+GO
+ALTER TABLE [dbo].[tblEmployee] ADD CONSTRAINT [DF__tblEmploy__First__21B6055D] DEFAULT ('FALSE') FOR [FirstTimeLoginStatus]
+GO
