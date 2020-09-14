@@ -16,12 +16,24 @@
     <div class="col-sm-12">
         <button class="btn btn-info" style="border-radius: 20px">
             @*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
-            <a href="#modal-Reviewer" data-toggle="modal" class="white">For Reviewer</a>
+            <a href="#modal-MachineReviewer" data-toggle="modal" class="white">For Machine Reviewer</a>
         </button>
 
         <button class="btn btn-info" style="border-radius: 20px">
             @*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
-            <a href="#modal-Approver" data-toggle="modal" class="white">For Approver</a>
+            <a href="#modal-MachineApprover" data-toggle="modal" class="white">For Machine Approver</a>
+        </button>
+        <button class="btn btn-info" style="border-radius: 20px">
+            @*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
+            <a href="#modal-ScheduleReviewer" data-toggle="modal" class="white">For Schedule Reviewer</a>
+        </button>
+        <button class="btn btn-info" style="border-radius: 20px">
+            @*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
+            <a href="#modal-ScheduleApprover" data-toggle="modal" class="white">For Schedule Approver</a>
+        </button>
+        <button class="btn btn-info" style="border-radius: 20px">
+            @*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
+            <a href="#modal-ScheduleExecution" data-toggle="modal" class="white">For Schedule Execution</a>
         </button>
     </div>
 </div>
@@ -29,12 +41,10 @@
 @*Added By Zuber Khan On 21-08-2020*@
 <div id="calendarMonth" class="col-sm-12"></div>
 
-
-
 <label for="form-field-8" id="ButtonId"> </label>
 <label for="form-field-8" id="Id"> </label>
 
-<div class="modal" id="modal-Reviewer" tabindex="-1" role="dialog">
+<div class="modal" id="modal-MachineReviewer" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header no-padding panelHead">
@@ -64,7 +74,7 @@
                             </thead>
 
                             <tbody>
-                                @foreach (var item in ViewBag.Reviewer)
+                                @foreach (var item in ViewBag.MachineReviewer)
                                 {
                                     <tr>
                                         <td>
@@ -94,7 +104,7 @@
     </div>
 </div>
 
-<div class="modal" id="modal-Approver" tabindex="-1" role="dialog">
+<div class="modal" id="modal-MachineApprover" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header no-padding panelHead">
@@ -124,7 +134,7 @@
                             </thead>
 
                             <tbody>
-                                @foreach (var item in ViewBag.Approver)
+                                @foreach (var item in ViewBag.MachineApprover)
                                 {
                                     <tr>
                                         <td>
@@ -146,6 +156,186 @@
                 </fieldset>
             </div>
         </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-ScheduleReviewer" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Schedule List
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+
+                <fieldset>
+                    <legend>Reviewer</legend>
+
+                    <div style="margin-top: 15px !important">
+                        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                            <thead>
+                                <tr>
+                                    <th style="width: 160px !important;">Action</th>
+                                    <th hidden>ID</th>
+                                    <th>Instrument ID</th>
+                                    <th>Schedule Type</th>
+                                    <th>Installation Date</th>
+                                    <th>Schedule Due Date</th>
+                                    <th>Before GracedPeriod</th>
+                                    <th>After GrancedPeriod</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in ViewBag.ScheduleReviewer)
+                                {
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
+                                        </td>
+                                        <td hidden>@item.Id</td>
+                                        <td>@item.FrequencyType</td>
+                                        <td>@item.ScheduleType</td>
+                                        <td>@item.InstallationDate</td>
+                                        <td>@item.ScheduleDueDate</td>
+                                        <td>@item.BGracedPeriod</td>
+                                        <td>@item.AGrancedPeriod</td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-ScheduleApprover" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Schedule List
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+
+                <fieldset>
+                    <legend>Approver</legend>
+
+                    <div style="margin-top: 15px !important">
+                        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                            <thead>
+                                <tr>
+                                    <th style="width: 160px !important;">Action</th>
+                                    <th hidden>ID</th>
+                                    <th>Instrument ID</th>
+                                    <th>Schedule Type</th>
+                                    <th>Installation Date</th>
+                                    <th>Schedule Due Date</th>
+                                    <th>Before GracedPeriod</th>
+                                    <th>After GrancedPeriod</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in ViewBag.ScheduleApprover)
+                                {
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
+                                        <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
+                                    </td>
+                                    <td hidden>@item.Id</td>
+                                    <td>@item.FrequencyType</td>
+                                    <td>@item.ScheduleType</td>
+                                    <td>@item.InstallationDate</td>
+                                    <td>@item.ScheduleDueDate</td>
+                                    <td>@item.BGracedPeriod</td>
+                                    <td>@item.AGrancedPeriod</td>
+                                </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-ScheduleExecution" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Schedule List
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+
+                <fieldset>
+                    <legend>Schedule Execution</legend>
+
+                    <div style="margin-top: 15px !important">
+                        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                            <thead>
+                                <tr>
+                                    <th style="width: 160px !important;">Action</th>
+                                    <th hidden>ID</th>
+                                    <th>Instrument ID</th>
+                                    <th>Schedule Type</th>
+                                    <th>Installation Date</th>
+                                    <th>Schedule Due Date</th>
+                                    <th>Before GracedPeriod</th>
+                                    <th>After GrancedPeriod</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in ViewBag.ScheduleExecution)
+                                {
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
+                                        </td>
+                                        <td hidden>@item.Id</td>
+                                        <td>@item.FrequencyType</td>
+                                        <td>@item.ScheduleType</td>
+                                        <td>@item.InstallationDate</td>
+                                        <td>@item.ScheduleDueDate</td>
+                                        <td>@item.BGracedPeriod</td>
+                                        <td>@item.AGrancedPeriod</td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
         <div class="modal-footer">
         </div>
     </div>
@@ -237,7 +427,26 @@
                 MachineReject($('#Id').val());
             }
         }
-    }
+        else if ($('#ButtonId').val() == "ScheduleApproved") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                ScheduleApproved($('#Id').val());
+            }
+
+        }
+        else if ($('#ButtonId').val() == "ScheduleReject") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                ScheduleReject($('#Id').val());
+            }
+        }
+    } 
     function MachineApproved(id) {
         var data = {
             ID: id,
@@ -245,8 +454,8 @@
         };
         $.post("/Home/MachineApprove", data, function (result) {
             if (result == 1) {
-                $('#modal-Reviewer').modal('hide');
-                $('#modal-Approver').modal('hide');
+                $('#modal-MachineReviewer').modal('hide');
+                $('#modal-MachineApprover').modal('hide');
 
                 loadTable();
                 $("#Approved-alert").fadeTo(2000, 1000).slideUp(1000, function () {
@@ -257,15 +466,51 @@
     }
 
     function MachineReject(id) {
-
         var data = {
             ID: id,
             Remark: $('#Remark').val(),
         };
         $.post("/Home/MachineReject", data, function (result) {
             if (result == 1) {
-                $('#modal-Reviewer').modal('hide');
-                $('#modal-Approver').modal('hide');
+                $('#modal-MachineReviewer').modal('hide');
+                $('#modal-MachineApprover').modal('hide');
+
+                loadTable();
+                $("#Reject-alert").fadeTo(2000, 1000).slideUp(1000, function () {
+                    $("#Reject-alert").slideUp(1000);
+                });
+            }
+
+        })
+    }
+
+    function ScheduleApproved(id) {
+        var data = {
+            ID: id,
+            Remark: $('#Remark').val(),
+        };
+        $.post("/Home/ScheduleApprove", data, function (result) {
+            if (result == 1) {
+                $('#modal-ScheduleReviewer').modal('hide');
+                $('#modal-ScheduleApprover').modal('hide');
+
+                loadTable();
+                $("#Approved-alert").fadeTo(2000, 1000).slideUp(1000, function () {
+                    $("#Approved-alert").slideUp(1000);
+                });
+            }
+        })
+    }
+
+    function ScheduleReject(id) {
+        var data = {
+            ID: id,
+            Remark: $('#Remark').val(),
+        };
+        $.post("/Home/ScheduleReject", data, function (result) {
+            if (result == 1) {
+                $('#modal-MachineReviewer').modal('hide');
+                $('#modal-MachineApprover').modal('hide');
 
                 loadTable();
                 $("#Reject-alert").fadeTo(2000, 1000).slideUp(1000, function () {

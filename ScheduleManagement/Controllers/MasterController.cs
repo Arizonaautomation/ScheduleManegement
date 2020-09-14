@@ -1092,7 +1092,7 @@ namespace TrainningManagement.Controllers
                         break;
                     }
                 }
-                var wfstepUpdated = scheModel.tblWorkFlowChilds.Where(x => x.WFChild_Id == machine.WfMovedStep).FirstOrDefault();
+                var wfstepUpdated = scheModel.tblWorkFlowChilds.Where(x => x.WFChild_Id == machine.WfMovedStep && x.WorFlowId==machine.Machine_Workflow).FirstOrDefault();
                 if (wfstepUpdated == null)
                     machine.WfMovedStep = 0;
                 machine.CreatedDate = DateTime.Now;
@@ -1238,8 +1238,7 @@ namespace TrainningManagement.Controllers
                                      machineWorkflow = WF.WorkFlowName,
                                      machineStatus = MWF.M.Status,
                                      StatusId = MWF.M.Instru_Equip_StatusId,
-                                     WfMoveStep = MWF.M.WfMovedStep,
-
+                                     WfMoveStep = MWF.M.WfMovedStep
                                  }).Where(y => y.MachineDepId == sessionData.Employee_Department && y.WfMoveStep == 0).ToList();
                     Machine Newmachine;
                     foreach (var item in machine)

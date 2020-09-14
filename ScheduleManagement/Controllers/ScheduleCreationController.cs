@@ -24,7 +24,6 @@ namespace TrainningManagement.Controllers
             ViewBag.InstrumentList = lstMachine();
             return View();
         }
-
         public List<tblAccessGroupChild> grpchildList()
         {
             List<tblAccessGroupChild> grpChildAccessList = new List<tblAccessGroupChild>();
@@ -171,6 +170,80 @@ namespace TrainningManagement.Controllers
         {
             List<ScheduleMachine> SList = new List<ScheduleMachine>();
             return SList;
+        }
+
+        public ActionResult ScheduleCreation(ScheduleMachine SM)
+        {
+            try
+            {
+                DateTime date;
+                var Count = 0;
+                //int diff = Convert.ToInt32((Convert.ToDateTime(SM.TillDate) - Convert.ToDateTime(cc)).TotalDays);
+                int diff = Convert.ToDateTime(SM.TillDate).Subtract(Convert.ToDateTime(SM.InstallationDate)).Days;
+                if (SM.FrequencyType == "15 Days")
+                    Count = diff / 15;
+                if (SM.FrequencyType == "1 month")
+                    Count = diff / 30;
+                if (SM.FrequencyType == "3 months")
+                    Count = diff / 90;
+                if (SM.FrequencyType == "6 months")
+                    Count = diff / 180;
+
+                date = Convert.ToDateTime(SM.InstallationDate);
+                SM.CreatedBy = ((tblEmployee)(Session["EmployeeData"])).Employee_Id;
+                SM.CreatedDepartment = ((tblEmployee)(Session["EmployeeData"])).Employee_Department;
+                SM.Status = "Active";
+
+                var wfstep = scheModel.tblMachineCreations.
+                           Join(
+                                scheModel.tblWorkFlowChilds,
+                                M => M.Machine_Workflow,
+                                WC => WC.WorFlowId,
+                                (M, WC) => new
+                                {
+                                    wfID = WC.WorFlowId,
+                                    wfChildId = WC.WFChild_Id,
+                                    flowStep = WC.FlowStep,
+                                }
+                    ).ToList();
+                long WorkflowID = 0;
+                foreach (var item in wfstep)
+                {
+                    WorkflowID = Convert.ToInt64(item.wfID);
+                    if (item.flowStep == "Creater")
+                    {
+                        SM.ScheduleMovedStep = item.wfChildId + 1;
+                        break;
+                    }
+                    else
+                    {
+                        SM.ScheduleMovedStep = item.wfChildId;
+                        break;
+                    }
+                }
+                var wfstepUpdated = scheModel.tblWorkFlowChilds.Where(x => x.WFChild_Id == SM.ScheduleMovedStep && x.WorFlowId == WorkflowID).FirstOrDefault();
+                if (wfstepUpdated == null)
+                    SM.ScheduleMovedStep = 0;
+
+                for (int i = 0; i < Count; i++)
+                {
+                    if (SM.FrequencyType == "15 Days")
+                        date = date.AddDays(15);
+                    if (SM.FrequencyType == "1 month")
+                        date = date.AddMonths(1);
+                    if (SM.FrequencyType == "3 months")
+                        date = date.AddMonths(3);
+                    if (SM.FrequencyType == "6 months")
+                        date = date.AddMonths(6);
+                    SM.ScheduleDueDate = date;
+                    SM.CreatedDate = DateTime.Now;
+                    scheModel.ScheduleMachines.Add(SM);
+                    scheModel.SaveChanges();
+                }
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], SM.Id, "ScheduleMachine", "NA", "New Schedule Created", SM.otherdata.Remark);
+                return Json(JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { throw; }
         }
     }
 }

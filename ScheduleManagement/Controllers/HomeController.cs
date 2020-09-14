@@ -20,8 +20,11 @@ namespace TrainningManagement.Controllers
         public ActionResult Index()
         {
             Session["MenuList"] = MenuList();
-            ViewBag.Reviewer = ReviewerMachineList();
-            ViewBag.Approver = ApproverMachineList();
+            ViewBag.MachineReviewer = ReviewerMachineList();
+            ViewBag.MachineApprover = ApproverMachineList();
+            ViewBag.ScheduleReviewer = ReviewerScheduleList();
+            ViewBag.ScheduleApprover = ApproverScheduleList();
+            ViewBag.ScheduleExecution = ExecutionScheduleList();
             return View();
         }
 
@@ -69,8 +72,8 @@ namespace TrainningManagement.Controllers
             try
             {
                 //var endDate = DateTime.Today.AddDays(15);
-               // var data = scheModel.ScheduleMachines.Where(x => x.ApprovedDate == endDate).ToList();
-                return Json( JsonRequestBehavior.AllowGet);
+                // var data = scheModel.ScheduleMachines.Where(x => x.ApprovedDate == endDate).ToList();
+                return Json(JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -175,7 +178,6 @@ namespace TrainningManagement.Controllers
                         GrpEmpID = E.employee_Id
                     }
                     ).Distinct().ToList();
-
                 var machine = scheModel.tblMachineCreations
                                            .Join(
                                                  scheModel.tblDepartments,
@@ -229,7 +231,7 @@ namespace TrainningManagement.Controllers
             return _context.tblMachineCreations.Single(p => p.Machine_Id == id);
         }
 
-        public ActionResult MachineApprove(long ID,string Remark)
+        public ActionResult MachineApprove(long ID, string Remark)
         {
             try
             {
@@ -239,8 +241,9 @@ namespace TrainningManagement.Controllers
 
                 machine.WfMovedStep = oldItem.WfMovedStep + 1;
                 dbScheduleModel oldWF = new dbScheduleModel();
-                var oldWFStep=oldWF.tblWorkFlowChilds.Where(x => x.WFChild_Id == oldItem.WfMovedStep).FirstOrDefault();
-                var wfstepUpdated = scheModel.tblWorkFlowChilds.Where(x => x.WFChild_Id == machine.WfMovedStep).FirstOrDefault();
+                var oldWFStep = oldWF.tblWorkFlowChilds.Where(x => x.WFChild_Id == oldItem.WfMovedStep).FirstOrDefault();
+                var wfstepUpdated = scheModel.tblWorkFlowChilds.Where(x => x.WFChild_Id == machine.WfMovedStep && x.WorFlowId == machine.Machine_Workflow).FirstOrDefault();
+
                 if (wfstepUpdated != null)
                 {
                     if (wfstepUpdated.WorFlowId == oldItem.Machine_Workflow)
@@ -260,12 +263,12 @@ namespace TrainningManagement.Controllers
                     machine.Machine_Id = ID;
                     scheModel.tblMachineCreations.Attach(machine);
                     scheModel.Entry(machine).Property(x => x.WfMovedStep).IsModified = true;
-                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldWFStep.FlowStep.ToString(),"Machine Created", Remark);
+                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldWFStep.FlowStep.ToString(), "Machine Created", Remark);
                     at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
                     scheModel.SaveChanges();
                     Result = 1;
                 }
-                    
+
 
                 return Json(Result, JsonRequestBehavior.AllowGet);
             }
@@ -275,45 +278,259 @@ namespace TrainningManagement.Controllers
         {
             try
             {
-                //var Result = 0;
-                //tblMachineCreation oldItem = oldMachinedata(ID);
-                //tblMachineCreation machine = new tblMachineCreation();
+                tblMachineCreation oldItem = oldMachinedata(ID);
+                tblMachineCreation machine = new tblMachineCreation();
 
-                //machine.WfMovedStep = oldItem.WfMovedStep + 1;
-                //dbScheduleModel oldWF = new dbScheduleModel();
-                //var oldWFStep = oldWF.tblWorkFlowChilds.Where(x => x.WFChild_Id == oldItem.WfMovedStep).FirstOrDefault();
-                //var wfstepUpdated = scheModel.tblWorkFlowChilds.Where(x => x.WFChild_Id == machine.WfMovedStep).FirstOrDefault();
-                //if (wfstepUpdated != null)
-                //{
-                //    if (wfstepUpdated.WorFlowId == oldItem.Machine_Workflow)
-                //    {
-                //        machine.Machine_Id = ID;
-                //        scheModel.tblMachineCreations.Attach(machine);
-                //        scheModel.Entry(machine).Property(x => x.WfMovedStep).IsModified = true;
-                //        at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldWFStep.FlowStep.ToString(), wfstepUpdated.FlowStep.ToString(), Remark);
-                //        at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
-                //        scheModel.SaveChanges();
-                //        Result = 1;
-                //    }
-                //}
-                //else
-                //{
-                //    machine.WfMovedStep = 0;
-                //    machine.Machine_Id = ID;
-                //    scheModel.tblMachineCreations.Attach(machine);
-                //    scheModel.Entry(machine).Property(x => x.WfMovedStep).IsModified = true;
-                //    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldWFStep.FlowStep.ToString(), "Machine Created", Remark);
-                //    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
-                //    scheModel.SaveChanges();
-                //    Result = 1;
-                //}Result,
+                dbScheduleModel oldWF = new dbScheduleModel();
+                var oldWFStep = oldWF.tblWorkFlowChilds.Where(x => x.WFChild_Id == oldItem.WfMovedStep).FirstOrDefault();
+                machine.WfMovedStep = 00;
+                machine.Machine_Id = ID;
+                scheModel.tblMachineCreations.Attach(machine);
+                scheModel.Entry(machine).Property(x => x.WfMovedStep).IsModified = true;
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldWFStep.FlowStep.ToString(), "Machine Created", Remark);
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
+                scheModel.SaveChanges();
+                var Result = 1;
 
-
-                return Json( JsonRequestBehavior.AllowGet);
+                return Json(Result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { throw; }
         }
-        
+
+        public List<ScheduleMachine> ReviewerScheduleList()
+        {
+            try
+            {
+                var SessionData = ((tblEmployee)(Session["EmployeeData"]));
+                List<ScheduleMachine> scheduleList = new List<ScheduleMachine>();
+
+                var Reviewer = scheModel.ScheduleMachines
+                   .Join(
+                    scheModel.tblMachineCreations,
+                    S => S.MachineId,
+                    M => M.Machine_Id,
+                    (S, M) => new { S, M })
+                    .Join(
+                    scheModel.tblWorkFlowChilds,
+                    SM => SM.S.ScheduleMovedStep,
+                    WC => WC.WFChild_Id,
+                    (SM, WC) => new { SM, WC })
+                    .Join(
+                    scheModel.tblAssignEmployeeGroups,
+                    A => A.WC.GrpRoleId,
+                    E => E.group_Id,
+                    (A, E) => new
+                    {
+                        machineID = A.SM.S.MachineId,
+                        WorkflowStep = A.WC.FlowStep,
+                        EmpID = A.WC.EmpId,
+                        GrpEmpID = E.employee_Id
+                    }
+                    ).Distinct().ToList();
+
+                var schedule = scheModel.ScheduleMachines.ToList();
+                var show = 0;
+                foreach (var item in schedule)
+                {
+                    foreach (var Re in Reviewer)
+                    {
+                        if (item.MachineId == Re.machineID && Re.WorkflowStep == "Reviewer" && (Re.EmpID == SessionData.Employee_Id || Re.GrpEmpID == SessionData.Employee_Id))
+                        {
+                            if (item.ApprovedRejectStatus == null)
+                            {
+                                show = 0;
+                                if (scheduleList.Count != 0)
+                                {
+                                    foreach (var list in scheduleList)
+                                    {
+                                        if (item.MachineId != list.MachineId)
+                                        {
+                                            show = 1;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                    show = 1;
+                                if (show == 1)
+                                {
+                                    var machine = scheModel.tblMachineCreations.Where(x => x.Machine_Id == item.MachineId).FirstOrDefault();
+                                    item.FrequencyType = machine.MachineID;
+                                    scheduleList.Add(item);
+                                }
+                            }
+                        }
+                    }
+
+                }
+                return scheduleList;
+            }
+            catch (Exception e) { throw; }
+        }
+        public List<ScheduleMachine> ApproverScheduleList()
+        {
+            try
+            {
+                var SessionData = ((tblEmployee)(Session["EmployeeData"]));
+                List<ScheduleMachine> scheduleList = new List<ScheduleMachine>();
+
+                var Approver = scheModel.ScheduleMachines
+           .Join(
+            scheModel.tblMachineCreations,
+            S => S.MachineId,
+            M => M.Machine_Id,
+            (S, M) => new { S, M })
+            .Join(
+            scheModel.tblWorkFlowChilds,
+            SM => SM.S.ScheduleMovedStep,
+            WC => WC.WFChild_Id,
+            (SM, WC) => new { SM, WC })
+            .Join(
+            scheModel.tblAssignEmployeeGroups,
+            A => A.WC.GrpRoleId,
+            E => E.group_Id,
+            (A, E) => new
+            {
+                machineID = A.SM.S.MachineId,
+                WorkflowStep = A.WC.FlowStep,
+                EmpID = A.WC.EmpId,
+                GrpEmpID = E.employee_Id
+            }
+            ).Distinct().ToList();
+
+                var schedule = scheModel.ScheduleMachines.ToList();
+                var show = 0;
+                foreach (var item in schedule)
+                {
+                    foreach (var Ap in Approver)
+                    {
+                        if (item.MachineId == Ap.machineID && Ap.WorkflowStep == "Approver" && (Ap.EmpID == SessionData.Employee_Id || Ap.GrpEmpID == SessionData.Employee_Id))
+                        {
+                            if (item.ApprovedRejectStatus == null)
+                            {
+                                show = 0;
+                                if (scheduleList.Count != 0)
+                                {
+                                    foreach (var list in scheduleList)
+                                    {
+                                        if (item.MachineId != list.MachineId)
+                                        {
+                                            show = 1;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                    show = 1;
+                                if (show == 1)
+                                {
+                                    var machine = scheModel.tblMachineCreations.Where(x => x.Machine_Id == item.MachineId).FirstOrDefault();
+                                    item.FrequencyType = machine.MachineID;
+                                    scheduleList.Add(item);
+                                }
+                            }
+                        }
+                    }
+
+                }
+                return scheduleList;
+            }
+            catch (Exception e) { throw; }
+        }
+
+        public List<ScheduleMachine> ExecutionScheduleList()
+        {
+            try
+            {
+                List<ScheduleMachine> List = new List<ScheduleMachine>();
+
+                var schedule = scheModel.ScheduleMachines.Where(x => x.ApprovedRejectStatus == 1).ToList();
+                foreach (var item in schedule)
+                {
+                    var machine = scheModel.tblMachineCreations.Where(x => x.Machine_Id == item.MachineId).FirstOrDefault();
+                    item.FrequencyType = machine.MachineID;
+                    List.Add(item);
+                }
+                return List;
+            }
+            catch (Exception e) { throw; }
+        }
+        private ScheduleMachine oldScheduledata(long id)
+        {
+            dbScheduleModel _context = new dbScheduleModel();
+            return _context.ScheduleMachines.Single(p => p.Id == id);
+        }
+
+        public ActionResult ScheduleApprove(long ID, string Remark)
+        {
+            try
+            {
+                var Result = 0;
+                ScheduleMachine oldItem = oldScheduledata(ID);
+                ScheduleMachine Schedule = new ScheduleMachine();
+                long machineID = Convert.ToInt64(oldItem.MachineId);
+                tblMachineCreation OldMachineWorkFlow = oldMachinedata(machineID);
+                Schedule.ScheduleMovedStep = oldItem.ScheduleMovedStep + 1;
+                dbScheduleModel oldWF = new dbScheduleModel();
+                var oldWFStep = oldWF.tblWorkFlowChilds.Where(x => x.WFChild_Id == oldItem.ScheduleMovedStep).FirstOrDefault();
+                var wfstepUpdated = scheModel.tblWorkFlowChilds.Where(x => x.WFChild_Id == Schedule.ScheduleMovedStep && x.WorFlowId == OldMachineWorkFlow.Machine_Workflow).FirstOrDefault();
+
+                if (wfstepUpdated != null)
+                {
+                    if (wfstepUpdated.WorFlowId == OldMachineWorkFlow.Machine_Workflow)
+                    {
+                        Schedule.Id = ID;
+                        scheModel.ScheduleMachines.Attach(Schedule);
+                        scheModel.Entry(Schedule).Property(x => x.ScheduleMovedStep).IsModified = true;
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldWFStep.FlowStep.ToString(), wfstepUpdated.FlowStep.ToString(), Remark);
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
+                        scheModel.SaveChanges();
+                        Result = 1;
+                    }
+                }
+                else
+                {
+                    Schedule.ApprovedRejectStatus = 1;
+                    Schedule.Id = ID;
+                    scheModel.ScheduleMachines.Attach(Schedule);
+                    scheModel.Entry(Schedule).Property(x => x.ApprovedRejectStatus).IsModified = true;
+                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldWFStep.FlowStep.ToString(), "Schedule Created", Remark);
+                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
+                    scheModel.SaveChanges();
+                    Result = 1;
+                }
+
+
+                return Json(Result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { throw; }
+        }
+        public ActionResult ScheduleReject(long ID, string Remark)
+        {
+            try
+            {
+                ScheduleMachine oldItem = oldScheduledata(ID);
+                ScheduleMachine Schedule = new ScheduleMachine();
+
+                dbScheduleModel oldWF = new dbScheduleModel();
+                var oldWFStep = oldWF.tblWorkFlowChilds.Where(x => x.WFChild_Id == oldItem.ScheduleMovedStep).FirstOrDefault();
+                Schedule.ApprovedRejectStatus = 0;
+                Schedule.Id = ID;
+                scheModel.ScheduleMachines.Attach(Schedule);
+                scheModel.Entry(Schedule).Property(x => x.ApprovedRejectStatus).IsModified = true;
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldWFStep.FlowStep.ToString(), "Reject", Remark);
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
+                scheModel.SaveChanges();
+                var Result = 1;
+
+                return Json(Result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { throw; }
+        }
+
+
+
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

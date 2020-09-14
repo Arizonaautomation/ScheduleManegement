@@ -51,5 +51,6 @@ namespace TrainningManagement.CommonClass
         public string grpid { get; set; }
         public string FormName { get; set; }
         public long CheckDeptHead { get; set; }
+        public string MachineID { get; set; }
     }
 }
