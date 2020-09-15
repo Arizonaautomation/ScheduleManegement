@@ -1092,9 +1092,11 @@ namespace TrainningManagement.Controllers
                         break;
                     }
                 }
-                var wfstepUpdated = scheModel.tblWorkFlowChilds.Where(x => x.WFChild_Id == machine.WfMovedStep && x.WorFlowId==machine.Machine_Workflow).FirstOrDefault();
+                var wfstepUpdated = scheModel.tblWorkFlowChilds.Where(x => x.WFChild_Id == machine.WfMovedStep && x.WorFlowId == machine.Machine_Workflow).FirstOrDefault();
                 if (wfstepUpdated == null)
-                    machine.WfMovedStep = 0;
+                    machine.Status = "Active";
+                else
+                    machine.Status = wfstepUpdated.FlowStep;
                 machine.CreatedDate = DateTime.Now;
                 machine.CreatedBy = ((tblEmployee)(Session["EmployeeData"])).Employee_Id;
                 var isExistm = scheModel.tblMachineCreations.Any(x => x.Machine_Id == machine.Machine_Id);
@@ -1104,7 +1106,6 @@ namespace TrainningManagement.Controllers
                         machine.Instru_Equip_StatusId = 1;
                     else if (machine.otherdata.FormName == "Equipment")
                         machine.Instru_Equip_StatusId = 2;
-                    machine.Status = "Active";
                     scheModel.tblMachineCreations.Add(machine);
                     scheModel.SaveChanges();
                     at.InsrtHistory((tblEmployee)Session["EmployeeData"], machine.Machine_Id, "MachineCreation", "NA", "New Machine Created", machine.otherdata.Remark);
@@ -1115,8 +1116,6 @@ namespace TrainningManagement.Controllers
                     //scheModel.Entry(machine).State = EntityState.Modified;
                     tblMachineCreation olditem = oldMachinedata(machine.Machine_Id);
                     scheModel.tblMachineCreations.Attach(machine);
-
-                    machine.Status = "Active";
                     if (olditem.Machine_Department != machine.Machine_Department)
                     {
                         at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Department.ToString(), machine.Machine_Department.ToString(), machine.otherdata.Remark);
