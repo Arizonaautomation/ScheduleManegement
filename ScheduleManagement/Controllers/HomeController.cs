@@ -249,9 +249,11 @@ namespace TrainningManagement.Controllers
                     if (wfstepUpdated.WorFlowId == oldItem.Machine_Workflow)
                     {
                         machine.Machine_Id = ID;
+                        machine.Status = wfstepUpdated.FlowStep;
                         scheModel.tblMachineCreations.Attach(machine);
                         scheModel.Entry(machine).Property(x => x.WfMovedStep).IsModified = true;
-                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldWFStep.FlowStep.ToString(), wfstepUpdated.FlowStep.ToString(), Remark);
+                        scheModel.Entry(machine).Property(x => x.Status).IsModified = true;
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.Status.ToString(), machine.Status.ToString(), Remark);
                         at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
                         scheModel.SaveChanges();
                         Result = 1;
@@ -259,11 +261,11 @@ namespace TrainningManagement.Controllers
                 }
                 else
                 {
-                    machine.WfMovedStep = 0;
+                    machine.Status = "Active";
                     machine.Machine_Id = ID;
                     scheModel.tblMachineCreations.Attach(machine);
-                    scheModel.Entry(machine).Property(x => x.WfMovedStep).IsModified = true;
-                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldWFStep.FlowStep.ToString(), "Machine Created", Remark);
+                    scheModel.Entry(machine).Property(x => x.Status).IsModified = true;
+                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.Status.ToString(),machine.Status.ToString(), Remark);
                     at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
                     scheModel.SaveChanges();
                     Result = 1;
@@ -283,11 +285,12 @@ namespace TrainningManagement.Controllers
 
                 dbScheduleModel oldWF = new dbScheduleModel();
                 var oldWFStep = oldWF.tblWorkFlowChilds.Where(x => x.WFChild_Id == oldItem.WfMovedStep).FirstOrDefault();
-                machine.WfMovedStep = 00;
+                machine.Status ="Rejected";
                 machine.Machine_Id = ID;
                 scheModel.tblMachineCreations.Attach(machine);
                 scheModel.Entry(machine).Property(x => x.WfMovedStep).IsModified = true;
-                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldWFStep.FlowStep.ToString(), "Machine Created", Remark);
+                scheModel.Entry(machine).Property(x => x.Status).IsModified = true;
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.Status.ToString(),machine.Status, Remark);
                 at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
                 scheModel.SaveChanges();
                 var Result = 1;
@@ -480,9 +483,11 @@ namespace TrainningManagement.Controllers
                     if (wfstepUpdated.WorFlowId == OldMachineWorkFlow.Machine_Workflow)
                     {
                         Schedule.Id = ID;
+                        Schedule.Status = wfstepUpdated.FlowStep;
                         scheModel.ScheduleMachines.Attach(Schedule);
                         scheModel.Entry(Schedule).Property(x => x.ScheduleMovedStep).IsModified = true;
-                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldWFStep.FlowStep.ToString(), wfstepUpdated.FlowStep.ToString(), Remark);
+                        scheModel.Entry(Schedule).Property(x => x.Status).IsModified = true;
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldItem.Status.ToString(), Schedule.Status.ToString(), Remark);
                         at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
                         scheModel.SaveChanges();
                         Result = 1;
@@ -490,11 +495,11 @@ namespace TrainningManagement.Controllers
                 }
                 else
                 {
-                    Schedule.ApprovedRejectStatus = 1;
                     Schedule.Id = ID;
+                    Schedule.Status = "Completed";
                     scheModel.ScheduleMachines.Attach(Schedule);
-                    scheModel.Entry(Schedule).Property(x => x.ApprovedRejectStatus).IsModified = true;
-                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldWFStep.FlowStep.ToString(), "Schedule Created", Remark);
+                    scheModel.Entry(Schedule).Property(x => x.Status).IsModified = true;
+                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldItem.Status.ToString(), Schedule.Status.ToString(), Remark);
                     at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
                     scheModel.SaveChanges();
                     Result = 1;
@@ -514,11 +519,11 @@ namespace TrainningManagement.Controllers
 
                 dbScheduleModel oldWF = new dbScheduleModel();
                 var oldWFStep = oldWF.tblWorkFlowChilds.Where(x => x.WFChild_Id == oldItem.ScheduleMovedStep).FirstOrDefault();
-                Schedule.ApprovedRejectStatus = 0;
                 Schedule.Id = ID;
+                Schedule.Status = "Rejected";
                 scheModel.ScheduleMachines.Attach(Schedule);
-                scheModel.Entry(Schedule).Property(x => x.ApprovedRejectStatus).IsModified = true;
-                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldWFStep.FlowStep.ToString(), "Reject", Remark);
+                scheModel.Entry(Schedule).Property(x => x.Status).IsModified = true;
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldItem.Status.ToString(), Schedule.Status.ToString(), Remark);
                 at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Id, "ScheduleMachine", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
                 scheModel.SaveChanges();
                 var Result = 1;
