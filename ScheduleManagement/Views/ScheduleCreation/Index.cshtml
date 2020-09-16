@@ -16,9 +16,9 @@
     <button type="button" class="close" data-dismiss="alert">x</button>
     <strong>Success! </strong> Update Data Successfully.
 </div>
-<div class="alert alert-success" id="Delete-alert" hidden="hidden">
+<div class="alert alert-success" id="Deactive-alert" hidden="hidden">
     <button type="button" class="close" data-dismiss="alert">x</button>
-    <strong>Success! </strong> Delete Data Successfully.
+    <strong>Success! </strong> Deactive Data Successfully.
 </div>
 
 <div class="row">
@@ -89,16 +89,16 @@
                                     <td>
                                         @if (grp.access_Modify == "True" && grp.access_Delete == "False")
                                         {
-                                            <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editEmployee(@item.Employee_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editSchedule(@item.Employee_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
                                         }
                                         @if (grp.access_Delete == "True" && grp.access_Modify == "False")
                                         {
-                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("EmployeeDelete",@item.Employee_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleDelete",@item.Employee_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
                                         }
                                         @if (grp.access_Delete == "True" && grp.access_Modify == "True")
                                         {
-                                            <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editEmployee(@item.Employee_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
-                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("EmployeeDelete",@item.Employee_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editSchedule(@item.Employee_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleDelete",@item.Employee_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
                                         }
                                     </td>
 
@@ -308,13 +308,13 @@
             }
 
         }
-        else if ($('#ButtonId').val() == "EmployeeDelete") {
+        else if ($('#ButtonId').val() == "ScheduleDelete") {
             if ($('#Remark').val().trim() == "") {
                 $('#messageBody_error').show();
                 $("#messageBody_error").fadeOut(2000);
             }
             else {
-                deltEmployee($('#Id').val());
+                deltSchedule($('#Id').val());
             }
         }
     }
@@ -438,31 +438,27 @@
         })
     }
 
-    function editEmployee(id) {
+    function editSchedule(id) {
         $('#DivwaitingTreatment').removeClass('hide')
         var id = { id: id };
-        $("Employee_Id").val("12");
-        $.get("/Master/EmployeeEdit", id, function (result) {
+        $.get("/ScheduleCreation/ScheduleEdit", id, function (result) {
             $('#modal-ScheduleCreation').modal('toggle');
             console.log(result);
             $("#Submit").text('Update');
-            $("#Employee_Id").val(result.Employee_Id);
-            $("#EmpProfilePhoto").text(result.EmpProfilePhoto);
-            $("#imagePreview").attr("src", result.EmpProfilePhoto);
-            $('#Employee_Department').val(result.Employee_Department);
-            $('#Employee_Designation').val(result.Employee_Designation);
-            $('#EmpID').val(result.EmpID);
-            $('#Employee_Name').val(result.Employee_Name);
-            $('#Employee_Email').val(result.Employee_Email);
-            $('#Employee_Contact').val(result.Employee_Contact);
-            $('#Employee_UserName').val(result.Employee_UserName);
-            $('#Employee_Password').val(result.Employee_Password);
-            $('#group_Id').val(result.group_Id);
-            $('#Employee_Address').val(result.Employee_Address);
+            $("#Id").val(result.Id);
+            $("#MachineId").text(result.MachineId);
+            $('#ScheduleType').val(result.ScheduleType);
+            $('#FrequencyType').val(result.FrequencyType);
+            $('#InstallationDate').val(result.InstallationDate);
+            $('#ScheduleDueDate').val(result.ScheduleDueDate);
+            $('#BGracedPeriod').val(result.BGracedPeriod);
+            $('#AGrancedPeriod').val(result.AGrancedPeriod);
+            $('#TillDate').val(result.TillDate);
+            $('#Comment').val(result.Comment);
             $('#DivwaitingTreatment').addClass('hide')
         });
     }
-    function deltEmployee(id) {
+    function deltSchedule(id) {
         $('#AddRemark').modal('toggle');
         // var id = { id: id };
         bootbox.confirm({
@@ -486,11 +482,11 @@
                         remark: $('#Remark').val(),
                     }
                     $('#DivwaitingTreatment').removeClass('hide')
-                    $.get("/Master/EmployeeDeactive", data, function (result) {
+                    $.get("/ScheduleCreation/ScheduleDeactive", data, function (result) {
                         loadTable();
                         $('#DivwaitingTreatment').addClass('hide')
-                        $("#Delete-alert").fadeTo(2000, 10000).slideUp(10000, function () {
-                            $("#Delete-alert").slideUp(10000);
+                        $("#Deactive-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                            $("#Deactive-alert").slideUp(10000);
                         });
                     });
 
