@@ -221,7 +221,7 @@ namespace TrainningManagement.Controllers
                         empCreation.EmpProfilePhoto = Base64Encode(empCreation.EmpProfilePhoto);
                     empCreation.CreatedDate = DateTime.Now;
                     empCreation.Status = "Active";
-                    empCreation.FirstTimeLoginStatus = "FALSE";
+                    empCreation.FirstTimeLoginStatus = "False";
                     scheModel.tblEmployees.Add(empCreation);
                     scheModel.SaveChanges();
                     string[] grpId = empCreation.otherdata.grpid.Split(',');
@@ -1238,7 +1238,7 @@ namespace TrainningManagement.Controllers
                                      machineStatus = MWF.M.Status,
                                      StatusId = MWF.M.Instru_Equip_StatusId,
                                      WfMoveStep = MWF.M.WfMovedStep
-                                 }).Where(y => y.MachineDepId == sessionData.Employee_Department && y.WfMoveStep == 0).ToList();
+                                 }).Where(y => y.MachineDepId == sessionData.Employee_Department && y.machineStatus == "Active").ToList();
                     Machine Newmachine;
                     foreach (var item in machine)
                     {

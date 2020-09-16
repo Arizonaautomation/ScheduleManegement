@@ -10,9 +10,9 @@
     <button type="button" class="close" data-dismiss="alert">x</button>
     <strong>Success! </strong> Update Data Successfully.
 </div>
-<div class="alert alert-success" id="Delete-alert" hidden="hidden">
+<div class="alert alert-success" id="Deactive-alert" hidden="hidden">
     <button type="button" class="close" data-dismiss="alert">x</button>
-    <strong>Success! </strong> Delete Data Successfully.
+    <strong>Success! </strong> Deactive Data Successfully.
 </div>
 
 <div class="row">
@@ -439,7 +439,7 @@
         $('#EmpProfilePhoto').val("");
         $("#imagePreview").attr("src", "/Image/defaultAvtar.png");
         $('#Employee_Department').val("");
-        $('DepartmentHead').hide();
+        $('#DepartmentHead').hide();
         $('#Employee_Designation').val("");
         $('#Employee_Name').val("");
         $('#Employee_Email').val("");
@@ -705,8 +705,8 @@
                     $.get("/Master/EmployeeDeactive", data, function (result) {
                         loadTable();
                         $('#DivwaitingTreatment').addClass('hide')
-                        $("#Delete-alert").fadeTo(2000, 10000).slideUp(10000, function () {
-                            $("#Delete-alert").slideUp(10000);
+                        $("#Deactive-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                            $("#Deactive-alert").slideUp(10000);
                         });
                     });
 

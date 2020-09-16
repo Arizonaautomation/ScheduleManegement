@@ -132,7 +132,7 @@ namespace TrainningManagement.Controllers
                                      StatusId = MWF.M.Instru_Equip_StatusId,
                                      WfMoveStep = MWF.M.WfMovedStep,
                                      inst_Equip_ID = MWF.M.Instru_Equip_StatusId,
-                                 }).Where(y => y.MachineDepId == sessionData.Employee_Department && y.WfMoveStep == 0 && y.inst_Equip_ID == 1).ToList();
+                                 }).Where(y => y.MachineDepId == sessionData.Employee_Department && y.machineStatus == "Active" && y.inst_Equip_ID == 1).ToList();
                     Machine Newmachine;
                     foreach (var item in machine)
                     {
@@ -172,13 +172,19 @@ namespace TrainningManagement.Controllers
             return SList;
         }
 
+        private ScheduleMachine oldScheduledata(long id)
+        {
+            dbScheduleModel _context = new dbScheduleModel();
+            return _context.ScheduleMachines.Single(p => p.Id == id);
+        }
+
+
         public ActionResult ScheduleCreation(ScheduleMachine SM)
         {
             try
             {
                 DateTime date;
                 var Count = 0;
-                //int diff = Convert.ToInt32((Convert.ToDateTime(SM.TillDate) - Convert.ToDateTime(cc)).TotalDays);
                 int diff = Convert.ToDateTime(SM.TillDate).Subtract(Convert.ToDateTime(SM.InstallationDate)).Days;
                 if (SM.FrequencyType == "15 Days")
                     Count = diff / 15;
@@ -192,7 +198,6 @@ namespace TrainningManagement.Controllers
                 date = Convert.ToDateTime(SM.InstallationDate);
                 SM.CreatedBy = ((tblEmployee)(Session["EmployeeData"])).Employee_Id;
                 SM.CreatedDepartment = ((tblEmployee)(Session["EmployeeData"])).Employee_Department;
-                SM.Status = "Active";
 
                 var wfstep = scheModel.tblMachineCreations.
                            Join(
@@ -201,11 +206,12 @@ namespace TrainningManagement.Controllers
                                 WC => WC.WorFlowId,
                                 (M, WC) => new
                                 {
+                                    MachineId = M.Machine_Id,
                                     wfID = WC.WorFlowId,
                                     wfChildId = WC.WFChild_Id,
                                     flowStep = WC.FlowStep,
                                 }
-                    ).ToList();
+                    ).Where(x => x.MachineId == SM.MachineId).ToList();
                 long WorkflowID = 0;
                 foreach (var item in wfstep)
                 {
@@ -223,8 +229,10 @@ namespace TrainningManagement.Controllers
                 }
                 var wfstepUpdated = scheModel.tblWorkFlowChilds.Where(x => x.WFChild_Id == SM.ScheduleMovedStep && x.WorFlowId == WorkflowID).FirstOrDefault();
                 if (wfstepUpdated == null)
-                    SM.ScheduleMovedStep = 0;
-
+                    SM.Status = "Completed";
+                else
+                    SM.Status = wfstepUpdated.FlowStep;
+                var St = 1;
                 for (int i = 0; i < Count; i++)
                 {
                     if (SM.FrequencyType == "15 Days")
@@ -235,15 +243,55 @@ namespace TrainningManagement.Controllers
                         date = date.AddMonths(3);
                     if (SM.FrequencyType == "6 months")
                         date = date.AddMonths(6);
+                    if (St == 0)
+                        SM.Status = "NULL";
                     SM.ScheduleDueDate = date;
+                    SM.BeforegracedDate = date.Subtract(TimeSpan.FromDays(Convert.ToInt64(SM.BGracedPeriod)));
+                    SM.AftergracedDate = date.AddDays(Convert.ToInt64(SM.AGrancedPeriod));
                     SM.CreatedDate = DateTime.Now;
                     scheModel.ScheduleMachines.Add(SM);
                     scheModel.SaveChanges();
+                    St = 0;
                 }
                 at.InsrtHistory((tblEmployee)Session["EmployeeData"], SM.Id, "ScheduleMachine", "NA", "New Schedule Created", SM.otherdata.Remark);
-                return Json(JsonRequestBehavior.AllowGet);
+                return Json("Save Success", JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { throw; }
         }
+
+        public ActionResult ScheduleEdit(long id)
+        {
+            try
+            {
+                var lstEmp = scheModel.ScheduleMachines.Where(x => x.Id == id).FirstOrDefault();
+                return Json(lstEmp, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public ActionResult ScheduleDeactive(long Id, string remark)
+        {
+            try
+            {
+                ScheduleMachine olditem = oldScheduledata(Id);
+                ScheduleMachine Schedule = new ScheduleMachine();
+                Schedule.Id = Id;
+                Schedule.Status = "Deactive";
+                scheModel.ScheduleMachines.Attach(Schedule);
+                scheModel.Entry(Schedule).Property(x => x.Status).IsModified = true;
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Id, "ScheduleMachine", olditem.Status.ToString(), Schedule.Status.ToString(), remark);
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Id, "ScheduleMachine", olditem.CreatedDate.ToString(), DateTime.Now.ToString(), remark);
+                scheModel.SaveChanges();
+                return Json("Data Deactive Successfull", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], Id, "Employee", "NA", "Deactive", ex.Message);
+                throw;
+            }
+        }
+
     }
 }

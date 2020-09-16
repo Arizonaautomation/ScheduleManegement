@@ -28,21 +28,21 @@ namespace TrainningManagement.Controllers
             var empldata = dbSche.tblEmployees.Where(x => x.Employee_UserName == tm.Employee_UserName && x.Employee_Password == tm.Employee_Password && x.Status=="Active").FirstOrDefault();
             if (empldata != null)
             {
-                //if (empldata.FirstTimeLoginStatus == "FALSE")
-                //{
-                //    //return RedirectToAction("Index", "Login");
-                //    return Json(empldata, JsonRequestBehavior.AllowGet);
-                //}
-                //else
-                //{
-                //    Session["EmployeeData"] = empldata;
-                //    var x = Session["EmployeeData"];
-                //    return RedirectToAction("Index", "Home", new { returnUrl = (this.HttpContext.Request).Path });
-                //}
-                Session["EmployeeData"] = empldata;
-                var x = Session["EmployeeData"];
-                //at.InsrtHistory(empldata, "Logout", "Login", "login Success");
-                return Json(empldata, JsonRequestBehavior.AllowGet);
+                if (empldata.FirstTimeLoginStatus == "False")
+                {
+                    //return RedirectToAction("Index", "Login");
+                    return Json(empldata, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    Session["EmployeeData"] = empldata;
+                    var x = Session["EmployeeData"];
+                    return RedirectToAction("Index", "Home", new { returnUrl = (this.HttpContext.Request).Path });
+                }
+                //Session["EmployeeData"] = empldata;
+                //var x = Session["EmployeeData"];
+                ////at.InsrtHistory(empldata, "Logout", "Login", "login Success");
+                //return Json(empldata, JsonRequestBehavior.AllowGet);
 
             }
             else
