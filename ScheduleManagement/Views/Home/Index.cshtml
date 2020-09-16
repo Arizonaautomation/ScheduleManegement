@@ -202,19 +202,19 @@
                             <tbody>
                                 @foreach (var item in ViewBag.MachineReviewer)
                                 {
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Edit Service">Approved</button>
-                                        <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Delete Service">Reject</button>
-                                    </td>
-                                    <td hidden>@item.Machine_Id</td>
-                                    <td>@item.MachineID</td>
-                                    <td>@item.Machine_Name</td>
-                                    <td>@item.DepartmentName</td>
-                                    <td>@item.Machine_Location</td>
-                                    <td>@item.WorkflowName</td>
-                                    <td>@item.Status</td>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Edit Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Delete Service">Reject</button>
+                                        </td>
+                                        <td hidden>@item.Machine_Id</td>
+                                        <td>@item.MachineID</td>
+                                        <td>@item.Machine_Name</td>
+                                        <td>@item.DepartmentName</td>
+                                        <td>@item.Machine_Location</td>
+                                        <td>@item.WorkflowName</td>
+                                        <td>@item.Status</td>
+                                    </tr>
                                 }
 
 
@@ -262,19 +262,19 @@
                             <tbody>
                                 @foreach (var item in ViewBag.MachineApprover)
                                 {
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Edit Service">Approved</button>
-                                        <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Delete Service">Reject</button>
-                                    </td>
-                                    <td hidden>@item.Machine_Id</td>
-                                    <td>@item.MachineID</td>
-                                    <td>@item.Machine_Name</td>
-                                    <td>@item.DepartmentName</td>
-                                    <td>@item.Machine_Location</td>
-                                    <td>@item.WorkflowName</td>
-                                    <td>@item.Status</td>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Edit Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Delete Service">Reject</button>
+                                        </td>
+                                        <td hidden>@item.Machine_Id</td>
+                                        <td>@item.MachineID</td>
+                                        <td>@item.Machine_Name</td>
+                                        <td>@item.DepartmentName</td>
+                                        <td>@item.Machine_Location</td>
+                                        <td>@item.WorkflowName</td>
+                                        <td>@item.Status</td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -319,19 +319,19 @@
                             <tbody>
                                 @foreach (var item in ViewBag.ScheduleReviewer)
                                 {
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
-                                        <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
-                                    </td>
-                                    <td hidden>@item.Id</td>
-                                    <td>@item.FrequencyType</td>
-                                    <td>@item.ScheduleType</td>
-                                    <td>@item.InstallationDate</td>
-                                    <td>@item.ScheduleDueDate</td>
-                                    <td>@item.BGracedPeriod</td>
-                                    <td>@item.AGrancedPeriod</td>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
+                                        </td>
+                                        <td hidden>@item.Id</td>
+                                        <td>@item.FrequencyType</td>
+                                        <td>@item.ScheduleType</td>
+                                        <td>@item.InstallationDate</td>
+                                        <td>@item.ScheduleDueDate</td>
+                                        <td>@item.BGracedPeriod</td>
+                                        <td>@item.AGrancedPeriod</td>
+                                    </tr>
                                 }
 
 
@@ -379,19 +379,19 @@
                             <tbody>
                                 @foreach (var item in ViewBag.ScheduleApprover)
                                 {
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
-                                        <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
-                                    </td>
-                                    <td hidden>@item.Id</td>
-                                    <td>@item.FrequencyType</td>
-                                    <td>@item.ScheduleType</td>
-                                    <td>@item.InstallationDate</td>
-                                    <td>@item.ScheduleDueDate</td>
-                                    <td>@item.BGracedPeriod</td>
-                                    <td>@item.AGrancedPeriod</td>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
+                                        </td>
+                                        <td hidden>@item.Id</td>
+                                        <td>@item.FrequencyType</td>
+                                        <td>@item.ScheduleType</td>
+                                        <td>@item.InstallationDate</td>
+                                        <td>@item.ScheduleDueDate</td>
+                                        <td>@item.BGracedPeriod</td>
+                                        <td>@item.AGrancedPeriod</td>
+                                    </tr>
                                 }
 
 
@@ -439,19 +439,19 @@
                             <tbody>
                                 @foreach (var item in ViewBag.ScheduleExecution)
                                 {
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
-                                        <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
-                                    </td>
-                                    <td hidden>@item.Id</td>
-                                    <td>@item.FrequencyType</td>
-                                    <td>@item.ScheduleType</td>
-                                    <td>@item.InstallationDate</td>
-                                    <td>@item.ScheduleDueDate</td>
-                                    <td>@item.BGracedPeriod</td>
-                                    <td>@item.AGrancedPeriod</td>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
+                                        </td>
+                                        <td hidden>@item.Id</td>
+                                        <td>@item.FrequencyType</td>
+                                        <td>@item.ScheduleType</td>
+                                        <td>@item.InstallationDate</td>
+                                        <td>@item.ScheduleDueDate</td>
+                                        <td>@item.BGracedPeriod</td>
+                                        <td>@item.AGrancedPeriod</td>
+                                    </tr>
                                 }
 
 
@@ -562,7 +562,16 @@
             "textColor": "#000000",
             "start": moment('2020-09-17 11:00:00').format('YYYY/MM/DD HH:mm'),
             "end": moment('2020-09-17 11:00:00').format('YYYY/MM/DD HH:mm')
-        })
+        },
+    {
+        "id": 3,
+        "title": "Zuber",
+        "allday": true,
+        "color": "#FFFF00",
+        "textColor": "#000000",
+        "start": moment('2020-09-18 11:00:00').format('YYYY/MM/DD HH:mm'),
+        "end": moment('2020-09-18 11:00:00').format('YYYY/MM/DD HH:mm')
+    })
         $('#calendarMonth').fullCalendar(
                    {
                        contentHeight: 400,
@@ -594,7 +603,7 @@
 
         //calendarMonth.fullCalendar('changeView', 'agendaWeek');
     }
-    
+
     function GetID(button, id) {
         $('#ButtonId').val(button);
         $('#Id').val(id);

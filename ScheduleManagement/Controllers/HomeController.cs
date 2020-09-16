@@ -27,7 +27,11 @@ namespace TrainningManagement.Controllers
             ViewBag.ScheduleExecution = ExecutionScheduleList();
             return View();
         }
-
+        public ActionResult fillCalendar(String MachineName)
+        {
+            var lstExeData = scheModel.tblScheduleExecutions.ToList();
+            return Json(lstExeData, JsonRequestBehavior.AllowGet);
+        }
         public List<tblAccessMenuMaster> MenuList()
         {
             var EmployeeId = ((tblEmployee)(Session["EmployeeData"])).Employee_Id;
@@ -265,7 +269,7 @@ namespace TrainningManagement.Controllers
                     machine.Machine_Id = ID;
                     scheModel.tblMachineCreations.Attach(machine);
                     scheModel.Entry(machine).Property(x => x.Status).IsModified = true;
-                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.Status.ToString(),machine.Status.ToString(), Remark);
+                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.Status.ToString(), machine.Status.ToString(), Remark);
                     at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
                     scheModel.SaveChanges();
                     Result = 1;
@@ -285,12 +289,12 @@ namespace TrainningManagement.Controllers
 
                 dbScheduleModel oldWF = new dbScheduleModel();
                 var oldWFStep = oldWF.tblWorkFlowChilds.Where(x => x.WFChild_Id == oldItem.WfMovedStep).FirstOrDefault();
-                machine.Status ="Rejected";
+                machine.Status = "Rejected";
                 machine.Machine_Id = ID;
                 scheModel.tblMachineCreations.Attach(machine);
                 scheModel.Entry(machine).Property(x => x.WfMovedStep).IsModified = true;
                 scheModel.Entry(machine).Property(x => x.Status).IsModified = true;
-                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.Status.ToString(),machine.Status, Remark);
+                at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.Status.ToString(), machine.Status, Remark);
                 at.InsrtHistory((tblEmployee)Session["EmployeeData"], oldItem.Machine_Id, "MachineCreation", oldItem.CreatedDate.ToString(), DateTime.Now.ToString(), Remark);
                 scheModel.SaveChanges();
                 var Result = 1;
