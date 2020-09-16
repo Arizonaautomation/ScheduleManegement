@@ -25,9 +25,14 @@ namespace TrainningManagement.Controllers
             ViewBag.ScheduleReviewer = ReviewerScheduleList();
             ViewBag.ScheduleApprover = ApproverScheduleList();
             ViewBag.ScheduleExecution = ExecutionScheduleList();
+
             return View();
         }
-
+        public ActionResult fillCalendar(String MachineName)
+        {
+            var lstExeData = scheModel.tblScheduleExecutions.ToList();
+            return Json(lstExeData, JsonRequestBehavior.AllowGet);
+        }
         public List<tblAccessMenuMaster> MenuList()
         {
             var EmployeeId = ((tblEmployee)(Session["EmployeeData"])).Employee_Id;
