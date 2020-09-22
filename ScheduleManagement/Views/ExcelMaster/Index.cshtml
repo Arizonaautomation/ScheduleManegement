@@ -1,24 +1,53 @@
-﻿
-@{
-                /**/
+﻿@model TrainningManagement.Models.FileUploadModel
 
-                ViewBag.Title = "Index";
-                Layout = "~/Views/Shared/_Layout.cshtml";
+@{
+    /**/
+
+    /**/
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row">
-    <div class="col-sm-5">
-        <input type="hidden" id="MasterExcel_Id" name="MasterExcel_Id" class="form-control" placeholder="" />
-        <label for="form-field-8">Upload Excel <span style="color:red;">*</span></label>
-        <input type="text" id="FileName" name="FileName" class="form-control" placeholder="" />
-        <input type="file" id="FileName" name="FileName" multiple />
-        <label class="error" for="MachineId" id="MachineId_error" style="color:red;" hidden>Select File.</label>
+@*<div class="row">
+        <div class="col-sm-5">
+            <input type="hidden" id="MasterExcel_Id" name="MasterExcel_Id" class="form-control" placeholder="" />
+            <label for="form-field-8">Upload Excel <span style="color:red;">*</span></label>
+            <input type="text" id="FileNametxt" name="FileNametxt" class="form-control" placeholder="" />
+            <input type="file" id="FileName" name="FileName" multiple />
+            <label class="error" for="MachineId" id="MachineId_error" style="color:red;" hidden>Select File.</label>
+        </div>
+
+        <button type="button" class="btn btn-info pull-right" onclick="FileSubmit()">Add Excel</button>
+    </div>*@
+
+@using (Html.BeginForm("UploadFiles", "ExcelMaster", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.file, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.file, new { htmlAttributes = new { @class = "form-control", @type = "file" } })
+                @Html.ValidationMessageFor(model => model.file, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Upload" class="btn btn-primary" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10 text-success">
+                @ViewBag.FileStatus
+            </div>
+        </div>
     </div>
-
-    <button type="button" class="btn btn-info pull-right" onclick="FileSubmit()">Add Excel</button>
-</div>
-
-
+}
 <div class="modal-body no-padding" style="background-color:white;">
 
     <fieldset>
@@ -29,20 +58,18 @@
                 <thead>
                     <tr>
                         <th style="width: 160px !important;">Action</th>
-                        <th hidden>ID</th>
                         <th>File Name</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach (var item in ViewBag.Mlist)
+                    @foreach (var item in ViewBag.FileList)
                     {
                         <tr>
                             <td>
-                                <button class="btn btn-minier btn-white btn-info btn-bold" onclick="OpenExcel(@item.MasterExcel_Id)" title="Open Service">Open</button>
+                                <button class="btn btn-minier btn-white btn-info btn-bold" onclick="OpenExcel('@item.file')" title="Open Service">Open</button>
                             </td>
-                            <td hidden>@item.MasterExcel_Id</td>
-                            <td>@item.FileName</td>
+                            <td>@item.file</td>
                         </tr>
                     }
                 </tbody>
@@ -53,43 +80,45 @@
 
 <script type="text/javascript">
 
-        function loadTable() {
-            location.reload(true);
-        }
-
-        var filename = "";
-        $('input[type="file"]').change(function (e) {
-            filename = e.target.files[0].name;
-            // alert('The file "' + filename + '" has been selected.');
-        });
-
-        function FileSubmit() {
-            excelm = {}
-            excelm.FileName = filename;
-            console.log(filename);
-            $.post("/ExcelMaster/ExcelCreation", excelm, function (result) {
-                loadTable();
-                if (result == "Save Success") {
-                    $("#Save-alert").fadeTo(2000, 5000).slideUp(5000, function () {
-                        $("#Save-alert").slideUp(5000);
-                    });
-                } else {
-                    $("#Update-alert").fadeTo(2000, 5000).slideUp(5000, function () {
-                        $("#Update-alert").slideUp(5000);
-                    });
-                }
-            })
+    function loadTable() {
+        location.reload(true);
     }
 
-    function OpenExcel(id) {
-        $('#DivwaitingTreatment').removeClass('hide')
-        var id = { id: id };
-        $.get("/ExcelMaster/ExcelEdit", id, function (result) {
-            console.log(result);
-            $('#modal-Department').modal('toggle');
-            $('#MasterExcel_Id').val(result.MasterExcel_Id);
-            $('#FileName').val(result.FileName);
-            window.open("data:application/excl,", result.FileName)
-        }
+    var filename = "";
+    $('input[type="file"]').change(function (e) {
+        filename = e.target.files[0].name;
+        $('#FileNametxt').val(filename);
 
+        // alert('The file "' + filename + '" has been selected.');
+    });
+
+    function FileSubmit() {
+        FileName = $('#FileName').val();
+        console.log($('#FileName').val());
+        var data = {
+            file: FileName,
+        }
+        $.post("/ExcelMaster/ExcelCreation", data, function (result) {
+            loadTable();
+            if (result == "Save Success") {
+                $("#Save-alert").fadeTo(2000, 5000).slideUp(5000, function () {
+                    $("#Save-alert").slideUp(5000);
+                });
+            } else {
+                $("#Update-alert").fadeTo(2000, 5000).slideUp(5000, function () {
+                    $("#Update-alert").slideUp(5000);
+                });
+            }
+        })
+    }
+
+    function OpenExcel(file) {
+        var File = { File: file };
+        $.get("/ExcelMaster/ExcelEdit", File, function (result) {
+            console.log(result);
+            //$('#modal-Department').modal('toggle');
+            //$('#MasterExcel_Id').val(result.MasterExcel_Id);
+            //window.open("data:application/excl,", result.FileName);
+        })
+    }
 </script>

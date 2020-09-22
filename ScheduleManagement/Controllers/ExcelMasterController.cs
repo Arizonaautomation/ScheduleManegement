@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -19,27 +21,43 @@ namespace TrainningManagement.Controllers
         // GET: ExcelMaster
         public ActionResult Index()
         {
+            ViewBag.FileList = filelist();
             ViewBag.Mlist = masterList();
             return View();
         }
 
-        public static string Base64Decode(string base64EncodedData)
+        public List<FileUploadModel> filelist()
         {
-            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
-            return Encoding.UTF8.GetString(base64EncodedBytes);
+            List<FileUploadModel> List = new List<FileUploadModel>();
+            string path = Server.MapPath("~/Content/UploadedFolder");
+            string[] filePaths = Directory.GetFiles(path, "*.xls");
+            FileUploadModel file;
+            foreach (var item in filePaths)
+            {
+                file = new FileUploadModel();
+                file.file = Path.GetFileName(item);
+                // file.file = item;
+                List.Add(file);
+            }
+            return List;
         }
+        //public static string Base64Decode(string base64EncodedData)
+        //{
+        //    var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
+        //    return Encoding.UTF8.GetString(base64EncodedBytes);
+        //}
 
         public List<tblExcelMaster> masterList()
         {
             List<tblExcelMaster> List = new List<tblExcelMaster>();
-            var Data = scheModel.tblExcelMasters.ToList();
-            tblExcelMaster data = new tblExcelMaster();
-            foreach (var item in Data)
-            {
-                data.MasterExcel_Id = item.MasterExcel_Id;
-                data.FileName = Base64Decode(item.FileName);
-                List.Add(data);
-            }
+            List = scheModel.tblExcelMasters.ToList();
+            //tblExcelMaster data = new tblExcelMaster();
+            //foreach (var item in Data)
+            //{
+            //    data.MasterExcel_Id = item.MasterExcel_Id;
+            //    data.FileName = Base64Decode(item.FileName);
+            //    List.Add(data);
+            //}
             return List;
         }
         public static string Base64Encode(string plainText)
@@ -47,30 +65,89 @@ namespace TrainningManagement.Controllers
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             return Convert.ToBase64String(plainTextBytes);
         }
-        public ActionResult ExcelCreation(tblExcelMaster excelm)
+
+        [HttpPost]
+        public ActionResult UploadFiles(HttpPostedFileBase file)
         {
             try
             {
-                excelm.CreatedBy = ((tblEmployee)(Session["EmployeeData"])).Employee_Id;
-                if (excelm.FileName != null)
-                    excelm.FileName = Base64Encode(excelm.FileName);
-                excelm.CreatedDate = DateTime.Now;
-                excelm.Status = "Active";
-                scheModel.tblExcelMasters.Add(excelm);
-                scheModel.SaveChanges();
-                return Json("Save Success", JsonRequestBehavior.AllowGet);
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+
+                        if (file != null)
+                        {
+                            string path = Path.Combine(Server.MapPath("~/Content/UploadedFolder"), Path.GetFileName(file.FileName));
+                            file.SaveAs(path);
+
+                        }
+                        ViewBag.FileStatus = "File uploaded successfully.";
+                    }
+                    catch (Exception)
+                    {
+
+                        ViewBag.FileStatus = "Error while file uploading.";
+                    }
+
+                }
+                ViewBag.FileList = filelist();
+                return View("Index");
+
+
+                //string filePath = string.Format("{0}/{1}", Server.MapPath("~/Content/UploadedFolder"), excelm.FileName);
+                //if (System.IO.File.Exists(filePath))
+                //    System.IO.File.Delete(filePath);
+                //Request.Files["xlsFile"].SaveAs(filePath);
+                //Application app = new Application();
+
+                //tblExcelMaster excelm = new tblExcelMaster();
+                //excelm.CreatedBy = ((tblEmployee)(Session["EmployeeData"])).Employee_Id;
+                //if (excelm.FileName != null)
+                //    excelm.FileName = Base64Encode(file.ToString());
+                //excelm.CreatedDate = DateTime.Now;
+                //excelm.Status = "Active";
+                //scheModel.tblExcelMasters.Add(excelm);
+                //scheModel.SaveChanges();
+
+                //Byte[] bytes = System.IO.File.ReadAllBytes("path");
+                //String file = Convert.ToBase64String(bytes)
+                //string path = Server.MapPath("~/Content/UploadedFolder");
+                //string filename = excelm.MasterExcel_Id + ".xls";
+                //set the image path
+                //string filepath = Path.Combine(path, filename);
+                //byte[] fileinbytes = Convert.FromBase64String(excelm.FileName);
+                //System.IO.File.WriteAllBytes(filepath, fileinbytes);
+
+                //Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                //Microsoft.Office.Interop.Excel.Workbook wb = app.WorkBooks;
+                //return Json("Save Success", JsonRequestBehavior.AllowGet);
 
             }
             catch (Exception e) { throw; }
 
         }
 
-        public ActionResult ExcelEdit(long id)
+        public ActionResult ExcelEdit(string File)
         {
             try
             {
-                var lstEmp = scheModel.tblExcelMasters.Where(x => x.MasterExcel_Id == id).FirstOrDefault();
-                return Json(lstEmp, JsonRequestBehavior.AllowGet);
+                string path = Server.MapPath("~/Content/UploadedFolder");
+                string childpath = "";
+                string[] filePaths = Directory.GetFiles(path, "*.xls");
+                foreach (var item in filePaths)
+                {
+                    if (File == Path.GetFileName(item))
+                    {
+                        childpath = Path.Combine(Server.MapPath("~/Content/UploadedFolder/File"), Path.GetFileName(item));
+                        System.IO.File.Copy(item, childpath, true);
+                    }
+                }
+                System.IO.File.Open(childpath, FileMode.Open);
+                //Application excel = new Application();
+
+                //var lstEmp = scheModel.tblExcelMasters.Where(x => x.MasterExcel_Id == id).FirstOrDefault();
+                return Json("Success", JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
