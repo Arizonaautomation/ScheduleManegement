@@ -49,10 +49,19 @@
                         {
                             if (grp.menu_Id == 5)
                             {
+                                //foreach (var item in ViewBag.lstMachine)
+                                //{
+                                //    if (item.Instru_Equip_StatusId == 1)
+                                //    {
+                                //        if (item.Status == "Rejected")
+                                //        {
                                 if (grp.access_Modify == "True" || grp.access_Delete == "True")
                                 {
                                     <th style="width: 130px !important;">Action</th>
                                 }
+                                @*}
+                                        }
+                                    }*@
                             }
                         }
                         <th hidden>ID</th>
@@ -62,6 +71,7 @@
                         <th>Equipment Location</th>
                         <th>Equipment WorkFlow</th>
                         <th>Status</th>
+                        <th>Remark</th>
                     </tr>
                 </thead>
 
@@ -82,22 +92,27 @@
                                         }
                                         if (grp.access_Modify == "True" && grp.access_Delete == "True")
                                         {
-
-                                            <td>
-                                                @if (grp.access_Modify == "True" && grp.access_Delete == "False")
-                                                {
-                                                    <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
-                                                }
-                                                @if (grp.access_Delete == "True" && grp.access_Modify == "False")
-                                                {
-                                                    <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
-                                                }
-                                                @if (grp.access_Delete == "True" && grp.access_Modify == "True")
-                                                {
-                                                    <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
-                                                    <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
-                                                }
-                                            </td>
+                                            if (item.Status == "Rejected")
+                                            {
+                                                <td>
+                                                    @if (grp.access_Modify == "True" && grp.access_Delete == "False")
+                                                    {
+                                                        <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                                    }
+                                                    @if (grp.access_Delete == "True" && grp.access_Modify == "False")
+                                                    {
+                                                        <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                                    }
+                                                    @if (grp.access_Delete == "True" && grp.access_Modify == "True")
+                                                    {
+                                                        <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                                        <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                                    }
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td></td>}
                                         }
                                     }
                                 }
@@ -108,6 +123,14 @@
                                 <td>@item.Machine_Location</td>
                                 <td>@item.Machine_Workflow</td>
                                 <td>@item.Status</td>
+                                @if (item.Status == "Rejected")
+                                {
+                                    <td>@item.Remark</td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
                             </tr>
                         }
                     }
@@ -245,6 +268,7 @@
     function ClearTextBox() {
         $('#Machine_Id').val("");
         $('#MachineID').val("");
+        $('#MachineID').attr('readonly', false); 
         $('#Machine_Department').val("");
         $('#Machine_Name').val("");
         $('#Machine_Location').val("");
@@ -384,6 +408,7 @@
             $('#modal-Equipment').modal('toggle');
             $("#Submit").text('Update');
             $('#MachineID').val(result.MachineID);
+            $('#MachineID').attr('readonly', true); 
             $('#Machine_Name').val(result.Machine_Name);
             $('#Machine_Location').val(result.Machine_Location);
             $('#Machine_Department').val(result.Machine_Department);

@@ -50,7 +50,9 @@ namespace TrainningManagement.Controllers
                                      AccessModify = GCC.GC.access_Modify,
                                      AccessDelete = GCC.GC.access_Delete,
                                      AccessView = GCC.GC.access_View,
-                                 }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True") && x.EmployeeID == SessionData.Employee_Id).ToList();
+                                     AccessReview=GCC.GC.access_Review,
+                                     AccessApprove=GCC.GC.access_Approve,
+                                 }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True"|| x.AccessReview == "True" || x.AccessApprove == "True") && x.EmployeeID == SessionData.Employee_Id).ToList();
                 foreach (var item in AccessGroupChildDetail)
                 {
                     tblAccessGroupChild grpchild = new tblAccessGroupChild();
@@ -59,6 +61,8 @@ namespace TrainningManagement.Controllers
                     grpchild.access_Modify = item.AccessModify;
                     grpchild.access_Delete = item.AccessDelete;
                     grpchild.access_View = item.AccessView;
+                    grpchild.access_Review = item.AccessReview;
+                    grpchild.access_Approve = item.AccessApprove;
                     grpChildAccessList.Add(grpchild);
                 }
 
@@ -84,8 +88,10 @@ namespace TrainningManagement.Controllers
                                      AccessModify = GCC.GC.access_Modify,
                                      AccessDelete = GCC.GC.access_Delete,
                                      AccessView = GCC.GC.access_View,
+                                     AccessReview = GCC.GC.access_Review,
+                                     AccessApprove = GCC.GC.access_Approve,
                                      siteId = GCC.E.SiteId
-                                 }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True") && x.EmployeeID == SessionData.Employee_Id && x.siteId == SessionData.SiteId).ToList();
+                                 }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True" || x.AccessReview == "True" || x.AccessApprove == "True") && x.EmployeeID == SessionData.Employee_Id && x.siteId == SessionData.SiteId).ToList();
                 foreach (var item in AccessGroupChildDetail)
                 {
                     tblAccessGroupChild grpchild = new tblAccessGroupChild();
@@ -94,11 +100,11 @@ namespace TrainningManagement.Controllers
                     grpchild.access_Modify = item.AccessModify;
                     grpchild.access_Delete = item.AccessDelete;
                     grpchild.access_View = item.AccessView;
+                    grpchild.access_Review = item.AccessReview;
+                    grpchild.access_Approve = item.AccessApprove;
                     grpChildAccessList.Add(grpchild);
                 }
-
             }
-
             return grpChildAccessList;
         }
 
@@ -220,7 +226,8 @@ namespace TrainningManagement.Controllers
                         grpchild.access_Modify = itemlist.access_Modify;
                         grpchild.access_Delete = itemlist.access_Delete;
                         grpchild.access_View = itemlist.access_View;
-
+                        grpchild.access_Review = itemlist.access_Review;
+                        grpchild.access_Approve = itemlist.access_Approve;
                         scheModel.tblAccessGroupChilds.Add(grpchild);
                         scheModel.SaveChanges();
                     }
@@ -263,7 +270,7 @@ namespace TrainningManagement.Controllers
         {
             try
             {
-                var AccessGroupChildDetail = scheModel.tblAccessGroupChilds.Where(x => (x.access_Create == "true" || x.access_Modify == "true" || x.access_Delete == "true" || x.access_View == "true") && x.group_Id == id).ToList();
+                var AccessGroupChildDetail = scheModel.tblAccessGroupChilds.Where(x => (x.access_Create == "true" || x.access_Modify == "true" || x.access_Delete == "true" || x.access_View == "true" ||x.access_Review=="true" || x.access_Approve=="true") && x.group_Id == id).ToList();
                 return Json(new { data = AccessGroupChildDetail }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { throw; }

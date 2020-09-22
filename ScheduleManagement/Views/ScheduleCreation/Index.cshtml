@@ -40,7 +40,7 @@
     </div>
 </div>
 <label for="form-field-8" id="ButtonId"> </label>
-<label for="form-field-8" id="Id"> </label>
+<label for="form-field-8" id="FId"> </label>
 
 <fieldset>
     <legend>Schedule Creation</legend>
@@ -69,9 +69,10 @@
                     <th>After GrancedPeriod</th>
                     <th>TillDate</th>
                     <th>Comment</th>
+                    <th>Status</th>
+                    <th>Remark</th>
                 </tr>
             </thead>
-
             <tbody>
                 @foreach (var item in ViewBag.Schedule)
                 {
@@ -81,52 +82,51 @@
                             if (grp.menu_Id == 10)
                             {
                                 if (grp.access_View == "True")
-                                {
-
-                                }
+                                { }
                                 if (grp.access_Delete == "True" || grp.access_Modify == "True")
                                 {
-                                    <td>
-                                        @if (grp.access_Modify == "True" && grp.access_Delete == "False")
-                                        {
-                                            <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editSchedule(@item.Employee_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
-                                        }
-                                        @if (grp.access_Delete == "True" && grp.access_Modify == "False")
-                                        {
-                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleDelete",@item.Employee_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
-                                        }
-                                        @if (grp.access_Delete == "True" && grp.access_Modify == "True")
-                                        {
-                                            <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editSchedule(@item.Employee_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
-                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleDelete",@item.Employee_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
-                                        }
-                                    </td>
-
+                                    if (item.Status == "Rejected")
+                                    {
+                                        <td>
+                                            @if (grp.access_Modify == "True" && grp.access_Delete == "False")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editSchedule(@item.Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                            }
+                                            @if (grp.access_Delete == "True" && grp.access_Modify == "False")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleDelete",@item.Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                            }
+                                            @if (grp.access_Delete == "True" && grp.access_Modify == "True")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editSchedule(@item.Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                                <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleDelete",@item.Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                            }
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>}
                                 }
-
                             }
-
                         }
-                        <td hidden></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td hidden>@item.Id</td>
+                        <td>@item.MachineID</td>
+                        <td>@item.ScheduleType</td>
+                        <td>@item.FrequencyType</td>
+                        <td>@item.InstallationDate</td>
+                        <td>@item.ScheduleDueDate</td>
+                        <td>@item.BGracedPeriod</td>
+                        <td>@item.AGrancedPeriod</td>
+                        <td>@item.TillDate</td>
+                        <td>@item.Comment</td>
+                        <td>@item.Status</td>
+                        <td>@item.Remark</td>
                     </tr>
                 }
-
             </tbody>
         </table>
-
     </div>
-
 </fieldset>
-
 
 <div class="modal" id="modal-ScheduleCreation" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -150,6 +150,7 @@
                         <div class="col-sm-3">
                             <div class="form-group"></div>
                             <label for="form-field-11">Instrument ID</label>
+                            <label for="form-field-8" id="InstrumentId"> </label>
                             @Html.DropDownList("MachineId", new SelectList(ViewBag.InstrumentList, "Machine_Id", "MachineID"), "Please Select Instrument", new { @id = "MachineId", @class = "form-control" })
                             <label class="error" for="MachineId" id="MachineId_error" style="color:red;" hidden>Select Instrument.</label>
 
@@ -202,9 +203,9 @@
                             <label class="error" for="AGrancedPeriod" id="AGrancedPeriod_error" style="color:red;" hidden>Enter After Graced Period.</label>
                         </div>
                         <div class="col-sm-3">
-                            <label for="form-field-11">Till Date <span style="color:red;">*</span></label>
-                            <input class="form-control" type="text" id="TillDate" name="TillDate" placeholder="Enter TillDate" onkeypress="return checkAlphaNumeric()" />
-                            <label class="error" for="TillDate" id="TillDate_error" style="color:red;" hidden>Enter Till Date.</label>
+                            <label for="form-field-11">End Date <span style="color:red;">*</span></label>
+                            @Html.DropDownList("TillDate", new SelectList(ViewBag.ScheduleEndDate, "ScheduleEnd_Type", "ScheduleEnd_Type"), "Please Select End Date", new { @id = "TillDate", @class = "form-control" })
+                            <label class="error" for="TillDate" id="TillDate_error" style="color:red;" hidden>Select End Date.</label>
                         </div>
                         <div class="col-sm-4">
                             <label for="form-field-8">Comment <span style="color:red;">*</span></label>
@@ -277,14 +278,14 @@
     });
     (function ($) {
         $('#InstallationDate').datetimepicker({
-            format: 'DD-MM-YYYY HH:mm:ss'
-        });
+            format: 'DD-MM-YYYY'
+        });//HH:mm:ss
         $('#ScheduleDueDate').datetimepicker({
-            format: 'DD-MM-YYYY HH:mm:ss'
-        });
+            format: 'DD-MM-YYYY'
+        });// HH:mm:ss
         $('#TillDate').datetimepicker({
-            format: 'DD-MM-YYYY HH:mm:ss'
-        });
+            format: 'DD-MM-YYYY'
+        });//HH:mm:ss
     }(jQuery));
 
 
@@ -293,9 +294,9 @@
     }
     function GetID(button, id) {
         $('#ButtonId').val(button);
-        $('#Id').val(id);
+        $('#FId').val(id);
         console.log($('#ButtonId').val());
-        console.log($('#Id').val());
+        console.log($('#FId').val());
     }
     function CallFunctionUsingId() {
         if ($('#ButtonId').val() == "ScheduleSubmit") {
@@ -314,13 +315,14 @@
                 $("#messageBody_error").fadeOut(2000);
             }
             else {
-                deltSchedule($('#Id').val());
+                deltSchedule($('#FId').val());
             }
         }
     }
     function ClearTextBox() {
         $('#Id').val("");
         $('#MachineId').val("");
+        $('#MachineId').attr('disabled', false);
         $('#ScheduleType').val("0");
         $('#FrequencyType').val("0");
         $('#InstallationDate').val("");
@@ -420,8 +422,9 @@
         }
         $('#DivwaitingTreatment').removeClass('hide')
         var ScheduleCreation = $('#frmSchedule').serialize();
-        ScheduleCreation = ScheduleCreation + "&otherdata.Remark=" + $('#Remark').val();
+        ScheduleCreation = ScheduleCreation + "&otherdata.Remark=" + $('#Remark').val() + "&otherdata.MachineID=" + $('#InstrumentId').val();
         $('#DivwaitingTreatment').removeClass('hide')
+        console.log(ScheduleCreation);
         $.post("/ScheduleCreation/ScheduleCreation", ScheduleCreation, function (result) {
             $('#AddRemark').modal('hide');
             loadTable();
@@ -446,11 +449,13 @@
             console.log(result);
             $("#Submit").text('Update');
             $("#Id").val(result.Id);
-            $("#MachineId").text(result.MachineId);
+            $("#MachineId").val(result.MachineId);
+            $('#MachineId').attr('disabled', true);
+            $("#InstrumentId").val(result.MachineId);
             $('#ScheduleType').val(result.ScheduleType);
             $('#FrequencyType').val(result.FrequencyType);
-            $('#InstallationDate').val(result.InstallationDate);
-            $('#ScheduleDueDate').val(result.ScheduleDueDate);
+            $('#InstallationDate').val(moment(result.InstallationDate).format('DD/MM/YYYY hh:mm a'));
+            $('#ScheduleDueDate').val(moment(result.ScheduleDueDate).format('DD/MM/YYYY hh:mm a'));
             $('#BGracedPeriod').val(result.BGracedPeriod);
             $('#AGrancedPeriod').val(result.AGrancedPeriod);
             $('#TillDate').val(result.TillDate);

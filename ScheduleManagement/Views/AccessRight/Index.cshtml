@@ -221,10 +221,12 @@
                                     <tr>
                                         <th hidden="hidden">MenuId</th>
                                         <th>Assign Menu</th>
-                                        <th>View</th>
-                                        <th>Create</th>
-                                        <th>Modify</th>
-                                        <th>Delete</th>
+                                        <th><input type="checkbox" name="Check_AllView" />View</th>
+                                        <th><input type="checkbox" name="Check_AllCreate" />Create</th>
+                                        <th><input type="checkbox" name="Check_AllModify" />Modify</th>
+                                        <th><input type="checkbox" name="Check_AllDeactive" />Deactive</th>
+                                        <th><input type="checkbox" name="Check_AllReview" />Review</th>
+                                        <th><input type="checkbox" name="Check_AllApprove" />Approve</th>
                                     </tr>
                                 </thead>
 
@@ -237,21 +239,21 @@
                                             <td><input type="checkbox" name="Check_View" /></td>
                                             <td><input type="checkbox" name="Check_Create" /></td>
                                             <td><input type="checkbox" name="Check_Modify" /></td>
-                                            <td><input type="checkbox" name="Check_Delete" /></td>
+                                            <td><input type="checkbox" name="Check_Deactive" /></td>
+                                            @if (item.menu_Name == "Instrument" || item.menu_Name == "Equipment" || item.menu_Name == "Schedule Creation")
+                                            {
+                                                <td><input type="checkbox" name="Check_Review" /></td>
+                                                <td><input type="checkbox" name="Check_Approve" /></td>
+                                            }
+                                            else
+                                            {
+                                                <td><input type="checkbox" name="Check_Review" disabled /></td>
+                                                <td><input type="checkbox" name="Check_Approve" disabled /></td>
+                                            }
+
                                         </tr>
                                     }
                                 </tbody>
-                                <thead>
-                                    <tr>
-                                        <th hidden="hidden">MenuId</th>
-                                        <th>Assign Menu</th>
-                                        <th>View</th>
-                                        <th>Create</th>
-                                        <th>Modify</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                </thead>
-
                             </table>
                             @*<label for="form-field-11">Menu @*<span style="color:red;">*</span>*</label>
                                 @*Html.DropDownList("menu_Id", new SelectList(ViewBag.Menu, "menu_Id", "menu_Name"), "Please Select Menu", new { @id = "menu_Id", @class = "form-control" })*
@@ -285,7 +287,71 @@
         $('#tblGroupMaster').dataTable({
             "order": [[1, "desc"]]
         });
-        //GetData();
+        $("input[name=Check_AllView]").click(function () {
+            if ($("input[name=Check_AllView]").prop("checked"))
+                $('#tblMenuList').find('input[name="Check_View"]').prop("checked", true)
+            else
+                $('#tblMenuList').find('input[name="Check_View"]').prop("checked", false)
+
+        });
+        $("input[name=Check_AllCreate]").click(function () {
+            if ($("input[name=Check_AllCreate]").prop("checked"))
+                $('#tblMenuList').find('input[name="Check_Create"]').prop("checked", true)
+            else
+                $('#tblMenuList').find('input[name="Check_Create"]').prop("checked", false)
+
+        });
+        $("input[name=Check_AllModify]").click(function () {
+            if ($("input[name=Check_AllModify]").prop("checked"))
+                $('#tblMenuList').find('input[name="Check_Modify"]').prop("checked", true)
+            else
+                $('#tblMenuList').find('input[name="Check_Modify"]').prop("checked", false)
+
+        });
+        $("input[name=Check_AllDeactive]").click(function () {
+            if ($("input[name=Check_AllDeactive]").prop("checked"))
+                $('#tblMenuList').find('input[name="Check_Deactive"]').prop("checked", true)
+            else
+                $('#tblMenuList').find('input[name="Check_Deactive"]').prop("checked", false)
+
+        });
+        $("input[name=Check_AllReview]").click(function () {
+            if ($("input[name=Check_AllReview]").prop("checked")) {
+                $("#tblMenuList").find("tr").each(function () {
+                    var tr = $(this);
+                    tr.find("td").each(function () {
+                        var check = $(this).find('input[name="Check_Review"]')
+                        if (check.prop('disabled')) {
+                            console.log(1)
+                            check.prop("checked", false)
+                        }
+                        else
+                            check.prop("checked", true)
+                    });
+                })
+            }
+            else
+                $('#tblMenuList').find('input[name="Check_Review"]').prop("checked", false)
+        });
+        $("input[name=Check_AllApprove]").click(function () {
+            if ($("input[name=Check_AllApprove]").prop("checked")) {
+                $("#tblMenuList").find("tr").each(function () {
+                    var tr = $(this);
+                    tr.find("td").each(function () {
+                        var check = $(this).find('input[name="Check_Approve"]')
+                        if (check.prop('disabled')) {
+                            console.log(1)
+                            check.prop("checked", false)
+                        }
+                        else
+                            check.prop("checked", true)
+                    });
+                })
+            }
+            else
+                $('#tblMenuList').find('input[name="Check_Approve"]').prop("checked", false)
+
+        });
     }(jQuery));
     function loadTable() {
         location.reload(true);
@@ -354,24 +420,6 @@
             });
         })
     }
-    //function GetData() {
-    //    $.get("/AccessRight/bindData", function (res) {
-
-    //        console.log(res.Data);
-    //        $.each(res.Data, function (index, value) {
-    //            console.log(value);
-    //            var tr = "<tr>";
-    //            tr += "<td>" + "<button class='btn btn-minier btn-white btn-info btn-bold' id='" + value.group_Id + "' onclick='editGroupChilld(" + value.group_Id + ")' title='Edit Service'><i class='ace-icon fa fa-pencil bigger-80'></i></button> <button class='btn btn-minier btn-white btn-danger btn-bold' id='" + value.group_Id + "'data-toggle='modal' data-target='#DeleteModal' value='Delete' onclick = 'GetID(" + value.group_Id + ")' title='Delete Service'><i class='ace-icon fa fa-trash bigger-80'></i></button>" + "</td>";
-    //            tr += "<td hidden='hidden'>" + value.group_Id + "</td>";
-    //            tr += "<td>" + value.group_Name + "</td>";
-    //            tr += "<td>" + value.remark + "</td>";
-    //            //tr += "<td hidden='hidden'>" + value.MenuID + "</td>";
-    //            //tr += "<td>" + value.MenuName + "</td>" + "</tr>";
-    //            $("#tblChildGrp").append(tr);
-    //        });
-    //        $("#tblGroupChild").DataTable();
-    //    });
-    //}
 
     function Validation() {
         var isValid = true;
@@ -423,50 +471,20 @@
             group_Name: $('#group_Name').val(),
             remark: $('#Description').val(),
         }
-        //var serializeform = $('#frmAccessGroup').serialize();
         $.post('/AccessRight/CreateAccessGroup', data, function (res) {
             $('#DivwaitingSchedule').addClass('hide');
             if (res.msg == "Add") {
-                //$("#Save-alert").fadeTo(2000, 5000).slideUp(5000, function () {
-                //    $("#Save-alert").slideUp(5000);
-                //});
                 $('#group_Id').val(res.id);
-                console.log($('#group_Id').val());
                 AddgroupChild($('#group_Id').val());
 
             } else {
                 AddgroupChild($('#group_Id').val());
-                //$("#Update-alert").fadeTo(2000, 10000).slideUp(10000, function () {
-                //    $("#Update-alert").slideUp(10000);
-                //});
             }
         })
     }
-    //function newFunction(frmMenu) {
-    //    var ser = $('#frmMenu').serialize();
-    //    console.log(ser);
-    //}
-
-
-    //function getSelectValues(select) {
-    //    var result = [];
-    //    var options = select && select.options;
-    //    var opt;
-
-    //    for (var i = 0, iLen = options.length; i < iLen; i++) {
-    //        opt = options[i];
-
-    //        if (opt.selected) {
-    //            result.push(opt.value || opt.text);
-    //        }
-    //    }
-    //    return result;
-    //}
     function AddgroupChild(groupId) {
 
         var menuList = [];
-        console.log(groupId);
-
         menuList.push({ group_Id: groupId, })
 
         $("#tblMenuList").find("tr").each(function () {
@@ -485,25 +503,29 @@
             });
             var strarray = check.split(',');
             console.log(strarray.length);
-            var View; var create; var modify; var Delete;
+            var View; var create; var modify; var Deactive; var Review; var Approve;
             for (var i = 1; i < strarray.length - 1; i++) {
-                if (i == 1) {
+                if (i == 1)
                     View = strarray[i];
-                }
-                if (i == 2) {
+                if (i == 2)
                     create = strarray[i];
-                }
                 if (i == 3)
                     modify = strarray[i];
                 if (i == 4)
-                    Delete = strarray[i];
+                    Deactive = strarray[i];
+                if (i == 5)
+                    Review = strarray[i];
+                if (i == 6)
+                    Approve = strarray[i];
             }
             menuList.push({
                 menu_Id: Id,
                 access_View: View,
                 access_Create: create,
                 access_Modify: modify,
-                access_Delete: Delete,
+                access_Delete: Deactive,
+                access_Review: Review,
+                access_Approve: Approve,
             })
         });
         console.log(menuList);
@@ -516,34 +538,6 @@
                 $("#Save-alert").slideUp(5000);
             });
         })
-
-        //var el = document.getElementsByTagName('select')[0];
-        //var menuList = getSelectValues(el);
-        //for (let i = 0; i < menuList.length; i++) {
-        //    console.log(menuList[i]);
-        //var data = {
-        //    group_Id= $('#GId').val(),
-        //};
-
-        //var menu_Id = menuList[i];
-
-        // }
-        //$('#DivwaitingSchedule').removeClass('hide')
-        //var data = {
-        //    group_Id= $('#GId').val(),
-        //};
-        //$.post('/AccessRight/AddAccessGroupChild', data, function (res) {
-        //    $('#DivwaitingSchedule').addClass('hide');
-        //    if (res == "Add") {
-        //        $("#Save-alert").fadeTo(2000, 5000).slideUp(5000, function () {
-        //            $("#Save-alert").slideUp(5000);
-        //        });
-        //    } else {
-        //        $("#Update-alert").fadeTo(2000, 10000).slideUp(10000, function () {
-        //            $("#Update-alert").slideUp(10000);
-        //        });
-        //    }
-        //})
     }
     function editGroupChilld(id) {
         ClearTextBox();
@@ -573,7 +567,7 @@
                                 $(this).find("input[name=Check_Modify]").prop("checked", true);
                             }
                             if (value.access_Modify == "True") {
-                                $(this).find("input[name=Check_Delete]").prop("checked", true);
+                                $(this).find("input[name=Check_Deactive]").prop("checked", true);
                             }
                             if (value.access_View == "True") {
                                 $(this).find("input[name=Check_View]").prop("checked", true);
@@ -582,7 +576,6 @@
                     }
                 })
             })
-            // console.log(result);
             $('#DivwaitingTreatment').addClass('hide')
             $('#MenuModal').modal('toggle')
 

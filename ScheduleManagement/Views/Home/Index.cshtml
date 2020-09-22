@@ -6,63 +6,105 @@
     <button type="button" class="close" data-dismiss="alert">x</button>
     <strong>Success! </strong> Approved Data Successfully.
 </div>
+
 <div class="alert alert-success" id="Reject-alert" hidden="hidden">
     <button type="button" class="close" data-dismiss="alert">x</button>
     <strong>Success! </strong> Reject Data Successfully.
 </div>
-
 <div class="col-sm-12 infobox-container" style="margin-bottom: 35px;">
-    <div class="infobox infobox-green">
-        <div class="infobox-icon">
-            <i class="ace-icon fa fa-comments" onclick="ShowModal('machineReview')"></i>
-        </div>
+    @foreach (var grp in ViewBag.Groupchild)
+    {
+        if (grp.menu_Id == 4)
+        {
+            if (grp.access_Review == "True")
+            {
+                <div class="infobox infobox-green">
+                    <div class="infobox-icon">
+                        <i class="ace-icon fa fa-comments" onclick="ShowModal('InstrumentReview')"></i>
+                    </div>
 
-        <div class="infobox-data">
-            <span class="infobox-data-number">@ViewBag.MachineReviewer.Count</span>
-            <div class="infobox-content">Machine Review Count</div>
-        </div>
+                    <div class="infobox-data">
+                        <span class="infobox-data-number">@ViewBag.InstrumentReviewer.Count</span>
+                        <div class="infobox-content"> Instrument Under Reviewer</div>
+                    </div>
+                </div>
+            }
+            if (grp.access_Approve == "True")
+            {
+                <div class="infobox infobox-blue">
+                    <div class="infobox-icon">
+                        <i class="ace-icon fa fa-twitter" onclick="ShowModal('InstrumentApprove')"></i>
+                    </div>
 
-        <div class="stat stat-success">8%</div>
-    </div>
+                    <div class="infobox-data">
+                        <span class="infobox-data-number">@ViewBag.InstrumentApprover.Count</span>
+                        <div class="infobox-content"> Instrument Under Approver</div>
+                    </div>
+                </div>
 
-    <div class="infobox infobox-blue">
-        <div class="infobox-icon">
-            <i class="ace-icon fa fa-twitter" onclick="ShowModal('machineApprove')"></i>
-        </div>
+            }
+        }
+        if (grp.menu_Id == 5)
+        {
+            if (grp.access_Review == "True")
+            {
+                <div class="infobox infobox-green">
+                    <div class="infobox-icon">
+                        <i class="ace-icon fa fa-comments" onclick="ShowModal('EquipmentReview')"></i>
+                    </div>
 
-        <div class="infobox-data">
-            <span class="infobox-data-number">@ViewBag.MachineApprover.Count</span>
-            <div class="infobox-content">Under Approver</div>
-        </div>
+                    <div class="infobox-data">
+                        <span class="infobox-data-number">@ViewBag.EquipmentReviewer.Count</span>
+                        <div class="infobox-content"> Equipment Under Reviewer</div>
+                    </div>
+                </div>
+            }
+            if (grp.access_Approve == "True")
+            {
+                <div class="infobox infobox-blue">
+                    <div class="infobox-icon">
+                        <i class="ace-icon fa fa-twitter" onclick="ShowModal('EquipmentApprove')"></i>
+                    </div>
 
-        <div class="badge badge-success">
-            +32%
-            <i class="ace-icon fa fa-arrow-up"></i>
-        </div>
-    </div>
+                    <div class="infobox-data">
+                        <span class="infobox-data-number">@ViewBag.EquipmentApprover.Count</span>
+                        <div class="infobox-content"> Equipment Under Approver</div>
+                    </div>
+                </div>
 
-    <div class="infobox infobox-pink">
-        <div class="infobox-icon">
-            <i class="ace-icon fa fa-shopping-cart" onclick="ShowModal('scheduleReview')"></i>
-        </div>
+            }
+        }
+        if (grp.menu_Id == 10)
+        {
+            if (grp.access_Review == "True")
+            {
+                <div class="infobox infobox-pink">
+                    <div class="infobox-icon">
+                        <i class="ace-icon fa fa-shopping-cart" onclick="ShowModal('scheduleReview')"></i>
+                    </div>
 
-        <div class="infobox-data">
-            <span class="infobox-data-number">@ViewBag.ScheduleReviewer.Count</span>
-            <div class="infobox-content">Schedule Under Review</div>
-        </div>
-        <div class="stat stat-important">4%</div>
-    </div>
+                    <div class="infobox-data">
+                        <span class="infobox-data-number">@ViewBag.ScheduleReviewer.Count</span>
+                        <div class="infobox-content">Schedule Under Reviewer</div>
+                    </div>
+                </div>
 
-    <div class="infobox infobox-red">
-        <div class="infobox-icon">
-            <i class="ace-icon fa fa-flask" onclick="ShowModal('scheduleApprove')"></i>
-        </div>
+            }
+            if (grp.access_Approve == "True")
+            {
+                <div class="infobox infobox-red">
+                    <div class="infobox-icon">
+                        <i class="ace-icon fa fa-flask" onclick="ShowModal('scheduleApprove')"></i>
+                    </div>
 
-        <div class="infobox-data">
-            <span class="infobox-data-number">@ViewBag.ScheduleApprover.Count</span>
-            <div class="infobox-content">Schedule Under Approve</div>
-        </div>
-    </div>
+                    <div class="infobox-data">
+                        <span class="infobox-data-number">@ViewBag.ScheduleApprover.Count</span>
+                        <div class="infobox-content">Schedule Under Approver</div>
+                    </div>
+                </div>
+            }
+        }
+    }
 
     <div class="infobox infobox-orange2">
         <div class="infobox-chart">
@@ -76,10 +118,10 @@
             <div class="infobox-content">Schedule Under Execution</div>
         </div>
 
-        <div class="badge badge-success">
-            7.2%
-            <i class="ace-icon fa fa-arrow-up"></i>
-        </div>
+        @*<div class="badge badge-success">
+                7.2%
+                <i class="ace-icon fa fa-arrow-up"></i>
+            </div>*@
     </div>
 
     @*<div class="infobox infobox-blue2">
@@ -138,28 +180,24 @@
             </div>
         </div>*@
 </div>
-@*<div class="row">
-    <div class="col-sm-12">
-        <button class="btn btn-info" style="border-radius: 20px">*@
-@*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
-@*<a href="#modal-MachineReviewer" data-toggle="modal" class="white">For Machine Reviewer</a>*@
-@*</button>
 
-    <button class="btn btn-info" style="border-radius: 20px">*@
-@*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
-@*<a href="#modal-MachineApprover" data-toggle="modal" class="white">For Machine Approver</a>
-    </button>
-    <button class="btn btn-info" style="border-radius: 20px">*@
-@*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
-@*<a href="#modal-ScheduleReviewer" data-toggle="modal" class="white">For Schedule Reviewer</a>
-    </button>
-    <button class="btn btn-info" style="border-radius: 20px">*@
-@*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
-@*<a href="#modal-ScheduleApprover" data-toggle="modal" class="white">For Schedule Approver</a>
-    </button>
-    <button class="btn btn-info" style="border-radius: 20px">*@
-@*<i class="ace-icon fa fa-save icon-animated-hand-pointer white"></i>*@
-@*<a href="#modal-ScheduleExecution" data-toggle="modal" class="white">For Schedule Execution</a>
+@*<div class="row">
+        <div class="col-sm-12">
+            <button class="btn btn-info" style="border-radius: 20px">
+                <a href="#modal-MachineReviewer" data-toggle="modal" class="white">For Machine Reviewer</a>
+            </button>
+
+            <button class="btn btn-info" style="border-radius: 20px">
+                <a href="#modal-MachineApprover" data-toggle="modal" class="white">For Machine Approver</a>
+            </button>
+            <button class="btn btn-info" style="border-radius: 20px">
+                <a href="#modal-ScheduleReviewer" data-toggle="modal" class="white">For Schedule Reviewer</a>
+            </button>
+            <button class="btn btn-info" style="border-radius: 20px">
+                <a href="#modal-ScheduleApprover" data-toggle="modal" class="white">For Schedule Approver</a>
+            </button>
+            <button class="btn btn-info" style="border-radius: 20px">
+                <a href="#modal-ScheduleExecution" data-toggle="modal" class="white">For Schedule Execution</a>
             </button>
         </div>
     </div>*@
@@ -168,16 +206,16 @@
 <div id="calendarMonth" class="col-sm-12"></div>
 
 <label for="form-field-8" id="ButtonId"> </label>
-<label for="form-field-8" id="Id"> </label>
+<label for="form-field-8" id="FId"> </label>
 
-<div class="modal" id="modal-MachineReviewer" tabindex="-1" role="dialog">
+<div class="modal" id="modal-InstrumentReviewer" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header no-padding panelHead">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     <span class="black">×</span>
                 </button>
-                Machine List
+                Instrument List
             </div>
             <div class="modal-body no-padding" style="background-color:white;">
 
@@ -200,12 +238,12 @@
                             </thead>
 
                             <tbody>
-                                @foreach (var item in ViewBag.MachineReviewer)
+                                @foreach (var item in ViewBag.InstrumentReviewer)
                                 {
                                     <tr>
                                         <td>
-                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Edit Service">Approved</button>
-                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Delete Service">Reject</button>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Approved Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Reject Service">Reject</button>
                                         </td>
                                         <td hidden>@item.Machine_Id</td>
                                         <td>@item.MachineID</td>
@@ -216,21 +254,18 @@
                                         <td>@item.Status</td>
                                     </tr>
                                 }
-
-
                             </tbody>
                         </table>
                     </div>
                 </fieldset>
             </div>
         </div>
-
         <div class="modal-footer">
         </div>
     </div>
 </div>
 
-<div class="modal" id="modal-MachineApprover" tabindex="-1" role="dialog">
+<div class="modal" id="modal-InstrumentApprover" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header no-padding panelHead">
@@ -260,12 +295,126 @@
                             </thead>
 
                             <tbody>
-                                @foreach (var item in ViewBag.MachineApprover)
+                                @foreach (var item in ViewBag.InstrumentApprover)
                                 {
                                     <tr>
                                         <td>
-                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Edit Service">Approved</button>
-                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Delete Service">Reject</button>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Approved Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Reject Service">Reject</button>
+                                        </td>
+                                        <td hidden>@item.Machine_Id</td>
+                                        <td>@item.MachineID</td>
+                                        <td>@item.Machine_Name</td>
+                                        <td>@item.DepartmentName</td>
+                                        <td>@item.Machine_Location</td>
+                                        <td>@item.WorkflowName</td>
+                                        <td>@item.Status</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-EquipmentReviewer" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Equipment List
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+
+                <fieldset>
+                    <legend>Reviewer</legend>
+
+                    <div style="margin-top: 15px !important">
+                        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                            <thead>
+                                <tr>
+                                    <th style="width: 160px !important;">Action</th>
+                                    <th hidden>ID</th>
+                                    <th>Equipment ID</th>
+                                    <th>Equipment Name</th>
+                                    <th>Equipment Department</th>
+                                    <th>Equipment Location</th>
+                                    <th>Equipment WorkFlow</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in ViewBag.EquipmentReviewer)
+                                {
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Approved Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Reject Service">Reject</button>
+                                        </td>
+                                        <td hidden>@item.Machine_Id</td>
+                                        <td>@item.MachineID</td>
+                                        <td>@item.Machine_Name</td>
+                                        <td>@item.DepartmentName</td>
+                                        <td>@item.Machine_Location</td>
+                                        <td>@item.WorkflowName</td>
+                                        <td>@item.Status</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-EquipmentApprover" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="black">×</span>
+                </button>
+                Equipment List
+            </div>
+            <div class="modal-body no-padding" style="background-color:white;">
+
+                <fieldset>
+                    <legend>Approver</legend>
+
+                    <div style="margin-top: 15px !important">
+                        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                            <thead>
+                                <tr>
+                                    <th style="width: 150px !important;">Action</th>
+                                    <th hidden>ID</th>
+                                    <th>Equipment ID</th>
+                                    <th>Equipment Name</th>
+                                    <th>Equipment Department</th>
+                                    <th>Equipment Location</th>
+                                    <th>Equipment WorkFlow</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in ViewBag.EquipmentApprover)
+                                {
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineApproved",@item.Machine_Id) title="Approved Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineReject",@item.Machine_Id) title="Reject Service">Reject</button>
                                         </td>
                                         <td hidden>@item.Machine_Id</td>
                                         <td>@item.MachineID</td>
@@ -321,8 +470,8 @@
                                 {
                                     <tr>
                                         <td>
-                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
-                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Approved Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Reject Service">Reject</button>
                                         </td>
                                         <td hidden>@item.Id</td>
                                         <td>@item.FrequencyType</td>
@@ -333,8 +482,6 @@
                                         <td>@item.AGrancedPeriod</td>
                                     </tr>
                                 }
-
-
                             </tbody>
                         </table>
                     </div>
@@ -381,8 +528,8 @@
                                 {
                                     <tr>
                                         <td>
-                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
-                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Approved Service">Approved</button>
+                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Reject Service">Reject</button>
                                         </td>
                                         <td hidden>@item.Id</td>
                                         <td>@item.FrequencyType</td>
@@ -441,8 +588,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            <button class="btn btn-minier btn-white btn-info btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleApproved",@item.Id) title="Edit Service">Approved</button>
-                                            <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("ScheduleReject",@item.Id) title="Delete Service">Reject</button>
+                                            <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editScheduleExecution(@item.Id)" title="Execute Service">Execute</button>
                                         </td>
                                         <td hidden>@item.Id</td>
                                         <td>@item.FrequencyType</td>
@@ -453,16 +599,140 @@
                                         <td>@item.AGrancedPeriod</td>
                                     </tr>
                                 }
-
-
                             </tbody>
                         </table>
                     </div>
                 </fieldset>
             </div>
         </div>
-
         <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-ScheduleExeData" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header no-padding panelHead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span style="color:black;">×</span>
+                </button>
+                Schedule Creation
+            </div>
+            <div id="DivwaitingTreatment" class="hide widget-box-overlay">
+                <div id="" style="z-index:1040;position:absolute;top:50%;" class="col-sm-12 col-xs-12 row center">
+                    <i class="fa fa-spinner fa fa-spin orange bigger-300"></i>
+                </div>
+            </div>
+            <div class="modal-body no-padding">
+                <form id="frmSchedule">
+                    <div class="row">
+                        <input class="form-control" type="hidden" id="Id" name="Id" placeholder="" />
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-3">
+                            <div class="form-group"></div>
+                            <label for="form-field-11">Instrument ID</label>
+                            <input class="form-control" type="text" id="MachineId" name="MachineId" placeholder="MachineId" onkeypress="return checkAlphaNumeric()" />
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group"></div>
+                            <label for="form-field-11">Schedule Type</label>
+                            <select class="form-control" id="ScheduleType" name="ScheduleType">
+                                <option value="0">Select Schedule Type</option>
+                                <option>Calibration</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group"></div>
+                            <label for="form-field-11">Frequency Type</label>
+                            <select class="form-control" id="FrequencyType" name="FrequencyType">
+                                <option value="0">Select Frequency Type</option>
+                                <option>15 Days</option>
+                                <option>1 month</option>
+                                <option>3 months</option>
+                                <option>6 months</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-3">
+                            <label for="form-field-11">Installation Date</label>
+                            <input class="form-control" type="text" id="InstallationDate" name="InstallationDate" placeholder="Installation Date" onkeypress="return checkAlphaNumeric()" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="form-field-8">Schedule Due Date</label>
+                            <input class="form-control" type="text" id="ScheduleDueDate" name="ScheduleDueDate" placeholder="Schedule Due Date" />
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="form-field-11">Before Graced Period</label>
+                            <input class="form-control" type="text" id="BGracedPeriod" name="BGracedPeriod" placeholder="Enter Before Graced Period" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-3">
+                            <label for="form-field-8">After Granced Period</label>
+                            <input class="form-control" type="text" id="AGrancedPeriod" name="AGrancedPeriod" placeholder="Enter After Graced Period" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="form-field-11">Till Date </label>
+                            <input class="form-control" type="text" id="TillDate" name="TillDate" placeholder="Enter TillDate" onkeypress="return checkAlphaNumeric()" />
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="form-field-8">Status <span style="color:red;">*</span></label>
+                            <select class="form-control" id="Schedule_Status" name="Schedule_Status" onchange="dropdownChange()">
+                                <option value="0">Select Status</option>
+                                <option>Pass</option>
+                                <option>Fail</option>
+                                <option>Skip</option>
+                            </select>
+                            <label class="error" for="Schedule_Status" id="ScheduleStatus_error" style="color:red;" hidden>Select Status.</label>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-5">
+                            <label for="form-field-8">Upload Report</label>
+                            <input class="form-control" type="text" id="Report" name="Report" placeholder="Enter After Graced Period" />
+                            <input type="file" name="Schedule_Report_File" id="Schedule_Report_File" />
+                            <label class="error" for="Report" id="Report_error" style="color:red;" hidden>Upload Report File.</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <label for="form-field-8">Comment <span style="color:red;">*</span></label>
+                            <textarea class="form-control" id="Comment" name="Comment" placeholder="Comment"></textarea>
+                            <label class="error" for="Comment" id="Comment_error" style="color:red;" hidden>Enter Comment.</label>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="row" id="Reschedule" hidden>
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-5">
+                            <label for="form-field-8">Reschedule Date <span style="color:red;" id="RSpan1">*</span></label>
+                            <input class="form-control" type="text" id="RScheduleDueDate" name="RScheduleDueDate" placeholder="ReSchedule Due Date" />
+                            <label class="error" for="RScheduleDueDate" id="RScheduleDueDate_error" style="color:red;" hidden>Please Select Date.</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <label for="form-field-8">Reason <span style="color:red;" id="RSpan2">*</span></label>
+                            <textarea class="form-control" type="text" id="Reason" name="Reason" placeholder="Enter Reason"></textarea>
+                            <label class="error" for="Reason" id="Reason_error" style="color:red;" hidden>Please Enter Reason.</label>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group"></div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal" style="margin-top: 10px;">
+                <i class="ace-icon fa fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-sm btn-info pull-right" id="Submit" style="margin-top: 10px;" onclick="ValidationSchedule()">
+                <i class="ace-icon fa fa-plus"></i>
+                Create
+            </button>
         </div>
     </div>
 </div>
@@ -507,18 +777,32 @@
 </div>
 
 <script>
+
     $('.table').DataTable({
         "order": [[1, "desc"]]
     });
+
+    (function ($) {
+        $('#RScheduleDueDate').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm:ss'
+        });
+    }(jQuery));
+
     function loadTable() {
         location.reload(true);
     }
     function ShowModal(modalName) {
-        if (modalName == "machineReview") {
-            $('#modal-MachineReviewer').modal('show');
+        if (modalName == "InstrumentReview") {
+            $('#modal-InstrumentReviewer').modal('show');
         }
-        else if (modalName == "machineApprove") {
-            $('#modal-MachineApprover').modal('show');
+        else if (modalName == "InstrumentApprove") {
+            $('#modal-InstrumentApprover').modal('show');
+        }
+        else if (modalName == "EquipmentReview") {
+            $('#modal-EquipmentReviewer').modal('show');
+        }
+        else if (modalName == "EquipmentApprove") {
+            $('#modal-EquipmentApprover').modal('show');
         }
         else if (modalName == "scheduleReview") {
             $('#modal-ScheduleReviewer').modal('show');
@@ -532,61 +816,88 @@
 
     }
 
-    //function LoadCalendar() {
-    //    var calendarEl = document.getElementById("calendarMonth");
-
-    //    var calendar = new FullCalendar.Calendar(calendarEl, {
-    //        header: {
-    //            left: 'prev,next today',
-    //            center: 'title',
-    //            right: 'month'
-    //            //right: 'month,agendaWeek,agendaDay'
-    //        },
-    //    })
-    //}
     function LoadCalander() {
         var events = []
-        events.push({
-            "id": 1,
-            "title": "Zuber",
-            "allday": true,
-            "color": "#FFFF00",
-            "textColor": "#000000",
-            "start": moment('2020-09-16 10:00:00').format('YYYY/MM/DD HH:mm'),
-            "end": moment('2020-09-16 10:00:00').format('YYYY/MM/DD HH:mm')
-        }, {
-            "id": 2,
-            "title": "Zuber",
-            "allday": true,
-            "color": "#FFFF00",
-            "textColor": "#000000",
-            "start": moment('2020-09-17 11:00:00').format('YYYY/MM/DD HH:mm'),
-            "end": moment('2020-09-17 11:00:00').format('YYYY/MM/DD HH:mm')
-        },
-    {
-        "id": 3,
-        "title": "Zuber",
-        "allday": true,
-        "color": "#FFFF00",
-        "textColor": "#000000",
-        "start": moment('2020-09-18 11:00:00').format('YYYY/MM/DD HH:mm'),
-        "end": moment('2020-09-18 11:00:00').format('YYYY/MM/DD HH:mm')
-    })
-        $('#calendarMonth').fullCalendar(
-                   {
-                       contentHeight: 400,
-                       defaultDate: new Date(),
-                       //color: 'lightBlue',
-                       //timeFormat: 'h(:mm)a',
-                       header: {
-                           left: 'prev,next today',
-                           center: 'title',
-                           right: 'month,basicWeek,basicDay,agenda'
-                       },
-                       eventLimit: true,
-                       eventColor: '#378006',
-                       events: events
-                   })
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("fillCalendar", "Home")",
+            contentType: "application/json",
+            success: function (result) {
+                console.log(result)
+                for (var i = 0; i < result.length; i++) {
+                    var startDate = moment(result[i].ScheduleDueDate).format('YYYY/MM/DD HH:mm')
+                    var endDate = moment(result[i].ScheduleDueDate).format('YYYY/MM/DD HH:mm')
+                    events.push({
+                        "id": result[i].Id,
+                        "title": result[i].FrequencyType,
+                        "ällday": true,
+                        "color": "white",
+                        "textColor": "black",
+                        "start": startDate,
+                        "end": endDate
+                    });
+
+                }
+                $('#calendarMonth').fullCalendar(
+                    {
+                        contentHeight: 400,
+                        defaultDate: new Date(),
+                        //color: 'lightBlue',
+                        //timeFormat: 'h(:mm)a',
+                        header: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'month,basicWeek,basicDay,agenda'
+                        },
+                        eventLimit: true,
+                        eventColor: '#378006',
+                        events: events,
+                        //eventRendar: function (eventObj,$el) {
+                        //    var modal =
+                        //        '<p><b>' + eventObj.FrequencyType.replace(/;/g, '<br/>') + '</b></p>\
+                    		  //<table class="table table-condensed table-bordered">\
+                        //        <tr><td class="blue">Start Date : </td><td>' + eventObj.start.format('lll') + '</td></tr>\
+                        //        <tr><td class="blue">End Date : </td><td>' + eventObj.end.format('lll') + '</td></tr>\
+                        //        </table>';
+                        //    $el.popover({
+                        //        title: "TEst",
+                        //        content: modal,
+                        //        trigger: 'hover',
+                        //        placement: 'bottom',
+                        //        container: 'body',
+                        //        html: true
+                        //    });
+                        //}
+                    })
+                }
+        })
+        //events.push({
+        //    "id": 1,
+        //    "title": "Zuber",
+        //    "allday": true,
+        //    "color": "#FFFF00",
+        //    "textColor": "#000000",
+        //    "start": moment('2020-09-16 10:00:00').format('YYYY/MM/DD HH:mm'),
+        //    "end": moment('2020-09-16 10:00:00').format('YYYY/MM/DD HH:mm')
+        //}, {
+        //        "id": 2,
+        //        "title": "Zuber",
+        //        "allday": true,
+        //        "color": "#FFFF00",
+        //        "textColor": "#000000",
+        //        "start": moment('2020-09-17 11:00:00').format('YYYY/MM/DD HH:mm'),
+        //        "end": moment('2020-09-17 11:00:00').format('YYYY/MM/DD HH:mm')
+        //    },
+        //    {
+        //        "id": 3,
+        //        "title": "Zuber",
+        //        "allday": true,
+        //        "color": "#FFFF00",
+        //        "textColor": "#000000",
+        //        "start": moment('2020-09-18 11:00:00').format('YYYY/MM/DD HH:mm'),
+        //        "end": moment('2020-09-18 11:00:00').format('YYYY/MM/DD HH:mm')
+        //    })
+
         //var calendarMonth = $('#calendarMonth').fullCalendar({
         //    buttonHtml: {
         //        prev: '<i class="ace-icon fa fa-chevron-left"></i>',
@@ -603,13 +914,13 @@
 
         //calendarMonth.fullCalendar('changeView', 'agendaWeek');
     }
-
     function GetID(button, id) {
         $('#ButtonId').val(button);
-        $('#Id').val(id);
+        $('#FId').val(id);
         console.log($('#ButtonId').val());
-        console.log($('#Id').val());
+        console.log($('#FId').val());
     }
+
     function CallFunctionUsingId() {
         if ($('#ButtonId').val() == "MachineApproved") {
             if ($('#Remark').val().trim() == "") {
@@ -617,7 +928,7 @@
                 $("#messageBody_error").fadeOut(2000);
             }
             else {
-                MachineApproved($('#Id').val());
+                MachineApproved($('#FId').val());
             }
 
         }
@@ -627,7 +938,7 @@
                 $("#messageBody_error").fadeOut(2000);
             }
             else {
-                MachineReject($('#Id').val());
+                MachineReject($('#FId').val());
             }
         }
         else if ($('#ButtonId').val() == "ScheduleApproved") {
@@ -636,7 +947,7 @@
                 $("#messageBody_error").fadeOut(2000);
             }
             else {
-                ScheduleApproved($('#Id').val());
+                ScheduleApproved($('#FId').val());
             }
 
         }
@@ -646,10 +957,20 @@
                 $("#messageBody_error").fadeOut(2000);
             }
             else {
-                ScheduleReject($('#Id').val());
+                ScheduleReject($('#FId').val());
+            }
+        }
+        else if ($('#ButtonId').val() == "ScheduleExecutionSubmit") {
+            if ($('#Remark').val().trim() == "") {
+                $('#messageBody_error').show();
+                $("#messageBody_error").fadeOut(2000);
+            }
+            else {
+                submitSExecution();
             }
         }
     }
+
     function MachineApproved(id) {
         var data = {
             ID: id,
@@ -721,6 +1042,147 @@
                 });
             }
 
+        })
+    }
+
+    function editScheduleExecution(id) {
+        $('#DivwaitingTreatment').removeClass('hide')
+        var id = { id: id };
+        $.get("/Home/ScheduleEdit", id, function (result) {
+
+            $('#modal-ScheduleExecution').modal('toggle');
+            $('#modal-ScheduleExeData').modal('toggle');
+            console.log(result);
+            $("#Id").val(result.id);
+            $("#MachineId").val(result.machineID);
+            $('#MachineId').attr('disabled', true);
+            $('#ScheduleType').val(result.SType);
+            $('#ScheduleType').attr('disabled', true);
+            $('#FrequencyType').val(result.FType);
+            $('#FrequencyType').attr('disabled', true);
+            $('#InstallationDate').val(moment(result.InstDate).format('DD/MM/YYYY hh:mm a'));
+            $('#InstallationDate').attr('readonly', true);
+            $('#ScheduleDueDate').val(moment(result.SDueDate).format('DD/MM/YYYY hh:mm a'));
+            $('#ScheduleDueDate').attr('readonly', true);
+            $('#BGracedPeriod').val(result.BGP);
+            $('#BGracedPeriod').attr('readonly', true);
+            $('#AGrancedPeriod').val(result.AGP);
+            $('#AGrancedPeriod').attr('readonly', true);
+            $('#TillDate').val(result.tillDate);
+            $('#TillDate').attr('readonly', true);
+            $('#DivwaitingTreatment').addClass('hide')
+        });
+    }
+
+    function dropdownChange() {
+        if ($('#Schedule_Status').val() == "Fail") {
+            $('#RSpan1').show();
+            $('#RSpan2').show();
+            $('#Reschedule').show();
+        }
+        else if ($('#Schedule_Status').val() == "Skip") {
+            $('#RSpan1').hide();
+            $('#RSpan2').hide();
+            $('#Reschedule').show();
+        }
+        else
+            $('#Reschedule').hide();
+    }
+
+    //Validation Function
+    function ValidationSchedule() {
+        var isValid = true;
+        if ($('#Schedule_Status').val() == "0") {
+            $('#ScheduleStatus_error').show();
+            $("#ScheduleStatus_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#ScheduleStatus_error').hide();
+        }
+        if ($('#Report').val().trim() == "") {
+            $('#Report_error').show();
+            $("#Report_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#Report_error').hide();
+        }
+        if ($('#Comment').val().trim() == "") {
+            $('#Comment_error').show();
+            $("#Comment_error").fadeOut(2000);
+            isValid = false;
+        }
+        else {
+            $('#Comment_error').hide();
+        }
+        if ($('#Schedule_Status').val() == "Fail") {
+            if ($('#RScheduleDueDate').val().trim() == "") {
+                $('#RScheduleDueDate_error').show();
+                $("#RScheduleDueDate_error").fadeOut(2000);
+                isValid = false;
+            }
+            else {
+                $('#RScheduleDueDate_error').hide();
+            }
+            if ($('#Reason').val().trim() == "") {
+                $('#Reason_error').show();
+                $("#Reason_error").fadeOut(2000);
+                isValid = false;
+            }
+            else {
+                $('#Reason_error').hide();
+            }
+        }
+        if (isValid == true) {
+                $('#modal-ScheduleExeData').modal('hide');
+                $('#AddRemark').modal('show');
+                GetID('ScheduleExecutionSubmit', '');
+        }
+        return isValid;
+    }
+
+    var filename = "";
+    $('input[type="file"]').change(function (e) {
+        filename = e.target.files[0].name;
+        $('#Report').val(filename);
+        // alert('The file "' + filename + '" has been selected.');
+    });
+
+    function submitSExecution() {
+        var res = ValidationSchedule();
+        if (res == false) {
+            return false;
+        }
+        var scheduleExe = {}; var remark;
+        scheduleExe.ScheduleId = $("#Id").val();
+        scheduleExe.Schedule_Status = $("#Schedule_Status").val();
+        scheduleExe.Schedule_Report_File = filename;
+        scheduleExe.Comment = $("#Comment").val();
+        remark = $('#Remark').val();
+        RSDate = $('#RScheduleDueDate').val();
+        Reason = $('#Reason').val();
+        var data = {
+            ScheduleExe: scheduleExe,
+            Remark: remark,
+            RscheduleDate: RSDate,
+            Reason: Reason,
+        }
+        console.log(data);
+        $('#DivwaitingTreatment').removeClass('hide')
+        $.post("/Home/ScheduleExecution", data, function (result) {
+            $('#AddRemark').modal('hide');
+            loadTable();
+            $('#DivwaitingTreatment').addClass('hide')
+            if (result == "Save Success") {
+                $("#Save-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                    $("#Save-alert").slideUp(10000);
+                });
+            } else {
+                $("#Update-alert").fadeTo(2000, 10000).slideUp(10000, function () {
+                    $("#Update-alert").slideUp(10000);
+                });
+            }
         })
     }
     LoadCalander();

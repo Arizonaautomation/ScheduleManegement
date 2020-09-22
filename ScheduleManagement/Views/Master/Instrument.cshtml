@@ -44,14 +44,24 @@
             <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
                 <thead>
                     <tr>
+
                         @foreach (var grp in ViewBag.Groupchild)
                         {
                             if (grp.menu_Id == 4)
                             {
+                                //foreach (var item in ViewBag.lstMachine)
+                                //{
+                                //    if (item.Instru_Equip_StatusId == 1)
+                                //    {
+                                //        if (item.Status == "Rejected")
+                                //        {
                                 if (grp.access_Modify == "True" || grp.access_Delete == "True")
                                 {
-                                    <th style="width: 130px !important;">Action</th>
+                                    <th style="width: 130px !important;" id="">Action</th>
                                 }
+                                @*}
+                                        }
+                                    }*@
                             }
                         }
                         <th hidden>ID</th>
@@ -61,6 +71,7 @@
                         <th>Instrument Location</th>
                         <th>Instrument WorkFlow</th>
                         <th>Status</th>
+                        <th>Remark</th>
                     </tr>
                 </thead>
 
@@ -69,44 +80,59 @@
                     {
                         if (item.Instru_Equip_StatusId == 1)
                         {
-                            <tr>
-                                @foreach (var grp in ViewBag.Groupchild)
+                    <tr>
+                        @foreach (var grp in ViewBag.Groupchild)
+                        {
+                            if (grp.menu_Id == 4)
+                            {
+                                if (grp.access_View == "True")
                                 {
-                                    if (grp.menu_Id == 4)
-                                    {
-                                        if (grp.access_View == "True")
-                                        {
 
-                                        }
-                                        if (grp.access_Modify == "True" && grp.access_Delete == "True")
-                                        {
-
-                                            <td>
-                                                @if (grp.access_Modify == "True" && grp.access_Delete == "False")
-                                                {
-                                                    <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
-                                                }
-                                                @if (grp.access_Delete == "True" && grp.access_Modify == "False")
-                                                {
-                                                    <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
-                                                }
-                                                @if (grp.access_Delete == "True" && grp.access_Modify == "True")
-                                                {
-                                                    <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
-                                                    <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
-                                                }
-                                            </td>
-                                        }
-                                    }
                                 }
-                                <td hidden>@item.Machine_Id</td>
-                                <td>@item.MachineID</td>
-                                <td>@item.Machine_Name</td>
-                                <td>@item.DepartmentName</td>
-                                <td>@item.Machine_Location</td>
-                                <td>@item.WorkflowName</td>
-                                <td>@item.Status</td>
-                            </tr>
+                                if (grp.access_Modify == "True" && grp.access_Delete == "True")
+                                {
+                                    if (item.Status == "Rejected")
+                                    {
+                                        <td>
+                                            @if (grp.access_Modify == "True" && grp.access_Delete == "False")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                            }
+                                            @if (grp.access_Delete == "True" && grp.access_Modify == "False")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                            }
+                                            @if (grp.access_Delete == "True" && grp.access_Modify == "True")
+                                            {
+                                                <button class="btn btn-minier btn-white btn-info btn-bold" onclick="editMachine(@item.Machine_Id)" title="Edit Service"><i class='ace-icon fa fa-pencil bigger-80'></i></button>
+                                                <button class="btn btn-minier btn-white btn-danger btn-bold" data-toggle="modal" data-target="#AddRemark" onclick=GetID("MachineDelete",@item.Machine_Id) title="Delete Service"><i class='ace-icon fa fa-trash bigger-80'></i></button>
+                                            }
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+
+                                }
+                            }
+                        }
+                        <td hidden>@item.Machine_Id</td>
+                        <td>@item.MachineID</td>
+                        <td>@item.Machine_Name</td>
+                        <td>@item.DepartmentName</td>
+                        <td>@item.Machine_Location</td>
+                        <td>@item.WorkflowName</td>
+                        <td>@item.Status</td>
+                        @if (item.Status == "Rejected")
+                        {
+                            <td>@item.Remark</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
                         }
 
                     }
@@ -254,6 +280,7 @@
     function ClearTextBox() {
         $('#Machine_Id').val("");
         $('#MachineID').val("");
+        $('#MachineID').attr('readonly', false); 
         $('#Machine_Department').val("");
         $('#Machine_Name').val("");
         $('#Machine_Location').val("");
@@ -372,6 +399,7 @@
         var name = "Instrument";
         machine = machine + "&otherdata.Remark=" + $('#Remark').val() + "&otherdata.FormName=" + name;
         $('#DivwaitingDesignation').removeClass('hide')
+
         $.post("/Master/MachineCreation", machine, function (result) {
             $('#AddRemark').modal('hide');
             loadTable();
@@ -395,6 +423,7 @@
             $("#Submit").text('Update');
             $('#Machine_Id').val(result.Machine_Id);
             $('#MachineID').val(result.MachineID);
+            $('#MachineID').attr('readonly', true); 
             $('#Machine_Name').val(result.Machine_Name);
             $('#Machine_Location').val(result.Machine_Location);
             $('#Machine_Department').val(result.Machine_Department);

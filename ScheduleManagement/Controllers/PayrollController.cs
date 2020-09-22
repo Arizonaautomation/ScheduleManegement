@@ -25,40 +25,84 @@ namespace TrainningManagement.Controllers
         }
         public List<tblAccessGroupChild> grpchildList()
         {
-            var EmployeeId = ((tblEmployee)(Session["EmployeeData"])).Employee_Id;
-
-            var AccessGroupChildDetail = scheModel.tblEmployees
-                        .Join(
-                              scheModel.tblAccessGroupChilds,
-                              E => E.group_Id,
-                              GC => GC.group_Id,
-                              (E, GC) => new { E, GC })
-                        .Join(
-                              scheModel.tblAccessMenuMasters,
-                              GCC => GCC.GC.menu_Id,
-                              MM => MM.menu_Id,
-                              (GCC, MM) => new
-                              {
-                                  EmployeeID = GCC.E.Employee_Id,
-                                  MenuId = MM.menu_Id,
-                                  MenuName = MM.menu_Name,
-                                  AccessCreate = GCC.GC.access_Create,
-                                  AccessModify = GCC.GC.access_Modify,
-                                  AccessDelete = GCC.GC.access_Delete,
-                                  AccessView = GCC.GC.access_View,
-                              }).Where(x => (x.AccessCreate == "true" || x.AccessModify == "true" || x.AccessDelete == "true" || x.AccessView == "true") && x.EmployeeID == EmployeeId).ToList();
             List<tblAccessGroupChild> grpChildAccessList = new List<tblAccessGroupChild>();
-            foreach (var item in AccessGroupChildDetail)
+            var SessionData = ((tblEmployee)(Session["EmployeeData"]));
+            if (SessionData.SiteId == null)
             {
-                tblAccessGroupChild grpchild = new tblAccessGroupChild();
-                grpchild.menu_Id = item.MenuId;
-                grpchild.access_Create = item.AccessCreate;
-                grpchild.access_Modify = item.AccessModify;
-                grpchild.access_Delete = item.AccessDelete;
-                grpchild.access_View = item.AccessView;
-                grpChildAccessList.Add(grpchild);
-            }
+                var AccessGroupChildDetail = scheModel.tblEmployees
+                           .Join(
+                                 scheModel.tblAccessGroupChilds,
+                                 E => E.group_Id,
+                                 GC => GC.group_Id,
+                                 (E, GC) => new { E, GC })
+                           .Join(
+                                 scheModel.tblAccessMenuMasters,
+                                 GCC => GCC.GC.menu_Id,
+                                 MM => MM.menu_Id,
+                                 (GCC, MM) => new
+                                 {
+                                     EmployeeID = GCC.E.Employee_Id,
+                                     MenuId = MM.menu_Id,
+                                     MenuName = MM.menu_Name,
+                                     AccessCreate = GCC.GC.access_Create,
+                                     AccessModify = GCC.GC.access_Modify,
+                                     AccessDelete = GCC.GC.access_Delete,
+                                     AccessView = GCC.GC.access_View,
+                                     AccessReview = GCC.GC.access_Review,
+                                     AccessApprove = GCC.GC.access_Approve,
+                                 }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True" || x.AccessReview == "True" || x.AccessApprove == "True") && x.EmployeeID == SessionData.Employee_Id).ToList();
+                foreach (var item in AccessGroupChildDetail)
+                {
+                    tblAccessGroupChild grpchild = new tblAccessGroupChild();
+                    grpchild.menu_Id = item.MenuId;
+                    grpchild.access_Create = item.AccessCreate;
+                    grpchild.access_Modify = item.AccessModify;
+                    grpchild.access_Delete = item.AccessDelete;
+                    grpchild.access_View = item.AccessView;
+                    grpchild.access_Review = item.AccessReview;
+                    grpchild.access_Approve = item.AccessApprove;
+                    grpChildAccessList.Add(grpchild);
+                }
 
+            }
+            else
+            {
+                var AccessGroupChildDetail = scheModel.tblEmployees
+                           .Join(
+                                 scheModel.tblAccessGroupChilds,
+                                 E => E.group_Id,
+                                 GC => GC.group_Id,
+                                 (E, GC) => new { E, GC })
+                           .Join(
+                                 scheModel.tblAccessMenuMasters,
+                                 GCC => GCC.GC.menu_Id,
+                                 MM => MM.menu_Id,
+                                 (GCC, MM) => new
+                                 {
+                                     EmployeeID = GCC.E.Employee_Id,
+                                     MenuId = MM.menu_Id,
+                                     MenuName = MM.menu_Name,
+                                     AccessCreate = GCC.GC.access_Create,
+                                     AccessModify = GCC.GC.access_Modify,
+                                     AccessDelete = GCC.GC.access_Delete,
+                                     AccessView = GCC.GC.access_View,
+                                     AccessReview = GCC.GC.access_Review,
+                                     AccessApprove = GCC.GC.access_Approve,
+                                     siteId = GCC.E.SiteId
+                                 }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True" || x.AccessReview == "True" || x.AccessApprove == "True") && x.EmployeeID == SessionData.Employee_Id && x.siteId == SessionData.SiteId).ToList();
+                foreach (var item in AccessGroupChildDetail)
+                {
+                    tblAccessGroupChild grpchild = new tblAccessGroupChild();
+                    grpchild.menu_Id = item.MenuId;
+                    grpchild.access_Create = item.AccessCreate;
+                    grpchild.access_Modify = item.AccessModify;
+                    grpchild.access_Delete = item.AccessDelete;
+                    grpchild.access_View = item.AccessView;
+                    grpchild.access_Review = item.AccessReview;
+                    grpchild.access_Approve = item.AccessApprove;
+                    grpChildAccessList.Add(grpchild);
+                }
+            }
             return grpChildAccessList;
         }
 

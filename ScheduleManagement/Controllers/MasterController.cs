@@ -57,7 +57,9 @@ namespace TrainningManagement.Controllers
                                      AccessModify = GCC.GC.access_Modify,
                                      AccessDelete = GCC.GC.access_Delete,
                                      AccessView = GCC.GC.access_View,
-                                 }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True") && x.EmployeeID == SessionData.Employee_Id).ToList();
+                                     AccessReview = GCC.GC.access_Review,
+                                     AccessApprove = GCC.GC.access_Approve,
+                                 }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True" || x.AccessReview == "True" || x.AccessApprove == "True") && x.EmployeeID == SessionData.Employee_Id).ToList();
                 foreach (var item in AccessGroupChildDetail)
                 {
                     tblAccessGroupChild grpchild = new tblAccessGroupChild();
@@ -66,6 +68,8 @@ namespace TrainningManagement.Controllers
                     grpchild.access_Modify = item.AccessModify;
                     grpchild.access_Delete = item.AccessDelete;
                     grpchild.access_View = item.AccessView;
+                    grpchild.access_Review = item.AccessReview;
+                    grpchild.access_Approve = item.AccessApprove;
                     grpChildAccessList.Add(grpchild);
                 }
 
@@ -91,8 +95,10 @@ namespace TrainningManagement.Controllers
                                      AccessModify = GCC.GC.access_Modify,
                                      AccessDelete = GCC.GC.access_Delete,
                                      AccessView = GCC.GC.access_View,
+                                     AccessReview = GCC.GC.access_Review,
+                                     AccessApprove = GCC.GC.access_Approve,
                                      siteId = GCC.E.SiteId
-                                 }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True") && x.EmployeeID == SessionData.Employee_Id && x.siteId == SessionData.SiteId).ToList();
+                                 }).Where(x => (x.AccessCreate == "True" || x.AccessModify == "True" || x.AccessDelete == "True" || x.AccessView == "True" || x.AccessReview == "True" || x.AccessApprove == "True") && x.EmployeeID == SessionData.Employee_Id && x.siteId == SessionData.SiteId).ToList();
                 foreach (var item in AccessGroupChildDetail)
                 {
                     tblAccessGroupChild grpchild = new tblAccessGroupChild();
@@ -101,11 +107,11 @@ namespace TrainningManagement.Controllers
                     grpchild.access_Modify = item.AccessModify;
                     grpchild.access_Delete = item.AccessDelete;
                     grpchild.access_View = item.AccessView;
+                    grpchild.access_Review = item.AccessReview;
+                    grpchild.access_Approve = item.AccessApprove;
                     grpChildAccessList.Add(grpchild);
                 }
-
             }
-
             return grpChildAccessList;
         }
 
@@ -1113,58 +1119,46 @@ namespace TrainningManagement.Controllers
                 }
                 else
                 {
-                    //scheModel.Entry(machine).State = EntityState.Modified;
                     tblMachineCreation olditem = oldMachinedata(machine.Machine_Id);
-                    scheModel.tblMachineCreations.Attach(machine);
-                    if (olditem.Machine_Department != machine.Machine_Department)
+
+                    if (olditem.Status == "Rejected")
                     {
-                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Department.ToString(), machine.Machine_Department.ToString(), machine.otherdata.Remark);
-                        scheModel.Entry(machine).Property(x => x.Machine_Department).IsModified = true;
-                    }
-                    if (olditem.MachineID != machine.MachineID)
-                    {
-                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.MachineID.ToString(), machine.MachineID.ToString(), machine.otherdata.Remark);
-                        scheModel.Entry(machine).Property(x => x.MachineID).IsModified = true;
-                    }
-                    if (olditem.Machine_Name != machine.Machine_Name)
-                    {
-                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Name.ToString(), machine.Machine_Name.ToString(), machine.otherdata.Remark);
-                        scheModel.Entry(machine).Property(x => x.Machine_Name).IsModified = true;
-                    }
-                    if (olditem.Machine_Location != machine.Machine_Location)
-                    {
-                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Location.ToString(), machine.Machine_Location.ToString(), machine.otherdata.Remark);
-                        scheModel.Entry(machine).Property(x => x.Machine_Location).IsModified = true;
-                    }
-                    if (olditem.Machine_Workflow != machine.Machine_Workflow)
-                    {
-                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Workflow.ToString(), machine.Machine_Workflow.ToString(), machine.otherdata.Remark);
-                        scheModel.Entry(machine).Property(x => x.Machine_Workflow).IsModified = true;
-                    }
-                    if (olditem.WfMovedStep != machine.WfMovedStep)
-                    {
-                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", "NA", wfstepUpdated.FlowStep.ToString(), machine.otherdata.Remark);
-                        scheModel.Entry(machine).Property(x => x.WfMovedStep).IsModified = true;
+                        tblMachineCreation oldM = new tblMachineCreation();
+                        oldM.Machine_Id = machine.Machine_Id;
+                        oldM.Status = "AfterReject";
+                        scheModel.tblMachineCreations.Attach(oldM);
+                        scheModel.Entry(oldM).Property(x => x.Status).IsModified = true;
+                        scheModel.SaveChanges();
+
                     }
 
-                    if (olditem.Status != machine.Status)
-                    {
-                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Status.ToString(), machine.Status.ToString(), machine.otherdata.Remark);
-                        scheModel.Entry(machine).Property(x => x.Status).IsModified = true;
-                    }
-
-                    if (olditem.CreatedBy != machine.CreatedBy)
-                    {
-                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.CreatedBy.ToString(), machine.CreatedBy.ToString(), machine.otherdata.Remark);
-                        scheModel.Entry(machine).Property(x => x.CreatedBy).IsModified = true;
-                    }
-                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.CreatedDate.ToString(), DateTime.Now.ToString(), machine.otherdata.Remark);
-
+                    if (machine.otherdata.FormName == "Instrument")
+                        machine.Instru_Equip_StatusId = 1;
+                    else if (machine.otherdata.FormName == "Equipment")
+                        machine.Instru_Equip_StatusId = 2;
+                    scheModel.tblMachineCreations.Add(machine);
                     scheModel.SaveChanges();
 
+                    if (olditem.Machine_Department != machine.Machine_Department)
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Department.ToString(), machine.Machine_Department.ToString(), machine.otherdata.Remark);
+                    if (olditem.MachineID != machine.MachineID)
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.MachineID.ToString(), machine.MachineID.ToString(), machine.otherdata.Remark);
+                    if (olditem.Machine_Name != machine.Machine_Name)
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Name.ToString(), machine.Machine_Name.ToString(), machine.otherdata.Remark);
+                    if (olditem.Machine_Location != machine.Machine_Location)
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Location.ToString(), machine.Machine_Location.ToString(), machine.otherdata.Remark);
+                    if (olditem.Machine_Workflow != machine.Machine_Workflow)
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Machine_Workflow.ToString(), machine.Machine_Workflow.ToString(), machine.otherdata.Remark);
+                    if (olditem.WfMovedStep != machine.WfMovedStep)
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", "NA", wfstepUpdated.FlowStep.ToString(), machine.otherdata.Remark);
+                    if (olditem.Status != machine.Status)
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.Status.ToString(), machine.Status.ToString(), machine.otherdata.Remark);
+                    if (olditem.CreatedBy != machine.CreatedBy)
+                        at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.CreatedBy.ToString(), machine.CreatedBy.ToString(), machine.otherdata.Remark);
+                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], olditem.Machine_Id, "MachineCreation", olditem.CreatedDate.ToString(), DateTime.Now.ToString(), machine.otherdata.Remark);
+                    at.InsrtHistory((tblEmployee)Session["EmployeeData"], machine.Machine_Id, "MachineCreation", "NA", "New Machine Created", machine.otherdata.Remark);
                     return Json("Update Success", JsonRequestBehavior.AllowGet);
                 }
-
             }
             catch (Exception ex)
             {
@@ -1237,8 +1231,9 @@ namespace TrainningManagement.Controllers
                                      machineWorkflow = WF.WorkFlowName,
                                      machineStatus = MWF.M.Status,
                                      StatusId = MWF.M.Instru_Equip_StatusId,
-                                     WfMoveStep = MWF.M.WfMovedStep
-                                 }).Where(y => y.MachineDepId == sessionData.Employee_Department && y.machineStatus == "Active").ToList();
+                                     WfMoveStep = MWF.M.WfMovedStep,
+                                     remark = MWF.M.Remark
+                                 }).Where(y => y.MachineDepId == sessionData.Employee_Department && (y.machineStatus == "Active" || y.machineStatus == "Rejected")).ToList();
                     Machine Newmachine;
                     foreach (var item in machine)
                     {
@@ -1251,6 +1246,7 @@ namespace TrainningManagement.Controllers
                         Newmachine.WorkflowName = item.machineWorkflow;
                         Newmachine.Status = item.machineStatus;
                         Newmachine.Instru_Equip_StatusId = Convert.ToInt64(item.StatusId);
+                        Newmachine.Remark = item.remark;
                         lstMachine.Add(Newmachine);
                     }
                 }
@@ -1417,6 +1413,7 @@ namespace TrainningManagement.Controllers
         public string DepartmentName { get; set; }
         public string WorkflowName { get; set; }
         public long Instru_Equip_StatusId { get; set; }
+        public string Remark { get; set; }
     }
 
 }
