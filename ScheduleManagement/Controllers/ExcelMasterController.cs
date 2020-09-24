@@ -22,6 +22,7 @@ namespace TrainningManagement.Controllers
         public ActionResult Index()
         {
             ViewBag.FileList = filelist();
+            ViewBag.ChildFileList = Childfilelist();
             ViewBag.Mlist = masterList();
             return View();
         }
@@ -41,6 +42,23 @@ namespace TrainningManagement.Controllers
             }
             return List;
         }
+
+        public List<FileUploadModel> Childfilelist()
+        {
+            List<FileUploadModel> List = new List<FileUploadModel>();
+            string path = Server.MapPath("~/Content/UploadedFolder/File");
+            string[] filePaths = Directory.GetFiles(path, "*.xls");
+            FileUploadModel file;
+            foreach (var item in filePaths)
+            {
+                file = new FileUploadModel();
+                file.file = Path.GetFileName(item);
+                // file.file = item;
+                List.Add(file);
+            }
+            return List;
+        }
+
         //public static string Base64Decode(string base64EncodedData)
         //{
         //    var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
@@ -92,6 +110,7 @@ namespace TrainningManagement.Controllers
 
                 }
                 ViewBag.FileList = filelist();
+                ViewBag.ChildFileList = Childfilelist();
                 return View("Index");
 
 
@@ -128,7 +147,7 @@ namespace TrainningManagement.Controllers
 
         }
 
-        public ActionResult ExcelEdit(string File)
+        public ActionResult MasterExcelOpen(string File)
         {
             try
             {
@@ -143,7 +162,57 @@ namespace TrainningManagement.Controllers
                         System.IO.File.Copy(item, childpath, true);
                     }
                 }
-                System.IO.File.Open(childpath, FileMode.Open);
+
+                //string patha = Server.MapPath("~/Content/Loan Calculation.xlsx");
+                Application excelApp = new Application();
+                excelApp.Visible = true;
+                //excelApp.FileValidation.
+               
+                Workbooks books = excelApp.Workbooks;
+                Workbook sheet = books.Open(childpath);
+                excelApp.ExecuteExcel4Macro("SHOW.TOOLBAR(\"Ribbon\",False)");
+
+                //Application excelApp = new Application();
+
+
+                //excelApp.ExecuteExcel4Macro("Show.ToolBar("+"Ribbon"+",False)");
+                //excelApp.CommandBars.ExecuteMso("MinimizeRibbon");
+                //excelApp.CommandBars.ExecuteMso("HideRibbon");
+                // System.IO.File.Open(childpath, FileMode.Open);
+                //Application excel = new Application();
+
+                //var lstEmp = scheModel.tblExcelMasters.Where(x => x.MasterExcel_Id == id).FirstOrDefault();
+                ViewBag.ChildFileList = Childfilelist();
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public ActionResult ChildExcelOpen(string File)
+        {
+            try
+            {
+                string path = Server.MapPath("~/Content/UploadedFolder/File");
+                string openPath = "";
+                string[] filePaths = Directory.GetFiles(path, "*.xls");
+                foreach (var item in filePaths)
+                {
+                    if (File == Path.GetFileName(item))
+                    {
+                        openPath = Path.Combine(Server.MapPath("~/Content/UploadedFolder/File"), Path.GetFileName(item));
+                    }
+                }
+
+                //string patha = Server.MapPath("~/Content/Loan Calculation.xlsx");
+                var excelApp = new Application();
+                excelApp.Visible = true;
+
+                Workbooks books = excelApp.Workbooks;
+                Workbook sheet = books.Open(openPath);
+
+                // System.IO.File.Open(childpath, FileMode.Open);
                 //Application excel = new Application();
 
                 //var lstEmp = scheModel.tblExcelMasters.Where(x => x.MasterExcel_Id == id).FirstOrDefault();

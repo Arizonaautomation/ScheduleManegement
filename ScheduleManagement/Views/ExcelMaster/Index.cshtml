@@ -48,34 +48,81 @@
         </div>
     </div>
 }
-<div class="modal-body no-padding" style="background-color:white;">
 
-    <fieldset>
-        <legend>Master File List</legend>
 
-        <div style="margin-top: 15px !important">
-            <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
-                <thead>
-                    <tr>
-                        <th style="width: 160px !important;">Action</th>
-                        <th>File Name</th>
-                    </tr>
-                </thead>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active">
+        <a data-toggle="tab" href="#MasterFiles" aria-expanded="true">
+            <i class="blue ace-icon fa fa-users bigger-120"></i>
+            Master Files
+        </a>
+    </li>
 
-                <tbody>
-                    @foreach (var item in ViewBag.FileList)
-                    {
+    <li class="">
+        <a data-toggle="tab" href="#ChildFiles" aria-expanded="false">
+            <i class="blue ace-icon fa fa-building bigger-120"></i>
+            Child Files
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content">
+
+    <div id="MasterFiles" class="tab-pane fade active in">
+        <div class="modal-body no-padding" style="background-color:white;">
+
+            <div style="margin-top: 15px !important">
+                <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                    <thead>
                         <tr>
-                            <td>
-                                <button class="btn btn-minier btn-white btn-info btn-bold" onclick="OpenExcel('@item.file')" title="Open Service">Open</button>
-                            </td>
-                            <td>@item.file</td>
+                            <th style="width: 160px !important;">Action</th>
+                            <th>File Name</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in ViewBag.FileList)
+                        {
+                            <tr>
+                                <td>
+                                    <button class="btn btn-minier btn-white btn-info btn-bold" onclick="OpenMasterExcel('@item.file')" title="Open Service">Open</button>
+                                </td>
+                                <td>@item.file</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </fieldset>
+    </div>
+    <div id="ChildFiles" class="tab-pane fade">
+        <div class="modal-body no-padding" style="background-color:white;">
+
+            <div style="margin-top: 15px !important">
+                <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                    <thead>
+                        <tr>
+                            <th style="width: 160px !important;">Action</th>
+                            <th>File Name</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in ViewBag.ChildFileList)
+                        {
+                            <tr>
+                                <td>
+                                    <button class="btn btn-minier btn-white btn-info btn-bold" onclick="OpenChildExcel('@item.file')" title="Open Service">Edit</button>
+                                    <button class="btn btn-minier btn-white btn-info btn-bold" onclick="ProcessChildExcel('@item.file')" title="Open Service">Process</button>
+                                </td>
+                                <td>@item.file</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -112,9 +159,18 @@
         })
     }
 
-    function OpenExcel(file) {
+    function OpenMasterExcel(file) {
         var File = { File: file };
-        $.get("/ExcelMaster/ExcelEdit", File, function (result) {
+        $.get("/ExcelMaster/MasterExcelOpen", File, function (result) {
+            console.log(result);
+            //$('#modal-Department').modal('toggle');
+            //$('#MasterExcel_Id').val(result.MasterExcel_Id);
+            //window.open("data:application/excl,", result.FileName);
+        })
+    }
+    function OpenChildExcel(file) {
+        var File = { File: file };
+        $.get("/ExcelMaster/ChildExcelOpen", File, function (result) {
             console.log(result);
             //$('#modal-Department').modal('toggle');
             //$('#MasterExcel_Id').val(result.MasterExcel_Id);
